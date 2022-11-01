@@ -13,6 +13,8 @@ public class PlayerAim : MonoBehaviour
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
+        hideCursor();
+
         Vector2 input = ctx.ReadValue<Vector2>();
 
         input.x *= sensitivity;
@@ -24,5 +26,10 @@ public class PlayerAim : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(Vector3.up * direction.y);
         cam.transform.localRotation = Quaternion.Euler(Vector3.right * direction.x);
+    }
+
+    void hideCursor(){
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
