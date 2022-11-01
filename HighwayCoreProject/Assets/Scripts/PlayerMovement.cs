@@ -7,9 +7,10 @@ public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody rb;
     
-    public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, VaultSpeed, VaultDist;
-    public Vector3 VaultJumpForce, VaultStart;
-    public int VaultStopDelay, GroundCheckCooldown, GravityCooldown;
+    public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity;
+    public float WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
+    public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
+    public int WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
     public float GroundCheckDist, GroundCheckRadius, NormalCheckDist;
     public LayerMask GroundMask, HardGroundMask;
 
@@ -50,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
 
         //Vault();
 
+        WallRun();
+
         rb.velocity = velocity + groundVel;
     }
 
@@ -64,15 +67,21 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask);
         if(isGrounded)
         {
-            if(groundTrans != groundInfo.collider.transform)
-            {
-                groundTrans = groundInfo.collider.transform;
-                currentGround = groundTrans.GetComponent<IMovingGround>();
-            }
-            if(currentGround != null)
-            {
-                groundVel = currentGround.velocity;
-            }
+            ChangeGround(groundInfo.collider.transform);
+        }
+    }
+
+    void ChangeGround(Transform newGround)
+    {
+        if(groundTrans != newGround)
+        {
+            groundTrans = newGround;
+            currentGround = groundTrans.GetComponent<IMovingGround>();
+            groundVel = Vector3.zero;
+        }
+        if(currentGround != null)
+        {
+            groundVel = currentGround.velocity;
         }
     }
 
@@ -164,6 +173,35 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    int isWallRunning, wallRunCooldown;
+    void WallRun()
+    {
+        isWallRunning = 0;
+        if(wallRunCooldown > 0)
+        {
+            wallRunCooldown--;
+            return;
+        }
+        RaycastHit hit = groundInfo;
+        if(!isGrounded && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
+        {
+            if(Physics.Raycast(transform.position + WallCheckPoint, transform.right, out hit, WallCheckDist, GroundMask))
+            {
+                isWallRunning = 1;
+            }
+            else if(Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
+            {
+                isWallRunning = -1;
+            }
+        }
+
+        if(isWallRunning != 0)
+        {
+            velocity.y = 0f;
+            ChangeGround(hit.collider.transform);
+        }
+    }
+
     public void Jump(InputAction.CallbackContext ctx)
     {
         if(!ctx.started)
@@ -177,6 +215,14 @@ public class PlayerMovement : MonoBehaviour
         if(isVaulting)
         {
             AddForce(Quaternion.LookRotation(transform.rotation * new Vector3(direction.x, 0f, direction.y)) * VaultJumpForce, 0f);
+            return;
+        }
+        if(isWallRunning != 0)
+        {
+            Vector3 jumpForce = WallJumpForce;
+            jumpForce.x *= -isWallRunning;
+            AddForce(transform.rotation * jumpForce, 0f);
+            wallRunCooldown = WallRunCooldown;
             return;
         }
     }

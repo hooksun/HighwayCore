@@ -173,7 +173,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -774,10 +774,15 @@ MonoBehaviour:
   JumpYPosMulti: 0.5
   JumpGravity: 20
   FallGravity: 30
+  WallCheckDist: 0.6
+  MinWallRunYSpeed: 3
   VaultSpeed: 0
   VaultDist: 0
+  WallCheckPoint: {x: 0, y: 0.3, z: 0}
+  WallJumpForce: {x: 4, y: 8, z: 3}
   VaultJumpForce: {x: 0, y: 0, z: 0}
   VaultStart: {x: 0, y: 0, z: 0}
+  WallRunCooldown: 10
   VaultStopDelay: 0
   GroundCheckCooldown: 5
   GravityCooldown: 5

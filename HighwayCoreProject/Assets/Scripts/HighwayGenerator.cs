@@ -34,6 +34,7 @@ public class HighwayGenerator : MonoBehaviour
 
                 position += newVehicle.length + Random.Range(minGap, maxGap);
                 newVehicle.position = position;
+                newVehicle.UpdateTransform();
                 newVehicle.targetGap = Random.Range(minGap, maxGap);
                 newVehicle.gapTime = Random.Range(minGapTime, maxGapTime);
             }
@@ -49,6 +50,10 @@ public class HighwayGenerator : MonoBehaviour
                 Vehicle vehicle = lane.Vehicles[i];
                 Vehicle lastVehicle = lane.Vehicles[i-1];
                 float gap = vehicle.position - vehicle.length - lastVehicle.position;
+                if(gap < minGap)
+                {
+                    vehicle.gapTime = Random.Range(minGapTime, lastVehicle.gapTime);
+                }
                 if(Mathf.Abs(vehicle.targetGap - gap) < .2f)
                 {
                     vehicle.targetGap = Random.Range(minGap, maxGap);
@@ -56,6 +61,7 @@ public class HighwayGenerator : MonoBehaviour
                     continue;
                 }
                 vehicle.position = Mathf.SmoothDamp(gap, vehicle.targetGap, ref vehicle.speed, vehicle.gapTime) + vehicle.length + lastVehicle.position;
+                vehicle.UpdateTransform();
             }
         }
     }

@@ -7,7 +7,7 @@ public class Vehicle : MonoBehaviour, IMovingGround
     public float position;
     public float length, speed, accel, targetGap, gapTime;
 
-    void Update()
+    public void UpdateTransform()
     {
         transform.localPosition = Vector3.forward * (position - length * 0.5f);
     }
