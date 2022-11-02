@@ -11,6 +11,8 @@ public class GunScript : MonoBehaviour
     public GameObject impact;
     float timeSinceLastShot;
     public TextMeshProUGUI ammoCounter;
+    public WeaponSwitching weaponSwitching;
+    public GameObject cam;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,7 +32,7 @@ public class GunScript : MonoBehaviour
             Reloading();
         }
 
-        ammoCounter.SetText(gunData.currentAmmo.ToString());
+        ammoCounter.SetText("AMMO : " + gunData.currentAmmo.ToString());
     }
 
     void whatIsWeapon(){
@@ -51,27 +53,37 @@ public class GunScript : MonoBehaviour
     }
 
     void ARBullet(){
-        if(Physics.Raycast(transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
+        if(Physics.Raycast(cam.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
             Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
     void ShotgunBullet(){
         for(int i=0;i<8;i++){
-            if(Physics.Raycast(transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
+            if(Physics.Raycast(cam.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
                 Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
     }
 
+    int prevSelectedWeapon;
     void Reloading(){
+        bool indexSet = false;
+        if(!indexSet){
+            prevSelectedWeapon = weaponSwitching.currentWeapon;
+            indexSet = true;
+        }
+        Debug.Log(prevSelectedWeapon);
         if(!gunData.isReloading){
             gunData.isReloading = true;
             Invoke("ReloadingFinished", 1f);
+            
         }
     }
     void ReloadingFinished(){
-        gunData.currentAmmo = gunData.maxAmmo;
-        gunData.isReloading = false;
+        if(prevSelectedWeapon == weaponSwitching.currentWeapon){
+            gunData.currentAmmo = gunData.maxAmmo;
+            gunData.isReloading = false;
+        }
     }
     bool ReadyToShoot(){
         if(!gunData.isReloading && timeSinceLastShot > readyTime){
@@ -81,9 +93,9 @@ public class GunScript : MonoBehaviour
     }
 
     Vector3 randomSpread(){
-        float x = Random.Range(-.05f, .05f);
-        float y = Random.Range(-.05f, .05f);
-        float z = Random.Range(-.05f, .05f);
+        float x = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
+        float y = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
+        float z = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
 
         return new Vector3(x,y,z);
     }

@@ -8,7 +8,7 @@ public class WeaponSwitching : MonoBehaviour
     public GunData shotgun;
     public GunData rifle;
     public GunScript gunScript;
-    int currentWeapon;
+    public int currentWeapon;
     int prevSelectedWeapon;
     
 
@@ -29,7 +29,6 @@ public class WeaponSwitching : MonoBehaviour
         for(int i=0;i<keyCodes.Length;i++){
             if(Input.GetKeyDown(keyCodes[i])){
                 currentWeapon = i;
-                Debug.Log(currentWeapon);
             }
         }
         if(prevSelectedWeapon!=currentWeapon){
@@ -58,9 +57,11 @@ public class WeaponSwitching : MonoBehaviour
     void changeGunData(){
         if(currentWeapon == 0){
             gunScript.gunData = shotgun;
+            gunScript.gunData.isReloading = false;
         }
         else if(currentWeapon == 1){
             gunScript.gunData = rifle;
+            gunScript.gunData.isReloading = false;
         }
     }
 }

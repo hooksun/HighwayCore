@@ -20,3 +20,4 @@ MonoBehaviour:
   fireRate: 600
   reloadTime: 1.5
   isReloading: 0
+  bulletSpread: 0.01
