@@ -97,6 +97,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1222406076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1222406077}
+  m_Layer: 6
+  m_Name: ProjSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1222406077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222406076}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.27299976, z: 0.5339999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8216949969757152875}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1463122415
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +558,7 @@ GameObject:
   - component: {fileID: 8216949968949899697}
   - component: {fileID: 8216949968949899696}
   - component: {fileID: 1406370825}
+  - component: {fileID: 1294293035}
   m_Layer: 6
   m_Name: Weapon Holder
   m_TagString: Untagged
@@ -582,6 +614,21 @@ MonoBehaviour:
   shotgun: {fileID: 11400000, guid: 37fdfc5093ef56841ad3f4aa4afc9e0b, type: 2}
   rifle: {fileID: 11400000, guid: 0cb60f3e89c95fb4eac1907d300555e5, type: 2}
   gunScript: {fileID: 8216949968949899696}
+--- !u!114 &1294293035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216949968949899694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d439e548b5eea4a4f991a690f4e2debe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projSpawnPoint: {fileID: 1222406077}
+  bullet: {fileID: 8105419304571585314, guid: ec2ea9871411a55438ee9d7ffc203ca7, type: 3}
+  desc: TESTING
 --- !u!1 &8216949969757152870
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,6 +661,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8216949968949899697}
+  - {fileID: 1222406077}
   m_Father: {fileID: 8216949968672074494}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
