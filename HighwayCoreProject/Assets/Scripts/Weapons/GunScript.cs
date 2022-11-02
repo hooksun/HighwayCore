@@ -52,14 +52,12 @@ public class GunScript : MonoBehaviour
 
     void ARBullet(){
         if(Physics.Raycast(transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
-            Debug.Log(hit.collider.name);
             Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
     void ShotgunBullet(){
         for(int i=0;i<8;i++){
             if(Physics.Raycast(transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
-                Debug.Log(hit.collider.name);
                 Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
