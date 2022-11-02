@@ -683,7 +683,7 @@ MonoBehaviour:
   maxGap: 5
   accelRange: 5
   minGapTime: 1
-  maxGapTime: 5
+  maxGapTime: 3
 --- !u!1 &2106397325
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,5 +906,10 @@ PrefabInstance:
       propertyPath: ammoCounter
       value: 
       objectReference: {fileID: 430378244}
+    - target: {fileID: 8216949970102271029, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}

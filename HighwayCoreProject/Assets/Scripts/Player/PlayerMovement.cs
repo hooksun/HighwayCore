@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public float WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public int WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
-    public float GroundCheckDist, GroundCheckRadius, NormalCheckDist;
+    public float GroundCheckDist, GroundCheckRadius, NormalCheckDist, MaxSlope;
     public LayerMask GroundMask, HardGroundMask;
 
     Vector2 direction;
@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         DoGravity();
 
-        //Vault();
+        Vault();
 
         WallRun();
 
@@ -127,7 +127,7 @@ public class PlayerMovement : MonoBehaviour
                 velocity.y -= FallGravity * Time.fixedDeltaTime;
                 gravityCooldown--;
             }
-            if((velocity - Vector3.up * velocity.y).sqrMagnitude > 0 && groundInfo.normal.y > .7f)
+            if((velocity - Vector3.up * velocity.y).sqrMagnitude > 0 && groundInfo.normal.y > Mathf.Cos(Mathf.Deg2Rad * MaxSlope))
             {
                 velocity.y = 0f;
                 float newVel = ((velocity.x * groundInfo.normal.x) + (velocity.z * groundInfo.normal.z)) / -groundInfo.normal.y;
@@ -147,6 +147,7 @@ public class PlayerMovement : MonoBehaviour
     }
     
     int vaultDelay;
+    Vector3 vaultDir;
     bool isVaulting{get => vaultDelay > 0;}
     void Vault()
     {
@@ -159,6 +160,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if(!Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, VaultStart.z, HardGroundMask))
                 {
+                    ChangeGround(hit.collider.transform);
+                    vaultDir = directionWorld;
                     vaultDelay = VaultStopDelay;
                     velocity.y = VaultSpeed;
                     return;
@@ -183,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         RaycastHit hit = groundInfo;
-        if(!isGrounded && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
+        if(!isGrounded && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
         {
             if(Physics.Raycast(transform.position + WallCheckPoint, transform.right, out hit, WallCheckDist, GroundMask))
             {
@@ -214,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if(isVaulting)
         {
-            AddForce(Quaternion.LookRotation(transform.rotation * new Vector3(direction.x, 0f, direction.y)) * VaultJumpForce, 0f);
+            AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, 0f);
             return;
         }
         if(isWallRunning != 0)

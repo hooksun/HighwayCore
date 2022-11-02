@@ -163,7 +163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 8216949968672074433}
   Speed: 10
-  SpeedWhileVaulting: 0
+  SpeedWhileVaulting: 5
   GroundAccel: 80
   AirAccel: 25
   JumpHeight: 1.5
@@ -172,19 +172,20 @@ MonoBehaviour:
   FallGravity: 30
   WallCheckDist: 0.6
   MinWallRunYSpeed: 3
-  VaultSpeed: 0
-  VaultDist: 0
+  VaultSpeed: 3
+  VaultDist: 1.6
   WallCheckPoint: {x: 0, y: 0.3, z: 0}
   WallJumpForce: {x: 4, y: 8, z: 3}
-  VaultJumpForce: {x: 0, y: 0, z: 0}
-  VaultStart: {x: 0, y: 0, z: 0}
+  VaultJumpForce: {x: 0, y: 10, z: -7}
+  VaultStart: {x: 0, y: 0.8, z: 0.6}
   WallRunCooldown: 10
-  VaultStopDelay: 0
+  VaultStopDelay: 5
   GroundCheckCooldown: 5
   GravityCooldown: 5
   GroundCheckDist: 1.1
   GroundCheckRadius: 0.48
   NormalCheckDist: 1.2
+  MaxSlope: 20
   GroundMask:
     serializedVersion: 2
     m_Bits: 8
@@ -546,7 +547,7 @@ BoxCollider:
   m_GameObject: {fileID: 8216949970102271027}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
