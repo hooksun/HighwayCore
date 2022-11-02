@@ -435,7 +435,7 @@ MonoBehaviour:
   VaultSpeed: 3
   VaultDist: 1.6
   WallCheckPoint: {x: 0, y: 0.3, z: 0}
-  WallJumpForce: {x: 4, y: 8, z: 3}
+  WallJumpForce: {x: 4, y: 8, z: 2}
   VaultJumpForce: {x: 0, y: 10, z: -7}
   VaultStart: {x: 0, y: 0.8, z: 0.6}
   WallRunCooldown: 10
