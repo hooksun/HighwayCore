@@ -10,8 +10,10 @@ public class GunData : ScriptableObject
     public float damage;
     public float maxDistance;
 
-    public int currentAmmo;
+    public int currentAmmoInMag;
+    public int magazineSize;
     public int maxAmmo;
+    public int ammoLeft;
     public float fireRate;
     public float reloadTime;
     public bool isReloading;

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: AssaultRifle
   m_EditorClassIdentifier: 
   name: AR
-  damage: 5
+  damage: 3
   maxDistance: 400
-  currentAmmo: 3
-  maxAmmo: 31
+  currentAmmoInMag: 0
+  magazineSize: 30
+  maxAmmo: 300
+  ammoLeft: 300
   fireRate: 600
   reloadTime: 1.5
   isReloading: 0

@@ -10,13 +10,14 @@ public class GunScript : MonoBehaviour
     float readyTime;
     public GameObject impact;
     float timeSinceLastShot;
-    public TextMeshProUGUI ammoCounter;
+    public TextMeshProUGUI ammoInMagCounter;
+    public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
     public GameObject cam;
     // Start is called before the first frame update
     void Start()
     {
-        gunData.currentAmmo = gunData.maxAmmo;
+        gunData.currentAmmoInMag = gunData.magazineSize;
         gunData.isReloading = false;
     }
 
@@ -32,7 +33,8 @@ public class GunScript : MonoBehaviour
             Reloading();
         }
 
-        ammoCounter.SetText("AMMO : " + gunData.currentAmmo.ToString());
+        ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
+        ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
     }
 
     void whatIsWeapon(){
@@ -45,10 +47,10 @@ public class GunScript : MonoBehaviour
     }
 
     void shooting(){
-        if(!gunData.isReloading && gunData.currentAmmo > 0 && ReadyToShoot()){
+        if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
             whatIsWeapon();
             timeSinceLastShot = 0f;
-            gunData.currentAmmo--;
+            gunData.currentAmmoInMag--;
         }
     }
 
@@ -79,9 +81,19 @@ public class GunScript : MonoBehaviour
             
         }
     }
-    void ReloadingFinished(){
+    void ReloadingFinished(){ //This is where the ammo refill
         if(prevSelectedWeapon == weaponSwitching.currentWeapon){
-            gunData.currentAmmo = gunData.maxAmmo;
+            int numOfBulletNeeded = gunData.magazineSize - gunData.currentAmmoInMag;
+
+            if(numOfBulletNeeded > gunData.ammoLeft){
+                numOfBulletNeeded = gunData.ammoLeft;
+            }
+
+            if(gunData.ammoLeft > 0){
+                gunData.currentAmmoInMag += numOfBulletNeeded;
+                gunData.ammoLeft -= numOfBulletNeeded;
+            }
+
             gunData.isReloading = false;
         }
     }
