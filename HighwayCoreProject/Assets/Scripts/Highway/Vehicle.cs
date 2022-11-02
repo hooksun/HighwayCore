@@ -6,6 +6,8 @@ public class Vehicle : MonoBehaviour, IMovingGround
 {
     public float position;
     public float length, speed, accel, targetGap, gapTime;
+    public Platform[] Platforms;
+
 
     public void UpdateTransform()
     {
@@ -13,4 +15,10 @@ public class Vehicle : MonoBehaviour, IMovingGround
     }
 
     public Vector3 velocity{get => Vector3.forward * speed;}
+}
+
+public class Platform
+{
+    public float height;
+    public Vector2 BoundsStart, BoundsEnd;
 }

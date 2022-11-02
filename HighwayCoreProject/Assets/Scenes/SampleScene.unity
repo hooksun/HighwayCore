@@ -343,6 +343,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &717730295 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8216949968672074494, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8216949969534088097}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,11 +685,13 @@ MonoBehaviour:
     transform: {fileID: 1431077805}
   StartLength: 200
   StartPosition: -50
-  minGap: 2
+  minGap: 3
   maxGap: 5
   accelRange: 5
   minGapTime: 1
   maxGapTime: 3
+  player: {fileID: 717730295}
+  PlayerGenerateDist: 100
 --- !u!1 &2106397325
 GameObject:
   m_ObjectHideFlags: 0

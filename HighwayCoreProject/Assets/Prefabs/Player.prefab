@@ -170,6 +170,8 @@ MonoBehaviour:
   JumpYPosMulti: 0.5
   JumpGravity: 20
   FallGravity: 30
+  WallRunSpeed: 12
+  WallRunAccel: 15
   WallCheckDist: 0.6
   MinWallRunYSpeed: 3
   VaultSpeed: 3

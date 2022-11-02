@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="AI", menuName ="NPC/AI")]
 public class AIData : ScriptableObject
 {
-    public string name;
+    public string name_;
     public float fireRate; // seconds/shot
     public float movementSpeed;
     public int shootingBurst; //Berapa banyak tembakan tiap kali serang

@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
     
     public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity;
-    public float WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
+    public float WallRunSpeed, WallRunAccel, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public int WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
     public float GroundCheckDist, GroundCheckRadius, NormalCheckDist, MaxSlope;
@@ -99,8 +99,9 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            float maxSpeed = (isVaulting?SpeedWhileVaulting:Speed);
-            Vector3 targetVel = horizVel + directionWorld * AirAccel * Time.fixedDeltaTime;
+            float maxSpeed = (isVaulting?SpeedWhileVaulting:(isWallRunning?WallRunSpeed:Speed));
+            float accel = (isWallRunning?WallRunAccel:AirAccel);
+            Vector3 targetVel = horizVel + directionWorld * accel * Time.fixedDeltaTime;
             float targetSqrSpeed = targetVel.sqrMagnitude;
             float SqrHorizSpeed = horizVel.sqrMagnitude;
             if(targetSqrSpeed > SqrHorizSpeed && targetSqrSpeed > maxSpeed * maxSpeed)
@@ -176,33 +177,39 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    int isWallRunning, wallRunCooldown;
+    bool isWallRunning;
+    int wallRunCooldown;
+    Vector3 wallDir;
     void WallRun()
     {
-        isWallRunning = 0;
+        isWallRunning = false;
         if(wallRunCooldown > 0)
         {
             wallRunCooldown--;
             return;
         }
-        RaycastHit hit = groundInfo;
+        
         if(!isGrounded && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
         {
-            if(Physics.Raycast(transform.position + WallCheckPoint, transform.right, out hit, WallCheckDist, GroundMask))
+            RaycastHit hit = groundInfo;
+            if((wallDir != Vector3.zero && Physics.Raycast(transform.position + WallCheckPoint, wallDir, out hit, WallCheckDist, GroundMask))
+            || Physics.Raycast(transform.position + WallCheckPoint, transform.right, out hit, WallCheckDist, GroundMask)
+            || Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
             {
-                isWallRunning = 1;
-            }
-            else if(Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
-            {
-                isWallRunning = -1;
+                isWallRunning = true;
+                velocity.y = 0f;
+                velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
+                if(velocity.sqrMagnitude > WallRunSpeed * WallRunSpeed)
+                {
+                    velocity -= velocity.normalized * WallRunAccel * Time.fixedDeltaTime;
+                }
+                wallDir = -hit.normal;
+                ChangeGround(hit.collider.transform);
+                return;
             }
         }
 
-        if(isWallRunning != 0)
-        {
-            velocity.y = 0f;
-            ChangeGround(hit.collider.transform);
-        }
+        wallDir = Vector3.zero;
     }
 
     public void Jump(InputAction.CallbackContext ctx)
@@ -220,11 +227,11 @@ public class PlayerMovement : MonoBehaviour
             AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, 0f);
             return;
         }
-        if(isWallRunning != 0)
+        if(isWallRunning)
         {
             Vector3 jumpForce = WallJumpForce;
-            jumpForce.x *= -isWallRunning;
-            AddForce(transform.rotation * jumpForce, 0f);
+            jumpForce.x = 0;
+            AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, 0f);
             wallRunCooldown = WallRunCooldown;
             return;
         }
