@@ -8,7 +8,7 @@ public class HighwayGenerator : MonoBehaviour
     public VehiclePool Pool;
     public Lane[] Lanes;
     public float StartLength;
-    public float StartPosition, minGap, maxGap, accelRange, minGapTime, maxGapTime;
+    public float StartPosition, minGap, maxGap, accelRange, minGapTime, maxGapTime, gapDistance;
 
     public Transform player; // temp
     public float PlayerGenerateDist;
@@ -46,6 +46,7 @@ public class HighwayGenerator : MonoBehaviour
                 firstVehicle.gameObject.SetActive(false);
                 firstVehicle.transform.parent = Pool.transform;
                 lane.Vehicles.RemoveAt(0);
+                lane.Vehicles[0].speed = 0f;
             }
             Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
             if(Mathf.Abs(lastVehicle.position - player.position.z) < PlayerGenerateDist)
@@ -62,7 +63,7 @@ public class HighwayGenerator : MonoBehaviour
                 {
                     vehicle.gapTime = Random.Range(minGapTime, Mathf.Min(vehicle.gapTime, vehicleBehind.gapTime));
                 }
-                if(Mathf.Abs(vehicle.targetGap - gap) < .2f)
+                if(Mathf.Abs(vehicle.targetGap - gap) < gapDistance)
                 {
                     vehicle.targetGap = Random.Range(minGap, maxGap);
                     vehicle.gapTime = Random.Range(minGapTime, maxGapTime);

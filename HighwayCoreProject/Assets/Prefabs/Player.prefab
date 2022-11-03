@@ -428,17 +428,29 @@ MonoBehaviour:
   JumpYPosMulti: 0.5
   JumpGravity: 20
   FallGravity: 30
+  JetpackSpeed: 5
+  JetpackForce: 5
+  JetpackDecel: 10
+  JetpackFuel: 50
+  FuelCost: 12
+  AirJumpCost: 16
+  RefuelRate: 5
+  GroundRefuelRate: 25
+  AirJumpAccel: 100
   WallRunSpeed: 12
-  WallRunAccel: 15
+  WallRunAccel: 20
+  WallRunDecel: 15
   WallCheckDist: 0.6
   MinWallRunYSpeed: 3
   VaultSpeed: 3
-  VaultDist: 1.6
+  VaultDist: 1.8
+  VaultDecel: 15
   WallCheckPoint: {x: 0, y: 0.3, z: 0}
   WallJumpForce: {x: 4, y: 8, z: 2}
   VaultJumpForce: {x: 0, y: 10, z: -7}
-  VaultStart: {x: 0, y: 0.8, z: 0.6}
-  WallRunCooldown: 10
+  VaultStart: {x: 0, y: 1, z: 0.6}
+  AirJumpTime: 5
+  WallRunCooldown: 5
   VaultStopDelay: 5
   GroundCheckCooldown: 5
   GravityCooldown: 5
@@ -452,6 +464,7 @@ MonoBehaviour:
   HardGroundMask:
     serializedVersion: 2
     m_Bits: 8
+  currentFuel: 0
 --- !u!114 &8216949968672074432
 MonoBehaviour:
   m_ObjectHideFlags: 0

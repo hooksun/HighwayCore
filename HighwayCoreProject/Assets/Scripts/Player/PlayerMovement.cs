@@ -8,9 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb;
     
     public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity;
-    public float WallRunSpeed, WallRunAccel, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
+    public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
+    public float WallRunSpeed, WallRunAccel, WallRunDecel, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
-    public int WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
+    public int AirJumpTime, WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
     public float GroundCheckDist, GroundCheckRadius, NormalCheckDist, MaxSlope;
     public LayerMask GroundMask, HardGroundMask;
 
@@ -52,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         Vault();
 
         WallRun();
+
+        Jetpack();
 
         rb.velocity = velocity + groundVel;
     }
@@ -100,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             float maxSpeed = (isVaulting?SpeedWhileVaulting:(isWallRunning?WallRunSpeed:Speed));
-            float accel = (isWallRunning?WallRunAccel:AirAccel);
+            float accel = (isWallRunning?WallRunAccel:(airJumping>0?AirJumpAccel:AirAccel));
             Vector3 targetVel = horizVel + directionWorld * accel * Time.fixedDeltaTime;
             float targetSqrSpeed = targetVel.sqrMagnitude;
             float SqrHorizSpeed = horizVel.sqrMagnitude;
@@ -164,6 +167,11 @@ public class PlayerMovement : MonoBehaviour
                     ChangeGround(hit.collider.transform);
                     vaultDir = directionWorld;
                     vaultDelay = VaultStopDelay;
+                    velocity.y = 0f;
+                    if(velocity.sqrMagnitude > SpeedWhileVaulting * SpeedWhileVaulting)
+                    {
+                        velocity -= velocity.normalized * VaultDecel * Time.fixedDeltaTime;
+                    }
                     velocity.y = VaultSpeed;
                     return;
                 }
@@ -201,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
                 velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
                 if(velocity.sqrMagnitude > WallRunSpeed * WallRunSpeed)
                 {
-                    velocity -= velocity.normalized * WallRunAccel * Time.fixedDeltaTime;
+                    velocity -= velocity.normalized * WallRunDecel * Time.fixedDeltaTime;
                 }
                 wallDir = -hit.normal;
                 ChangeGround(hit.collider.transform);
@@ -212,8 +220,32 @@ public class PlayerMovement : MonoBehaviour
         wallDir = Vector3.zero;
     }
 
+    public float currentFuel;
+    int airJumping;
+    void Jetpack()
+    {
+        if(airJumping > 0)
+        {
+            airJumping--;
+        }
+        if(isJumping && !isGrounded && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y < JetpackSpeed)
+        {
+            float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + FallGravity) * Time.fixedDeltaTime);
+            velocity.y = 0f;
+            velocity -= velocity.normalized * JetpackDecel * Time.fixedDeltaTime;
+            velocity.y = velY;
+            currentFuel -= FuelCost * Time.fixedDeltaTime;
+            return;
+        }
+        
+        currentFuel = Mathf.MoveTowards(currentFuel, JetpackFuel, (isGrounded?GroundRefuelRate:RefuelRate) * Time.fixedDeltaTime);
+    }
+
+    bool isJumping;
     public void Jump(InputAction.CallbackContext ctx)
     {
+        if(!ctx.performed)
+            isJumping = ctx.started;
         if(!ctx.started)
             return;
         
@@ -233,6 +265,14 @@ public class PlayerMovement : MonoBehaviour
             jumpForce.x = 0;
             AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, 0f);
             wallRunCooldown = WallRunCooldown;
+            return;
+        }
+        if(currentFuel >= AirJumpCost)
+        {
+            AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
+            currentFuel -= AirJumpCost;
+            airJumping = AirJumpTime;
+            print("Air Jump");
             return;
         }
     }

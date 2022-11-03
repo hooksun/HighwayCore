@@ -690,6 +690,7 @@ MonoBehaviour:
   accelRange: 5
   minGapTime: 1
   maxGapTime: 3
+  gapDistance: 0.5
   player: {fileID: 717730295}
   PlayerGenerateDist: 100
 --- !u!1 &2106397325
