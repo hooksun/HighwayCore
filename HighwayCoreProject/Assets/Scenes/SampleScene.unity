@@ -1032,5 +1032,6 @@ PrefabInstance:
       propertyPath: ammoInMagCounter
       value: 
       objectReference: {fileID: 430378244}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1294293035, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}

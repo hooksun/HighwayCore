@@ -7,6 +7,7 @@ public class WeaponSwitching : MonoBehaviour
     public Transform[] weapons;
     public GunData shotgun;
     public GunData rifle;
+    public GunData pistol;
     public GunScript gunScript;
     public int currentWeapon;
     int prevSelectedWeapon;
@@ -17,15 +18,14 @@ public class WeaponSwitching : MonoBehaviour
     {
         findWeapon();
         currentWeapon = 0;
+        prevSelectedWeapon = 0;
         selectWeapon(currentWeapon);
-        prevSelectedWeapon = -1;
     }
 
     // Update is called once per frame
     void Update()
     {
         prevSelectedWeapon = currentWeapon;
-        
         for(int i=0;i<keyCodes.Length;i++){
             if(Input.GetKeyDown(keyCodes[i])){
                 currentWeapon = i;
@@ -34,12 +34,13 @@ public class WeaponSwitching : MonoBehaviour
         if(prevSelectedWeapon!=currentWeapon){
             selectWeapon(currentWeapon);
         }
-        changeGunData();
+        //changeGunData();
     }
 
     private KeyCode[] keyCodes = {
         KeyCode.Alpha1, 
-        KeyCode.Alpha2
+        KeyCode.Alpha2,
+        KeyCode.Alpha3
     };
 
     void findWeapon(){
@@ -48,33 +49,47 @@ public class WeaponSwitching : MonoBehaviour
             weapons[i] = transform.GetChild(i);
         }
     }
-    // void selectWeapon(int index){
-    //     for(int i=0;i<weapons.Length;i++){
-    //         weapons[i].gameObject.SetActive(i == index);
-    //     }
-    // }
 
     void selectWeapon(int index){
-        if(index == 0 && shotgun.available){
+        if(index == 0 && pistol.available){
             for(int i=0;i<weapons.Length;i++){
                 weapons[i].gameObject.SetActive(i == index);
             }
+            gunScript.gunData = pistol;
+            gunScript.gunData.isReloading = false;
         }
-        if(index == 1 && rifle.available){
+        if(index == 1 && shotgun.available){
             for(int i=0;i<weapons.Length;i++){
                 weapons[i].gameObject.SetActive(i == index);
             }
+            gunScript.gunData = shotgun;
+            gunScript.gunData.isReloading = false;
+        }
+        if(index == 2 && rifle.available){
+            for(int i=0;i<weapons.Length;i++){
+                weapons[i].gameObject.SetActive(i == index);
+            }
+            gunScript.gunData = rifle;
+            gunScript.gunData.isReloading = false;
+
         }
     }
 
     void changeGunData(){
         if(currentWeapon == 0){
+            if(pistol.available){
+                gunScript.gunData = pistol;
+                gunScript.gunData.isReloading = false;
+                weapons[0].gameObject.SetActive(0 == 0);
+            }
+        }
+        if(currentWeapon == 1){
             if(shotgun.available){
                 gunScript.gunData = shotgun;
                 gunScript.gunData.isReloading = false;
             }
         }
-        else if(currentWeapon == 1){
+        else if(currentWeapon == 2){
             if(rifle.available){
                 gunScript.gunData = rifle;
                 gunScript.gunData.isReloading = false;

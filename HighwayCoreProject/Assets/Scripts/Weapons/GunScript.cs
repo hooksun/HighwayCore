@@ -41,7 +41,7 @@ public class GunScript : MonoBehaviour
         if(gunData.name == "Shotgun"){
             ShotgunBullet();
         }
-        if(gunData.name == "AR"){
+        if(gunData.name == "AR" || gunData.name == "Pistol"){
             ARBullet();
         }
     }

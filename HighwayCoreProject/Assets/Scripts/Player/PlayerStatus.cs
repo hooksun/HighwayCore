@@ -11,6 +11,7 @@ public class PlayerStatus : MonoBehaviour
 
     public Transform groundChecker;
     private bool fallen;
+    bool takenDamage = false;
     void Start()
     {
         health = playerData.maxHealth;
@@ -19,32 +20,12 @@ public class PlayerStatus : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        if(Physics.Raycast(groundChecker.position, Vector3.down, out hit, .2f)){
-            if(hit.collider.name == "Road"){
-                fallen = true;
-            }
-            else{
-                fallen = false;
-            }
-        }
         PlayerHealthCondition();
-        PlayerFell();
     }
     void PlayerHealthCondition(){
         healthPointTxt.SetText("HP : " + health);
         if(health <=0){
             //DED
-        }
-    }
-
-    bool takenDamage = false;
-    void PlayerFell(){
-        if(fallen && !takenDamage){
-            PlayerTakeDamage();
-            takenDamage = true;
-
-            Invoke("ReadyToTakeDamage", 1f);
         }
     }
 
