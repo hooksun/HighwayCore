@@ -306,6 +306,7 @@ GameObject:
   - component: {fileID: 8216949968672074435}
   - component: {fileID: 8216949968672074432}
   - component: {fileID: 8216949968672074433}
+  - component: {fileID: 1394077368}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -560,6 +561,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1394077368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216949968672074490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addecc90a4b67c54dbbfe93289c4d7af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: 77b5b3d8c3ce71b47b44a4bd9301694d, type: 2}
+  healthPointTxt: {fileID: 0}
 --- !u!1 &8216949968949899694
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,6 +626,8 @@ MonoBehaviour:
   gunData: {fileID: 11400000, guid: 0cb60f3e89c95fb4eac1907d300555e5, type: 2}
   impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
   ammoCounter: {fileID: 0}
+  weaponSwitching: {fileID: 1406370825}
+  cam: {fileID: 8216949969757152870}
 --- !u!114 &1406370825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,6 +644,7 @@ MonoBehaviour:
   shotgun: {fileID: 11400000, guid: 37fdfc5093ef56841ad3f4aa4afc9e0b, type: 2}
   rifle: {fileID: 11400000, guid: 0cb60f3e89c95fb4eac1907d300555e5, type: 2}
   gunScript: {fileID: 8216949968949899696}
+  currentWeapon: 0
 --- !u!114 &1294293035
 MonoBehaviour:
   m_ObjectHideFlags: 0
