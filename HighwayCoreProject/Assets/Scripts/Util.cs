@@ -2,6 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public static class Util
+{
+    public static int[] RandomSequence(int amount)
+    {
+        int[] answer = new int[amount];
+        List<int> sequence = new List<int>();
+        for(int i = 0; i < amount; i++)
+        {
+            sequence.Add(i);
+        }
+        for(int i = 0; i < amount; i++)
+        {
+            int j = Random.Range(0, sequence.Count);
+            answer[i] = sequence[j];
+            sequence.RemoveAt(j);
+        }
+        return answer;
+    }
+}
+
 [System.Serializable]
 public class VariablePool<T>
 {

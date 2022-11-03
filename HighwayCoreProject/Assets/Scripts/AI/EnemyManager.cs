@@ -7,11 +7,32 @@ public class EnemyManager : MonoBehaviour
     public Transform player; // temp
     public HighwayGenerator Highway;
 
-    public VariablePool<Enemy> Enemies;
+    public VariablePool<EnemyType> Enemies;
+    public List<IEnemySpawner> Spawners;
 
     void EnemyUpdate()
     {
 
+    }
+
+    void SpawnEnemies(int amount)
+    {
+        for(int i = 0; i < amount; i++)
+        {
+            EnemyType enemy = Enemies.GetRandomVar();
+            int[] seq = Util.RandomSequence(Spawners.Count);
+            for(int j = 0; j < seq.Length; j++)
+            {
+                IEnemySpawner spawner = Spawners[seq[j]];
+                if(!spawner.canSpawn)
+                    continue;
+                float dist = spawner.DistanceFrom(player.position);
+                if(dist < enemy.minDistance || dist > enemy.maxDistance)
+                    continue;
+
+                //spawner.SpawnEnemy();
+            }
+        }
     }
 
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform)
@@ -61,4 +82,11 @@ public class EnemyManager : MonoBehaviour
 
         return answer;
     }
+}
+
+[System.Serializable]
+public struct EnemyType
+{
+    public int enemyIndex;
+    public float minDistance, maxDistance;
 }

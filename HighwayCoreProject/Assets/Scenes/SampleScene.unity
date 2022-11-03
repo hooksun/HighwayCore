@@ -414,6 +414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 932973447}
   - component: {fileID: 932973448}
+  - component: {fileID: 932973449}
   m_Layer: 0
   m_Name: ObjectPool
   m_TagString: Untagged
@@ -448,7 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1305720e58d68114fbf407d498ac6ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VehiclePools:
+  ObjectPools:
   - pool: []
     Object: {fileID: 3611803262088579868, guid: 7a65bfb6fb7bb95499f3696ec080bc9c,
       type: 3}
@@ -461,6 +462,19 @@ MonoBehaviour:
     Object: {fileID: 2074021377265111950, guid: 8b7b97f4238f9034b96108bbd98e398c,
       type: 3}
     startAmount: 25
+--- !u!114 &932973449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932973446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6bb70d324fce414a825d5a3bae7ddf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectPools: []
 --- !u!114 &1217877353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1217877353, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -719,6 +733,7 @@ GameObject:
   - component: {fileID: 1472807254}
   - component: {fileID: 1472807253}
   - component: {fileID: 1472807257}
+  - component: {fileID: 1472807258}
   m_Layer: 3
   m_Name: Road
   m_TagString: Untagged
@@ -816,6 +831,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef3e6d945f7acc64a9004732e913da8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyManager: {fileID: 0}
   Vehicles:
     Pool:
     - weight: 2
@@ -846,6 +862,37 @@ MonoBehaviour:
   gapDistance: 0.5
   player: {fileID: 717730295}
   PlayerGenerateDist: 100
+--- !u!114 &1472807258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472807252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e249eb57390731947b61d2201d7a35a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 717730295}
+  Highway: {fileID: 1472807257}
+  Enemies:
+    Pool:
+    - weight: 1
+      variable:
+        enemyIndex: 0
+        minDistance: 0
+        maxDistance: 0
+    - weight: 1
+      variable:
+        enemyIndex: 1
+        minDistance: 0
+        maxDistance: 0
+    - weight: 1
+      variable:
+        enemyIndex: 2
+        minDistance: 0
+        maxDistance: 0
 --- !u!1 &1721917227
 GameObject:
   m_ObjectHideFlags: 0

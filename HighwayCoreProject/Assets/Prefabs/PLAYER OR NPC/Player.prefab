@@ -429,12 +429,12 @@ MonoBehaviour:
   JumpYPosMulti: 0.5
   JumpGravity: 20
   FallGravity: 30
-  JetpackSpeed: 5
-  JetpackForce: 5
+  JetpackSpeed: 4
+  JetpackForce: 6
   JetpackDecel: 10
   JetpackFuel: 50
   FuelCost: 12
-  AirJumpCost: 16
+  AirJumpCost: 20
   RefuelRate: 5
   GroundRefuelRate: 25
   AirJumpAccel: 100
@@ -575,6 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 77b5b3d8c3ce71b47b44a4bd9301694d, type: 2}
   healthPointTxt: {fileID: 0}
+  groundChecker: {fileID: 0}
 --- !u!1 &8216949968949899694
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +626,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunData: {fileID: 11400000, guid: 0cb60f3e89c95fb4eac1907d300555e5, type: 2}
   impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
-  ammoCounter: {fileID: 0}
+  ammoInMagCounter: {fileID: 0}
+  ammoLeftCounter: {fileID: 0}
   weaponSwitching: {fileID: 1406370825}
   cam: {fileID: 8216949969757152870}
 --- !u!114 &1406370825

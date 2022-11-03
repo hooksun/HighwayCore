@@ -2,37 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VehiclePool : MonoBehaviour
+public class VehiclePool : ObjectPool<Vehicle>{}
+
+public abstract class ObjectPool<T> : MonoBehaviour where T : Component
 {
-    public Pool<Vehicle>[] VehiclePools;
+    public Pool<T>[] ObjectPools;
 
     void Awake()
     {
-        foreach(Pool<Vehicle> pool in VehiclePools)
+        foreach(Pool<T> pool in ObjectPools)
         {
             for(int i = pool.pool.Count; i < pool.startAmount; i++)
             {
                 GameObject obj = Instantiate(pool.Object.gameObject, transform);
                 obj.SetActive(false);
-                pool.pool.Add(obj.GetComponent<Vehicle>());
+                pool.pool.Add(obj.GetComponent<T>());
             }
         }
     }
 
-    public Vehicle GetVehicle(int index)
+    public T GetObject(int index)
     {
-        foreach(Vehicle vehicle in VehiclePools[index].pool)
+        foreach(T tObj in ObjectPools[index].pool)
         {
-            if(!vehicle.gameObject.activeInHierarchy)
+            if(!tObj.gameObject.activeInHierarchy)
             {
-                vehicle.gameObject.SetActive(true);
-                return vehicle;
+                tObj.gameObject.SetActive(true);
+                return tObj;
             }
         }
-        GameObject obj = Instantiate(VehiclePools[index].Object.gameObject, transform);
-        Vehicle vec = obj.GetComponent<Vehicle>();
-        VehiclePools[index].pool.Add(vec);
-        return vec;
+        GameObject obj = Instantiate(ObjectPools[index].Object.gameObject, transform);
+        T t = obj.GetComponent<T>();
+        ObjectPools[index].pool.Add(t);
+        return t;
     }
 }
 

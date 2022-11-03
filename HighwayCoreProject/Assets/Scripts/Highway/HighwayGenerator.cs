@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HighwayGenerator : MonoBehaviour
 {
+    public EnemyManager enemyManager;
     public VariablePool<int> Vehicles;
     public VehiclePool Pool;
     public Lane[] Lanes;
@@ -47,6 +48,11 @@ public class HighwayGenerator : MonoBehaviour
                 firstVehicle.transform.parent = Pool.transform;
                 lane.Vehicles.RemoveAt(0);
                 lane.Vehicles[0].speed = 0f;
+
+                if(firstVehicle.isSpawner)
+                {
+                    enemyManager.Spawners.Remove((IEnemySpawner)firstVehicle);
+                }
             }
             Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
             if(Mathf.Abs(lastVehicle.position - player.position.z) < PlayerGenerateDist)
@@ -77,9 +83,14 @@ public class HighwayGenerator : MonoBehaviour
 
     float AddVehicle(Lane lane, float position)
     {
-        Vehicle newVehicle = Pool.GetVehicle(Vehicles.GetRandomVar());
+        Vehicle newVehicle = Pool.GetObject(Vehicles.GetRandomVar());
         lane.Vehicles.Add(newVehicle);
         newVehicle.transform.parent = lane.transform;
+
+        if(newVehicle.isSpawner)
+        {
+            enemyManager.Spawners.Add((IEnemySpawner)newVehicle);
+        }
 
         position += newVehicle.length + Random.Range(minGap, maxGap);
         newVehicle.position = position;

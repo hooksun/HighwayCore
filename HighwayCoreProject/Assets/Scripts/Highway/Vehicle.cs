@@ -7,6 +7,7 @@ public class Vehicle : MonoBehaviour, IMovingGround
     public float position;
     public float length, speed, accel, targetGap, gapTime;
     public Platform[] Platforms;
+    public virtual bool isSpawner{get => false;}
 
     public void UpdateTransform()
     {
