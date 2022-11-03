@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Gun", menuName ="Weapon/Gun")]
 public class GunData : ScriptableObject
 {
+    public bool available;
     public new string name;
 
     public float damage;

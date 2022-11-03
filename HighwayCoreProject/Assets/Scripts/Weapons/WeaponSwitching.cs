@@ -48,20 +48,37 @@ public class WeaponSwitching : MonoBehaviour
             weapons[i] = transform.GetChild(i);
         }
     }
+    // void selectWeapon(int index){
+    //     for(int i=0;i<weapons.Length;i++){
+    //         weapons[i].gameObject.SetActive(i == index);
+    //     }
+    // }
+
     void selectWeapon(int index){
-        for(int i=0;i<weapons.Length;i++){
-            weapons[i].gameObject.SetActive(i == index);
+        if(index == 0 && shotgun.available){
+            for(int i=0;i<weapons.Length;i++){
+                weapons[i].gameObject.SetActive(i == index);
+            }
+        }
+        if(index == 1 && rifle.available){
+            for(int i=0;i<weapons.Length;i++){
+                weapons[i].gameObject.SetActive(i == index);
+            }
         }
     }
 
     void changeGunData(){
         if(currentWeapon == 0){
-            gunScript.gunData = shotgun;
-            gunScript.gunData.isReloading = false;
+            if(shotgun.available){
+                gunScript.gunData = shotgun;
+                gunScript.gunData.isReloading = false;
+            }
         }
         else if(currentWeapon == 1){
-            gunScript.gunData = rifle;
-            gunScript.gunData.isReloading = false;
+            if(rifle.available){
+                gunScript.gunData = rifle;
+                gunScript.gunData.isReloading = false;
+            }
         }
     }
 }
