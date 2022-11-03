@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity;
+    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, MaxJumpDistance, idleTime;
+    public Vector3 transformOffset;
     public Transform targetPlayer;
     public EnemyManager manager;
     public EnemyState currentState;
@@ -14,8 +15,19 @@ public class Enemy : MonoBehaviour
     PlatformAddress targetPlatform;
     TransformPoint targetPoint, jumpPoint;
     bool isJumping;
-
+    
     void FixedUpdate()
+    {
+        Simulate();
+        if(isJumping)
+        {
+            transform.position += jumpVelocity * Time.fixedDeltaTime;
+            return;
+        }
+        transform.position = transformPosition.worldPoint + transformOffset;
+    }
+    
+    void Simulate()
     {
         if(isJumping)
         {
@@ -36,6 +48,21 @@ public class Enemy : MonoBehaviour
             PathFind();
             return;
         }
+        if(currentState == EnemyState.idle)
+        {
+            if(!idleing)
+                StartCoroutine(Idleing());
+            return;
+        }
+    }
+
+    bool idleing;
+    IEnumerator Idleing()
+    {
+        idleing = true;
+        yield return new WaitForSeconds(idleTime);
+        idleing = false;
+        currentState = EnemyState.pathfinding;
     }
 
     void PathFind()
@@ -48,6 +75,20 @@ public class Enemy : MonoBehaviour
         
         if(transformPosition.point == targetPoint.point)
         {
+            if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform|| jumpPoint.transform == null)
+            {
+                currentState = EnemyState.idle;
+                return;
+            }
+            
+            Vector3 jumpWorldPoint = jumpPoint.worldPoint;
+            jumpWorldPoint.y = transform.position.y;
+            if((jumpWorldPoint - transform.position).sqrMagnitude > MaxJumpDistance * MaxJumpDistance)
+            {
+                FindNewPath();
+                return;
+            }
+            
             isJumping = true;
             jumpVelocity = Vector3.zero;
             float height1 = Mathf.Max(currentPlatform.platform.height, targetPlatform.platform.height) + JumpHeight - currentPlatform.platform.height;
@@ -64,10 +105,36 @@ public class Enemy : MonoBehaviour
 
     protected virtual void FindNewPath()
     {
+        float sqrDist = Mathf.Infinity;
         List<PlatformAddress> neighbours = manager.RequestPlatformNeighbours(currentPlatform);
-        //pick one to be the targetPlatform
-        //set targetPoint, jumpPoint
+        for(int i = 0; i < neighbours.Count; i++)
+        {
+            PlatformAddress plat = neighbours[i];
+            if(Mathf.Abs(currentPlatform.platform.height - plat.platform.height) > MaxHeight)
+            {
+                neighbours.RemoveAt(i);
+                i--;
+                continue;
+            }
+            float newSqrDist = (plat.ClosestPointTo(targetPlayer.position).worldPoint - targetPlayer.position).sqrMagnitude;
+            if(newSqrDist < sqrDist)
+            {
+                sqrDist = newSqrDist;
+                targetPlatform = plat;
+            }
+        }
+        SetTargetPoint();
+    }
 
+    protected virtual void SetTargetPoint()
+    {
+        if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform)
+        {
+            targetPoint = currentPlatform.ClosestPointTo(targetPlayer.position);
+            return;
+        }
+        jumpPoint = targetPlatform.ClosestPointTo(transform.position);
+        targetPoint = currentPlatform.ClosestPointTo(jumpPoint.worldPoint);
     }
 
     Vector3 jumpVelocity;
@@ -77,6 +144,7 @@ public class Enemy : MonoBehaviour
         if(jumpTime < 0)
         {
             transformPosition = jumpPoint;
+            currentPlatform = targetPlatform;
             isJumping = false;
             FindNewPath();
             return;
@@ -106,6 +174,18 @@ public struct PlatformAddress
 
     public Vehicle vehicle{get => lane.Vehicles[vehicleIndex];}
     public Platform platform{get => vehicle.Platforms[platformIndex];}
+
+    public TransformPoint ClosestPointTo(Vector3 point)
+    {
+        Vector2 boundsStart = new Vector3(platform.BoundsStart.x, 0f, platform.BoundsStart.y) + vehicle.transform.position - vehicle.transformOffset;
+        Vector2 boundsEnd = new Vector3(platform.BoundsEnd.x, 0f, platform.BoundsEnd.y) + vehicle.transform.position - vehicle.transformOffset;
+        point.x = Mathf.Clamp(point.x, boundsStart.x, boundsEnd.x);
+        point.z = Mathf.Clamp(point.z, boundsStart.y, boundsEnd.y);
+
+        point -= vehicle.transform.position;
+        point.y = vehicle.transform.position.y + platform.height - vehicle.transformOffset.y;
+        return new TransformPoint(vehicle.transform, point);
+    }
 }
 
 public struct TransformPoint
@@ -119,5 +199,5 @@ public struct TransformPoint
         point = _point;
     }
 
-    public Vector3 worldPoint => transform.TransformPoint(point);
+    public Vector3 worldPoint => transform.position + point;
 }

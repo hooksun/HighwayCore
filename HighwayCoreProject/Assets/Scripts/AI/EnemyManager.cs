@@ -6,9 +6,12 @@ public class EnemyManager : MonoBehaviour
 {
     public Transform player; // temp
     public HighwayGenerator Highway;
+    public EnemyPool enemyPool;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners;
+
+    List<Enemy> ActiveEnemies = new List<Enemy>();
 
     void EnemyUpdate()
     {
@@ -30,7 +33,11 @@ public class EnemyManager : MonoBehaviour
                 if(dist < enemy.minDistance || dist > enemy.maxDistance)
                     continue;
 
-                //spawner.SpawnEnemy();
+                Enemy nme = enemyPool.GetObject(enemy.enemyIndex);
+                nme.manager = this;
+                nme.targetPlayer = player;
+
+                spawner.SpawnEnemy(nme);
             }
         }
     }
@@ -62,9 +69,9 @@ public class EnemyManager : MonoBehaviour
                 for(int i = 0; i < nextLane.Vehicles.Count; i++)
                 {
                     Vehicle vehicle = nextLane.Vehicles[i];
-                    if(vehicle.position - vehicle.length > boundsEnd)
+                    if(vehicle.position > boundsEnd)
                         break;
-                    if(vehicle.position < boundsStart)
+                    if(vehicle.position + vehicle.length < boundsStart)
                         continue;
                     
                     for(int j = 0; j < vehicle.Platforms.Length; j++)

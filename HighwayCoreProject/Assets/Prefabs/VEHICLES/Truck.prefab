@@ -116,3 +116,11 @@ MonoBehaviour:
   accel: 0
   targetGap: 0
   gapTime: 0
+  transformOffset: {x: 0, y: 2, z: 6}
+  Platforms:
+  - height: 4
+    BoundsStart: {x: -1, y: 0.5}
+    BoundsEnd: {x: 1, y: 4.5}
+  - height: 4
+    BoundsStart: {x: -1, y: 7.5}
+    BoundsEnd: {x: 1, y: 11.5}

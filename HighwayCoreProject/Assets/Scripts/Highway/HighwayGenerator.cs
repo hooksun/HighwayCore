@@ -5,8 +5,8 @@ using UnityEngine;
 public class HighwayGenerator : MonoBehaviour
 {
     public EnemyManager enemyManager;
-    public VariablePool<int> Vehicles;
     public VehiclePool Pool;
+    public VariablePool<int> Vehicles;
     public Lane[] Lanes;
     public float StartLength;
     public float StartPosition, minGap, maxGap, accelRange, minGapTime, maxGapTime, gapDistance;
@@ -41,33 +41,24 @@ public class HighwayGenerator : MonoBehaviour
     {
         foreach(Lane lane in Lanes)
         {
-            Vehicle firstVehicle = lane.Vehicles[0];
-            if(Mathf.Abs(firstVehicle.position - firstVehicle.length - player.position.z) > PlayerGenerateDist)
+            if(Mathf.Abs(lane.Vehicles[0].position - player.position.z) > PlayerGenerateDist)
             {
-                firstVehicle.gameObject.SetActive(false);
-                firstVehicle.transform.parent = Pool.transform;
-                lane.Vehicles.RemoveAt(0);
-                lane.Vehicles[0].speed = 0f;
-
-                if(firstVehicle.isSpawner)
-                {
-                    enemyManager.Spawners.Remove((IEnemySpawner)firstVehicle);
-                }
+                RemoveVehicle(lane, 0);
             }
             Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
             if(Mathf.Abs(lastVehicle.position - player.position.z) < PlayerGenerateDist)
             {
-                AddVehicle(lane, lastVehicle.position);
+                AddVehicle(lane, lastVehicle.position + lastVehicle.length);
             }
             
-            for(int i = 1; i < lane.Vehicles.Count; i++)
+            for(int i = lane.Vehicles.Count - 2; i >= 0; i--)
             {
                 Vehicle vehicle = lane.Vehicles[i];
-                Vehicle vehicleBehind = lane.Vehicles[i-1];
-                float gap = vehicle.position - vehicle.length - vehicleBehind.position;
+                Vehicle vehicleFront = lane.Vehicles[i+1];
+                float gap = vehicleFront.position - vehicle.position - vehicle.length;
                 if(gap < minGap)
                 {
-                    vehicle.gapTime = Random.Range(minGapTime, Mathf.Min(vehicle.gapTime, vehicleBehind.gapTime));
+                    vehicle.gapTime = Random.Range(minGapTime, Mathf.Min(vehicle.gapTime, vehicleFront.gapTime));
                 }
                 if(Mathf.Abs(vehicle.targetGap - gap) < gapDistance)
                 {
@@ -75,7 +66,7 @@ public class HighwayGenerator : MonoBehaviour
                     vehicle.gapTime = Random.Range(minGapTime, maxGapTime);
                     continue;
                 }
-                vehicle.position = Mathf.SmoothDamp(gap, vehicle.targetGap, ref vehicle.speed, vehicle.gapTime) + vehicle.length + vehicleBehind.position;
+                vehicle.position = vehicleFront.position - Mathf.SmoothDamp(gap, vehicle.targetGap, ref vehicle.speed, vehicle.gapTime) - vehicle.length;
                 vehicle.UpdateTransform();
             }
         }
@@ -89,15 +80,32 @@ public class HighwayGenerator : MonoBehaviour
 
         if(newVehicle.isSpawner)
         {
-            enemyManager.Spawners.Add((IEnemySpawner)newVehicle);
+            ((SpawnerVehicle)newVehicle).address = new PlatformAddress(lane, lane.transform.GetSiblingIndex(), newVehicle.transform.GetSiblingIndex(), 0);
+            enemyManager.Spawners.Add((SpawnerVehicle)newVehicle);
         }
 
-        position += newVehicle.length + Random.Range(minGap, maxGap);
+        position += Random.Range(minGap, maxGap);
         newVehicle.position = position;
+        newVehicle.speed = 0f;
         newVehicle.UpdateTransform();
         newVehicle.targetGap = Random.Range(minGap, maxGap);
         newVehicle.gapTime = Random.Range(minGapTime, maxGapTime);
-        return position;
+        return position + newVehicle.length;
+    }
+
+    void RemoveVehicle(Lane lane, int index = 0)
+    {
+        Vehicle vehicle = lane.Vehicles[index];
+        vehicle.gameObject.SetActive(false);
+        vehicle.transform.parent = Pool.transform;
+        lane.Vehicles.RemoveAt(index);
+        if(index == lane.Vehicles.Count)
+            lane.Vehicles[lane.Vehicles.Count - 1].speed = 0f;
+
+        if(vehicle.isSpawner)
+        {
+            enemyManager.Spawners.Remove((IEnemySpawner)vehicle);
+        }
     }
 }
 
