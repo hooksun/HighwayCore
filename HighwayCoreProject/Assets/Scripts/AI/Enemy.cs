@@ -18,12 +18,12 @@ public class Enemy : MonoBehaviour
     bool isJumping;
     int backnForth;
     
-    void FixedUpdate()
+    void Update()
     {
         Simulate();
         if(isJumping)
         {
-            transform.position += jumpVelocity * Time.fixedDeltaTime;
+            transform.position += jumpVelocity * Time.deltaTime;
             return;
         }
         transform.position = transformPosition.worldPoint + transformOffset;
@@ -122,7 +122,7 @@ public class Enemy : MonoBehaviour
         }
 
         //movetowards logic
-        transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.fixedDeltaTime);
+        transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
     }
 
     protected virtual void FindNewPath()
@@ -185,8 +185,8 @@ public class Enemy : MonoBehaviour
 
         Vector3 distance = jumpPoint.worldPoint - transform.position;
         distance.y = 0f;
-        jumpVelocity = distance / jumpTime + Vector3.up * (jumpVelocity.y - (jumpVelocity.y > 0?JumpGravity:FallGravity) * Time.fixedDeltaTime);
-        jumpTime -= Time.fixedDeltaTime;
+        jumpVelocity = distance / jumpTime + Vector3.up * (jumpVelocity.y - (jumpVelocity.y > 0?JumpGravity:FallGravity) * Time.deltaTime);
+        jumpTime -= Time.deltaTime;
     }
 }
 

@@ -120,6 +120,7 @@ MonoBehaviour:
   JumpDistance: 2
   MaxJumpDistance: 10
   idleTime: 3
+  maxBacknForth: 1
   transformOffset: {x: 0, y: 1, z: 0}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
