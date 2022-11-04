@@ -9,10 +9,15 @@ public class EnemyManager : MonoBehaviour
     public EnemyPool enemyPool;
 
     public VariablePool<EnemyType> Enemies;
-    public List<IEnemySpawner> Spawners;
+    public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
+    public List<Enemy> ActiveEnemies = new List<Enemy>();
 
-    List<Enemy> ActiveEnemies = new List<Enemy>();
-
+    IEnumerator Start()
+    {
+        yield return new WaitForSeconds(5f);
+        SpawnEnemies(10);
+    }
+    
     void EnemyUpdate()
     {
 
@@ -38,11 +43,13 @@ public class EnemyManager : MonoBehaviour
                 nme.targetPlayer = player;
 
                 spawner.SpawnEnemy(nme);
+                ActiveEnemies.Add(nme);
+                nme.Activate();
             }
         }
     }
 
-    public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform)
+    public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
     {
         List<PlatformAddress> answer = new List<PlatformAddress>();
 
@@ -58,29 +65,39 @@ public class EnemyManager : MonoBehaviour
             newPlat.platformIndex++;
             answer.Add(newPlat);
         }
+        if(platform.platformIndex == 0 && platform.vehicleIndex > 0)
+        {
+            Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex-1];
+            answer.Add(new PlatformAddress(platform.lane, nextVehicle, nextVehicle.Platforms.Length - 1));
+        }
+        if(platform.platformIndex == platform.vehicle.Platforms.Length - 1 && platform.vehicleIndex < platform.lane.Vehicles.Count - 1)
+        {
+            Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex+1];
+            answer.Add(new PlatformAddress(platform.lane, nextVehicle, 0));
+        }
         float boundsStart = platform.vehicle.position + platform.platform.BoundsStart.y;
         float boundsEnd = platform.vehicle.position + platform.platform.BoundsEnd.y;
         int laneIndex = platform.laneIndex - 1;
         for(int h = 0; h < 2; h++)
         {
-            if(laneIndex > 0 && laneIndex < Highway.Lanes.Length - 1)
+            if(laneIndex >= 0 && laneIndex < Highway.Lanes.Length)
             {
                 Lane nextLane = Highway.Lanes[laneIndex];
                 for(int i = 0; i < nextLane.Vehicles.Count; i++)
                 {
                     Vehicle vehicle = nextLane.Vehicles[i];
-                    if(vehicle.position > boundsEnd)
+                    if(vehicle.position > boundsEnd + boundsOffset)
                         break;
-                    if(vehicle.position + vehicle.length < boundsStart)
+                    if(vehicle.position + vehicle.length < boundsStart - boundsOffset)
                         continue;
                     
                     for(int j = 0; j < vehicle.Platforms.Length; j++)
                     {
                         Platform plat = vehicle.Platforms[j];
-                        if(vehicle.position + plat.BoundsStart.y > boundsEnd || vehicle.position + plat.BoundsEnd.y < boundsStart)
+                        if(vehicle.position + plat.BoundsStart.y > boundsEnd + boundsOffset || vehicle.position + plat.BoundsEnd.y < boundsStart - boundsOffset)
                             continue;
                         
-                        answer.Add(new PlatformAddress(nextLane, laneIndex, i, j));
+                        answer.Add(new PlatformAddress(nextLane, vehicle, j));
                     }
                 }
             }

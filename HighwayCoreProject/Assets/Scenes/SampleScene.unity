@@ -456,6 +456,10 @@ MonoBehaviour:
     Object: {fileID: 2074021377265111950, guid: 8b7b97f4238f9034b96108bbd98e398c,
       type: 3}
     startAmount: 25
+  - pool: []
+    Object: {fileID: -142073367996895342, guid: 71d681a5a00b78c4b88d30d5146319d7,
+      type: 3}
+    startAmount: 10
 --- !u!114 &932973449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,7 +472,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6bb70d324fce414a825d5a3bae7ddf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectPools: []
+  ObjectPools:
+  - pool: []
+    Object: {fileID: 259255105076096126, guid: 94b70a42cf5084549888e55a0c68574d, type: 3}
+    startAmount: 10
 --- !u!114 &1217877353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1217877353, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -706,12 +713,14 @@ MonoBehaviour:
   Pool: {fileID: 932973448}
   Vehicles:
     Pool:
-    - weight: 2
+    - weight: 4
       variable: 0
-    - weight: 2
+    - weight: 4
       variable: 1
-    - weight: 1
+    - weight: 2
       variable: 2
+    - weight: 1
+      variable: 3
   Lanes:
   - Vehicles: []
     transform: {fileID: 460245550}
@@ -732,7 +741,7 @@ MonoBehaviour:
   maxGapTime: 3
   gapDistance: 0.5
   player: {fileID: 717730295}
-  PlayerGenerateDist: 100
+  PlayerGenerateDist: 150
 --- !u!114 &1472807258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,24 +756,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 717730295}
   Highway: {fileID: 1472807257}
-  enemyPool: {fileID: 0}
+  enemyPool: {fileID: 932973449}
   Enemies:
     Pool:
     - weight: 1
       variable:
         enemyIndex: 0
-        minDistance: 0
-        maxDistance: 0
-    - weight: 1
-      variable:
-        enemyIndex: 1
-        minDistance: 0
-        maxDistance: 0
-    - weight: 1
-      variable:
-        enemyIndex: 2
-        minDistance: 0
-        maxDistance: 0
+        minDistance: 5
+        maxDistance: 50
+  ActiveEnemies: []
 --- !u!1 &2056577076
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, MaxJumpDistance, idleTime;
+    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance, idleTime;
+    public int maxBacknForth = 1;
     public Vector3 transformOffset;
     public Transform targetPlayer;
     public EnemyManager manager;
@@ -12,9 +13,10 @@ public class Enemy : MonoBehaviour
     public PlatformAddress currentPlatform;
     public TransformPoint transformPosition;
 
-    PlatformAddress targetPlatform;
+    PlatformAddress targetPlatform, lastPlatform;
     TransformPoint targetPoint, jumpPoint;
     bool isJumping;
+    int backnForth;
     
     void FixedUpdate()
     {
@@ -26,9 +28,20 @@ public class Enemy : MonoBehaviour
         }
         transform.position = transformPosition.worldPoint + transformOffset;
     }
+
+    public void Activate()
+    {
+        
+    }
     
     void Simulate()
     {
+        if(transformPosition.transform == null || !transformPosition.transform.gameObject.activeInHierarchy)
+        {
+            Die();
+            return;
+        }
+        
         if(isJumping)
         {
             Jumping();
@@ -40,7 +53,8 @@ public class Enemy : MonoBehaviour
         }
         if(currentState == EnemyState.attack)
         {
-
+            if((transform.position - targetPlayer.position).sqrMagnitude > DesiredDistance * DesiredDistance)
+                currentState = EnemyState.pathfinding;
             return;
         }
         if(currentState == EnemyState.pathfinding)
@@ -56,6 +70,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    void Die()
+    {
+        print("ded");
+        manager.ActiveEnemies.Remove(this);
+        gameObject.SetActive(false);
+    }
+
     bool idleing;
     IEnumerator Idleing()
     {
@@ -63,6 +84,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(idleTime);
         idleing = false;
         currentState = EnemyState.pathfinding;
+        FindNewPath();
     }
 
     void PathFind()
@@ -75,7 +97,7 @@ public class Enemy : MonoBehaviour
         
         if(transformPosition.point == targetPoint.point)
         {
-            if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform|| jumpPoint.transform == null)
+            if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
             {
                 currentState = EnemyState.idle;
                 return;
@@ -106,11 +128,12 @@ public class Enemy : MonoBehaviour
     protected virtual void FindNewPath()
     {
         float sqrDist = Mathf.Infinity;
-        List<PlatformAddress> neighbours = manager.RequestPlatformNeighbours(currentPlatform);
+        bool found = false;
+        List<PlatformAddress> neighbours = manager.RequestPlatformNeighbours(currentPlatform, JumpDistance);
         for(int i = 0; i < neighbours.Count; i++)
         {
             PlatformAddress plat = neighbours[i];
-            if(Mathf.Abs(currentPlatform.platform.height - plat.platform.height) > MaxHeight)
+            if(plat.platform.height - currentPlatform.platform.height > MaxHeight)
             {
                 neighbours.RemoveAt(i);
                 i--;
@@ -119,11 +142,20 @@ public class Enemy : MonoBehaviour
             float newSqrDist = (plat.ClosestPointTo(targetPlayer.position).worldPoint - targetPlayer.position).sqrMagnitude;
             if(newSqrDist < sqrDist)
             {
+                if(lastPlatform.lane != null && lastPlatform.platform == plat.platform && backnForth >= maxBacknForth)
+                    continue;
+                found = true;
                 sqrDist = newSqrDist;
                 targetPlatform = plat;
             }
         }
         SetTargetPoint();
+        if(found && lastPlatform.lane != null && lastPlatform.platform == targetPlatform.platform)
+        {
+            backnForth++;
+            return;
+        }
+        backnForth = 0;
     }
 
     protected virtual void SetTargetPoint()
@@ -144,6 +176,7 @@ public class Enemy : MonoBehaviour
         if(jumpTime < 0)
         {
             transformPosition = jumpPoint;
+            lastPlatform = currentPlatform;
             currentPlatform = targetPlatform;
             isJumping = false;
             FindNewPath();
@@ -152,7 +185,7 @@ public class Enemy : MonoBehaviour
 
         Vector3 distance = jumpPoint.worldPoint - transform.position;
         distance.y = 0f;
-        jumpVelocity = distance / jumpTime;
+        jumpVelocity = distance / jumpTime + Vector3.up * (jumpVelocity.y - (jumpVelocity.y > 0?JumpGravity:FallGravity) * Time.fixedDeltaTime);
         jumpTime -= Time.fixedDeltaTime;
     }
 }
@@ -162,28 +195,28 @@ public enum EnemyState{idle, pathfinding, attack}
 public struct PlatformAddress
 {
     public Lane lane;
-    public int laneIndex, vehicleIndex, platformIndex;
+    public Vehicle vehicle;
+    public int platformIndex;
 
-    public PlatformAddress(Lane _lane, int laneI, int vehI, int platI)
+    public PlatformAddress(Lane _lane, Vehicle veh, int platI)
     {
         lane = _lane;
-        laneIndex = laneI;
-        vehicleIndex = vehI;
+        vehicle = veh;
         platformIndex = platI;
     }
 
-    public Vehicle vehicle{get => lane.Vehicles[vehicleIndex];}
+    public int laneIndex{get => lane.transform.GetSiblingIndex();}
+    public int vehicleIndex{get => vehicle.transform.GetSiblingIndex();}
     public Platform platform{get => vehicle.Platforms[platformIndex];}
 
     public TransformPoint ClosestPointTo(Vector3 point)
     {
-        Vector2 boundsStart = new Vector3(platform.BoundsStart.x, 0f, platform.BoundsStart.y) + vehicle.transform.position - vehicle.transformOffset;
-        Vector2 boundsEnd = new Vector3(platform.BoundsEnd.x, 0f, platform.BoundsEnd.y) + vehicle.transform.position - vehicle.transformOffset;
-        point.x = Mathf.Clamp(point.x, boundsStart.x, boundsEnd.x);
-        point.z = Mathf.Clamp(point.z, boundsStart.y, boundsEnd.y);
-
         point -= vehicle.transform.position;
-        point.y = vehicle.transform.position.y + platform.height - vehicle.transformOffset.y;
+        point += vehicle.transformOffset;
+        point.x = Mathf.Clamp(point.x, platform.BoundsStart.x, platform.BoundsEnd.x);
+        point.z = Mathf.Clamp(point.z, platform.BoundsStart.y, platform.BoundsEnd.y);
+        point -= vehicle.transformOffset;
+        point.y = platform.height - vehicle.transformOffset.y;
         return new TransformPoint(vehicle.transform, point);
     }
 }

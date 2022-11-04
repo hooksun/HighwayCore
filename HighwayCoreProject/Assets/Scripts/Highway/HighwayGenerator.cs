@@ -80,7 +80,7 @@ public class HighwayGenerator : MonoBehaviour
 
         if(newVehicle.isSpawner)
         {
-            ((SpawnerVehicle)newVehicle).address = new PlatformAddress(lane, lane.transform.GetSiblingIndex(), newVehicle.transform.GetSiblingIndex(), 0);
+            ((SpawnerVehicle)newVehicle).address = new PlatformAddress(lane, newVehicle, 0);
             enemyManager.Spawners.Add((SpawnerVehicle)newVehicle);
         }
 

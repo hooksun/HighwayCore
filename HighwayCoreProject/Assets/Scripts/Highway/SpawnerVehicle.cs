@@ -18,7 +18,7 @@ public class SpawnerVehicle : Vehicle, IEnemySpawner
         Vector2 center = (plat.BoundsStart + plat.BoundsEnd) * 0.5f;
         address.platformIndex = spawnPlatform;
         enemy.currentPlatform = address;
-        enemy.transformPosition = new TransformPoint(transform, transform.position + new Vector3(center.x, plat.height, center.y) - transformOffset);
+        enemy.transformPosition = new TransformPoint(transform, new Vector3(center.x, plat.height, center.y) - transformOffset);
         
         StartCoroutine(SpawnCooldown());
     }
