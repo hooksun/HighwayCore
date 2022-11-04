@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef8d8302f3f9e8e43aeb500db322f449, type: 3}
-  m_Name: AssaultRifle
+  m_Name: Pistol
   m_EditorClassIdentifier: 
-  available: 0
-  name: AR
-  damage: 3
+  available: 1
+  name: Pistol
+  damage: 5
   maxDistance: 400
-  currentAmmoInMag: 26
-  magazineSize: 30
-  maxAmmo: 300
-  ammoLeft: 270
-  fireRate: 600
+  currentAmmoInMag: 12
+  magazineSize: 12
+  maxAmmo: 64
+  ammoLeft: 52
+  fireRate: 300
   reloadTime: 1.5
   isReloading: 0
   bulletSpread: 0.01
