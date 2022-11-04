@@ -16,7 +16,7 @@ MonoBehaviour:
   name: AR
   damage: 3
   maxDistance: 400
-  currentAmmoInMag: 26
+  currentAmmoInMag: 30
   magazineSize: 30
   maxAmmo: 300
   ammoLeft: 270
