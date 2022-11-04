@@ -8,12 +8,13 @@ public class WeaponSwitching : MonoBehaviour
     public GunData shotgun;
     public GunData rifle;
     public GunData pistol;
+    public GunData sniper;
     public GunScript gunScript;
     public int currentWeapon;
     int prevSelectedWeapon;
     
 
-    // Start is called before the first frame update
+
     void Start()
     {
         findWeapon();
@@ -22,7 +23,7 @@ public class WeaponSwitching : MonoBehaviour
         selectWeapon(currentWeapon);
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         prevSelectedWeapon = currentWeapon;
@@ -40,7 +41,8 @@ public class WeaponSwitching : MonoBehaviour
     private KeyCode[] keyCodes = {
         KeyCode.Alpha1, 
         KeyCode.Alpha2,
-        KeyCode.Alpha3
+        KeyCode.Alpha3,
+        KeyCode.Alpha4
     };
 
     void findWeapon(){
@@ -71,29 +73,35 @@ public class WeaponSwitching : MonoBehaviour
             }
             gunScript.gunData = rifle;
             gunScript.gunData.isReloading = false;
-
+        }
+        if(index == 3 && sniper.available){
+            for(int i=0;i<weapons.Length;i++){
+                weapons[i].gameObject.SetActive(i == index);
+            }
+            gunScript.gunData = sniper;
+            gunScript.gunData.isReloading = false;
         }
     }
 
-    void changeGunData(){
-        if(currentWeapon == 0){
-            if(pistol.available){
-                gunScript.gunData = pistol;
-                gunScript.gunData.isReloading = false;
-                weapons[0].gameObject.SetActive(0 == 0);
-            }
-        }
-        if(currentWeapon == 1){
-            if(shotgun.available){
-                gunScript.gunData = shotgun;
-                gunScript.gunData.isReloading = false;
-            }
-        }
-        else if(currentWeapon == 2){
-            if(rifle.available){
-                gunScript.gunData = rifle;
-                gunScript.gunData.isReloading = false;
-            }
-        }
-    }
+    // void changeGunData(){
+    //     if(currentWeapon == 0){
+    //         if(pistol.available){
+    //             gunScript.gunData = pistol;
+    //             gunScript.gunData.isReloading = false;
+    //             weapons[0].gameObject.SetActive(0 == 0);
+    //         }
+    //     }
+    //     if(currentWeapon == 1){
+    //         if(shotgun.available){
+    //             gunScript.gunData = shotgun;
+    //             gunScript.gunData.isReloading = false;
+    //         }
+    //     }
+    //     else if(currentWeapon == 2){
+    //         if(rifle.available){
+    //             gunScript.gunData = rifle;
+    //             gunScript.gunData.isReloading = false;
+    //         }
+    //     }
+    // }
 }

@@ -44,6 +44,9 @@ public class GunScript : MonoBehaviour
         if(gunData.name == "AR" || gunData.name == "Pistol"){
             ARBullet();
         }
+        if(gunData.name == "Sniper"){
+            SniperBullet();
+        }
     }
 
     void shooting(){
@@ -64,6 +67,16 @@ public class GunScript : MonoBehaviour
             if(Physics.Raycast(cam.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
                 Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
             }
+        }
+    }
+
+    void SniperBullet(){
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward + randomSpread(), 400.0f);
+        for(int i=0;i<hits.Length;i++){
+            Debug.Log(i);
+            RaycastHit hit = hits[i];
+            Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
 
