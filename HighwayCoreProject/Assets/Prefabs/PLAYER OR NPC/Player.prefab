@@ -982,6 +982,7 @@ GameObject:
   - component: {fileID: 8216949968672074495}
   - component: {fileID: 8216949968672074492}
   - component: {fileID: 8216949968672074493}
+  - component: {fileID: 1552649164780691460}
   - component: {fileID: 8216949968672074434}
   - component: {fileID: 8216949968672074435}
   - component: {fileID: 6364680495220450297}
@@ -1076,6 +1077,24 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1552649164780691460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8216949968672074490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0edb433b0f9de14eb1c3622f3d00bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Movement: {fileID: 8216949968672074435}
+  Aim: {fileID: 8216949968672074434}
+  Status: {fileID: 1394077368}
+  TrailTime: 0.5
+  positionOffset: {x: 0, y: 0.5, z: 0}
+  trailPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &8216949968672074434
 MonoBehaviour:
   m_ObjectHideFlags: 0

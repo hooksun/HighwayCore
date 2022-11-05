@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public Transform Head;
+    public float MaxRotateSpeed, Lead;
     public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance, idleTime;
     public int maxBacknForth = 1;
     public Vector3 transformOffset;
-    public Transform targetPlayer;
-    public EnemyManager manager;
+    [HideInInspector] public Player targetPlayer;
+    [HideInInspector] public EnemyManager manager;
     public EnemyState currentState;
     public PlatformAddress currentPlatform;
     public TransformPoint transformPosition;
@@ -41,18 +43,19 @@ public class Enemy : MonoBehaviour
             Die();
             return;
         }
-        
+        LookAtPlayer();
         if(isJumping)
         {
             Jumping();
             return;
         }
-        if((transform.position - targetPlayer.position).sqrMagnitude <= DesiredDistance * DesiredDistance)
+        if((transform.position - targetPlayer.position).sqrMagnitude < DesiredDistance * DesiredDistance)
         {
             currentState = EnemyState.attack;
         }
         if(currentState == EnemyState.attack)
         {
+            //Attack();
             if((transform.position - targetPlayer.position).sqrMagnitude > DesiredDistance * DesiredDistance)
                 currentState = EnemyState.pathfinding;
             return;
@@ -85,6 +88,12 @@ public class Enemy : MonoBehaviour
         idleing = false;
         currentState = EnemyState.pathfinding;
         FindNewPath();
+    }
+
+    void LookAtPlayer()
+    {
+        Vector3 targetDirection = targetPlayer.trailPosition + (targetPlayer.position - targetPlayer.trailPosition) * Lead - Head.position;
+        Head.rotation = Quaternion.LookRotation(Vector3.RotateTowards(Head.forward, targetDirection, MaxRotateSpeed * Time.deltaTime, 0f));
     }
 
     void PathFind()

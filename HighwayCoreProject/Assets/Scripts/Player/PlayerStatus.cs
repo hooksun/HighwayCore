@@ -11,7 +11,7 @@ public class PlayerStatus : MonoBehaviour
 
     public Transform groundChecker;
     private bool fallen;
-    bool takenDamage = false;
+    bool takenDamage;
     void Start()
     {
         health = playerData.maxHealth;
@@ -33,6 +33,6 @@ public class PlayerStatus : MonoBehaviour
         health-=20f;
     }
     void ReadyToTakeDamage(){
-        takenDamage = false;
+        //takenDamage = false;
     }
 }

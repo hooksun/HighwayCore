@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public Transform player; // temp
+    public Player player; // temp
     public HighwayGenerator Highway;
     public EnemyPool enemyPool;
 

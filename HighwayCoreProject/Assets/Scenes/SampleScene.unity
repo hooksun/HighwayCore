@@ -754,7 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e249eb57390731947b61d2201d7a35a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 717730295}
+  player: {fileID: 8216949969534088098}
   Highway: {fileID: 1472807257}
   enemyPool: {fileID: 932973449}
   Enemies:
@@ -1035,3 +1035,15 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 1294293035, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
+--- !u!114 &8216949969534088098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1552649164780691460, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8216949969534088097}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0edb433b0f9de14eb1c3622f3d00bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
