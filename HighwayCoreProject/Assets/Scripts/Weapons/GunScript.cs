@@ -13,12 +13,18 @@ public class GunScript : MonoBehaviour
     public TextMeshProUGUI ammoInMagCounter;
     public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
-    public GameObject cam;
+    public GameObject camGameObject;
+    public Camera camera;
+    float camZoomOut = 60f;
+    float camZoomIn = 20f;
+    float t = 0f;
+    
     // Start is called before the first frame update
     void Start()
     {
         gunData.currentAmmoInMag = gunData.magazineSize;
         gunData.isReloading = false;
+        camera.fieldOfView = camZoomOut;
     }
 
     // Update is called once per frame
@@ -26,18 +32,24 @@ public class GunScript : MonoBehaviour
     {
         readyTime = 1f/(gunData.fireRate/60f);
         timeSinceLastShot += Time.deltaTime;
+
+        ZoomingOut(); // Camera zoom Reset
+
         if(Input.GetKey(KeyCode.Mouse0)){
             shooting();
         }
-        else if(Input.GetKey(KeyCode.R)){
+        if(Input.GetKey(KeyCode.R)){
             Reloading();
+        }
+        else if(Input.GetKey(KeyCode.Mouse1)){
+            SecondaryFire();
         }
 
         ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
         ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
     }
 
-    void whatIsWeapon(){
+    void whatIsWeaponShoot(){
         if(gunData.name == "Shotgun"){
             ShotgunBullet();
         }
@@ -49,22 +61,50 @@ public class GunScript : MonoBehaviour
         }
     }
 
+    void SecondaryFire(){
+        if(gunData.name == "Shotgun"){
+            
+        }
+        if(gunData.name == "AR" || gunData.name == "Pistol"){
+            
+        }
+        if(gunData.name == "Sniper"){
+            ZoomingIn();
+        }
+    }
+
+    void ZoomingOut(){
+        if(!Input.GetKey(KeyCode.Mouse1) && gunData.name == "Sniper"){
+            camera.fieldOfView = Mathf.Lerp(camZoomOut, camZoomIn, t);
+        
+        if(t>=0.0f){
+            t-=4f*Time.deltaTime;
+        }
+        }
+    }
+    void ZoomingIn(){
+        camera.fieldOfView = Mathf.Lerp(camZoomOut, camZoomIn, t);
+        
+        if(t<=1.0f){
+            t+=4f*Time.deltaTime;
+        }
+    }
     void shooting(){
         if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
-            whatIsWeapon();
+            whatIsWeaponShoot();
             timeSinceLastShot = 0f;
             gunData.currentAmmoInMag--;
         }
     }
 
     void ARBullet(){
-        if(Physics.Raycast(cam.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
+        if(Physics.Raycast(camGameObject.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
             Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
         }
     }
     void ShotgunBullet(){
         for(int i=0;i<8;i++){
-            if(Physics.Raycast(cam.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
+            if(Physics.Raycast(camGameObject.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
                 Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
             }
         }
@@ -72,7 +112,7 @@ public class GunScript : MonoBehaviour
 
     void SniperBullet(){
         RaycastHit[] hits;
-        hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward + randomSpread(), 400.0f);
+        hits = Physics.RaycastAll(camGameObject.transform.position, camGameObject.transform.forward + randomSpread(), 400.0f);
         for(int i=0;i<hits.Length;i++){
             Debug.Log(i);
             RaycastHit hit = hits[i];

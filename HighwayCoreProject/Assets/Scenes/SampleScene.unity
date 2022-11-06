@@ -343,12 +343,6 @@ Transform:
   m_Father: {fileID: 2056577077}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &717730295 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8216949968672074494, guid: 7782ee91ef6814e498f41b5da176d8ff,
-    type: 3}
-  m_PrefabInstance: {fileID: 8216949969534088097}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +549,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1424447839 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8216949968672074494, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8454592957504459003}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1431077804
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +740,7 @@ MonoBehaviour:
   minGapTime: 1
   maxGapTime: 3
   gapDistance: 0.5
-  player: {fileID: 717730295}
+  player: {fileID: 1424447839}
   PlayerGenerateDist: 150
 --- !u!114 &1472807258
 MonoBehaviour:
@@ -754,7 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e249eb57390731947b61d2201d7a35a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8216949969534088098}
+  player: {fileID: 7459199334214734757}
   Highway: {fileID: 1472807257}
   enemyPool: {fileID: 932973449}
   Enemies:
@@ -951,7 +951,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea5e20aff22595b408bc703ee0d09c2b, type: 3}
---- !u!1001 &8216949969534088097
+--- !u!114 &7459199334214734757 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1552649164780691460, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8454592957504459003}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0edb433b0f9de14eb1c3622f3d00bb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &8454592957504459003
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1032,18 +1044,5 @@ PrefabInstance:
       propertyPath: ammoInMagCounter
       value: 
       objectReference: {fileID: 430378244}
-    m_RemovedComponents:
-    - {fileID: 1294293035, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
---- !u!114 &8216949969534088098 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1552649164780691460, guid: 7782ee91ef6814e498f41b5da176d8ff,
-    type: 3}
-  m_PrefabInstance: {fileID: 8216949969534088097}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0edb433b0f9de14eb1c3622f3d00bb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
