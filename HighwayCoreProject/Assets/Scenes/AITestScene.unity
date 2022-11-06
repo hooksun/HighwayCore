@@ -570,6 +570,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 515991348}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1129349847 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 283776849, guid: ea5e20aff22595b408bc703ee0d09c2b,
+    type: 3}
+  m_PrefabInstance: {fileID: 260907563}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1167248309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,10 +1050,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1915026396524099316, guid: f50962d28e1b2e442882abc5c63a773a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1915026396829029266, guid: f50962d28e1b2e442882abc5c63a773a,
         type: 3}
       propertyPath: m_Name
       value: ShotgunObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915026396829029266, guid: f50962d28e1b2e442882abc5c63a773a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1915026396829029277, guid: f50962d28e1b2e442882abc5c63a773a,
+        type: 3}
+      propertyPath: radius
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1915026396829029278, guid: f50962d28e1b2e442882abc5c63a773a,
         type: 3}
@@ -1113,6 +1134,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 289480304, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
+      propertyPath: interactUI
+      value: 
+      objectReference: {fileID: 1129349847}
     - target: {fileID: 1394077368, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
       propertyPath: healthPointTxt
       value: 
@@ -1196,6 +1221,28 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 765398501, guid: 56994337a9792d04d852c375097d5bbf, type: 3}
+      propertyPath: radius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 765398501, guid: 56994337a9792d04d852c375097d5bbf, type: 3}
+      propertyPath: inRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 765398501, guid: 56994337a9792d04d852c375097d5bbf, type: 3}
+      propertyPath: playerMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 27936119540853483, guid: 56994337a9792d04d852c375097d5bbf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2037750629578312850, guid: 56994337a9792d04d852c375097d5bbf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2971422502831187282, guid: 56994337a9792d04d852c375097d5bbf,
         type: 3}
       propertyPath: m_RootOrder
@@ -1251,10 +1298,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4127378721090336082, guid: 56994337a9792d04d852c375097d5bbf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6539720783237159626, guid: 56994337a9792d04d852c375097d5bbf,
         type: 3}
       propertyPath: m_Name
       value: SniperObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 6539720783237159626, guid: 56994337a9792d04d852c375097d5bbf,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56994337a9792d04d852c375097d5bbf, type: 3}
@@ -1320,10 +1377,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2976518491462100602, guid: 864c8d6bdd44f2541b94f65de1851d90,
+        type: 3}
+      propertyPath: radius
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2976518491462100603, guid: 864c8d6bdd44f2541b94f65de1851d90,
         type: 3}
       propertyPath: m_Name
       value: AssaultRifleObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976518491462100603, guid: 864c8d6bdd44f2541b94f65de1851d90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976518492660293306, guid: 864c8d6bdd44f2541b94f65de1851d90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2976518492666928296, guid: 864c8d6bdd44f2541b94f65de1851d90,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 864c8d6bdd44f2541b94f65de1851d90, type: 3}
