@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8d8302f3f9e8e43aeb500db322f449, type: 3}
   m_Name: Shotgun
   m_EditorClassIdentifier: 
-  available: 1
+  available: 0
   name: Shotgun
   damage: 2
   maxDistance: 400
   currentAmmoInMag: 8
   magazineSize: 8
   maxAmmo: 64
-  ammoLeft: 40
+  ammoLeft: 56
   fireRate: 400
   reloadTime: 1.5
   isReloading: 0

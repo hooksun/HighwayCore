@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &283776849 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 283776849, guid: ea5e20aff22595b408bc703ee0d09c2b,
+    type: 3}
+  m_PrefabInstance: {fileID: 222678031777772081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,6 +976,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 289480304, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
+      propertyPath: interactUI
+      value: 
+      objectReference: {fileID: 283776849}
     - target: {fileID: 1394077368, guid: 7782ee91ef6814e498f41b5da176d8ff, type: 3}
       propertyPath: healthPointTxt
       value: 

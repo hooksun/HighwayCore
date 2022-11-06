@@ -1490,6 +1490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5ebbc11f62bc84bb940bee4120e1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactUI: {fileID: 0}
   cam: {fileID: 8216949969757152870}
 --- !u!114 &8216949969790004690
 MonoBehaviour:
