@@ -160,21 +160,19 @@ public class PlayerMovement : MonoBehaviour
             Vector3 origin = transform.position + Quaternion.LookRotation(directionWorld) * VaultStart;
 
             RaycastHit hit;
-            if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f)
+            if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f ||
+            Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, out hit, VaultStart.z, HardGroundMask))
             {
-                if(!Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, VaultStart.z, HardGroundMask))
+                ChangeGround(hit.collider.transform);
+                vaultDir = directionWorld;
+                vaultDelay = VaultStopDelay;
+                velocity.y = 0f;
+                if(velocity.sqrMagnitude > SpeedWhileVaulting * SpeedWhileVaulting)
                 {
-                    ChangeGround(hit.collider.transform);
-                    vaultDir = directionWorld;
-                    vaultDelay = VaultStopDelay;
-                    velocity.y = 0f;
-                    if(velocity.sqrMagnitude > SpeedWhileVaulting * SpeedWhileVaulting)
-                    {
-                        velocity -= velocity.normalized * VaultDecel * Time.fixedDeltaTime;
-                    }
-                    velocity.y = VaultSpeed;
-                    return;
+                    velocity -= velocity.normalized * VaultDecel * Time.fixedDeltaTime;
                 }
+                velocity.y = VaultSpeed;
+                return;
             }
         }
         
@@ -228,9 +226,9 @@ public class PlayerMovement : MonoBehaviour
         {
             airJumping--;
         }
-        if(isJumping && !isGrounded && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y < JetpackSpeed)
+        if(isJumping && !isGrounded && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
         {
-            float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + FallGravity) * Time.fixedDeltaTime);
+            float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + (velocity.y>0?JumpGravity:FallGravity)) * Time.fixedDeltaTime);
             velocity.y = 0f;
             velocity -= velocity.normalized * JetpackDecel * Time.fixedDeltaTime;
             velocity.y = velY;
