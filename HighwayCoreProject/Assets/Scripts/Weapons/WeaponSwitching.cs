@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSwitching : MonoBehaviour
+public class WeaponSwitching : PlayerBehaviour
 {
     public Transform[] weapons;
     public GunData shotgun;

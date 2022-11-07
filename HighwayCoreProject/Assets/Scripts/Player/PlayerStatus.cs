@@ -8,10 +8,9 @@ public class PlayerStatus : PlayerBehaviour
     float health;
     public PlayerData playerData;
     public TextMeshProUGUI healthPointTxt;
+    public bool isFallen = false;
 
-    public Transform groundChecker;
-    private bool fallen;
-    bool takenDamage;
+    
     void Start()
     {
         health = playerData.maxHealth;
@@ -27,13 +26,11 @@ public class PlayerStatus : PlayerBehaviour
         if(health <=0){
             player.Die();
         }
+        
     }
 
-    void PlayerTakeDamage(){
-        health-=20f;
-    }
-    void ReadyToTakeDamage(){
-        //takenDamage = false;
+    public void TakeDamage(float damage){
+        health-=damage;
     }
 
     public override void Die()

@@ -8,6 +8,10 @@ public class Player : MonoBehaviour
     public PlayerAim Aim;
     public PlayerStatus Status;
     public Transform Head;
+    public GunScript Guns;
+    public PickUpWeapon PickUp;
+    public PlayerDamageSource Damage;
+    public WeaponSwitching WeaponSwitch;
 
     public float TrailTime;
     public Vector3 positionOffset;
@@ -19,6 +23,10 @@ public class Player : MonoBehaviour
         Aim.player = this;
         Movement.player = this;
         Status.player = this;
+        Guns.player = this;
+        PickUp.player = this;
+        Damage.player = this;
+        WeaponSwitch.player = this;
     }
     
     void Update()
@@ -37,6 +45,10 @@ public class Player : MonoBehaviour
         Aim.Die();
         Movement.Die();
         Status.Die();
+        Guns.Die();
+        PickUp.Die();
+        Damage.Die();
+        WeaponSwitch.Die();
     }
 }
 
