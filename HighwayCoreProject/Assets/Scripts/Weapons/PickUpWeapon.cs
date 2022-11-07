@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PickUpWeapon : MonoBehaviour
+public class PickUpWeapon : PlayerBehaviour
 {
     public GameObject interactUI;
     public GameObject cam;
