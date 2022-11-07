@@ -199,7 +199,7 @@ public class Enemy : MonoBehaviour
     }
 }
 
-public enum EnemyState{idle, pathfinding, attack}
+public enum EnemyState{idle, pathfinding, attack, stunned}
 
 public struct PlatformAddress
 {

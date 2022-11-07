@@ -9,10 +9,11 @@ public class PlayerMovement : PlayerBehaviour
     
     public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
-    public float WallRunSpeed, WallRunAccel, WallRunDecel, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
+    public float WallRunSpeed, WallRunAccel, WallRunDecel, WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public int AirJumpTime, WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
-    public float GroundCheckDist, GroundCheckRadius, NormalCheckDist, MaxSlope;
+    public float GroundCheckDist, GroundCheckRadius, MaxSlope;
+    public bool HasJetpack, HasGrapple;
     public LayerMask GroundMask, HardGroundMask;
 
     Vector2 direction;
@@ -54,7 +55,8 @@ public class PlayerMovement : PlayerBehaviour
 
         WallRun();
 
-        Jetpack();
+        if(HasJetpack)
+            Jetpack();
 
         rb.velocity = velocity + groundVel;
     }
@@ -70,7 +72,7 @@ public class PlayerMovement : PlayerBehaviour
         isGrounded = Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask);
         if(isGrounded)
         {
-            ChangeGround(groundInfo.collider.transform);
+            ChangeGround(groundInfo.transform);
         }
     }
 
@@ -163,7 +165,7 @@ public class PlayerMovement : PlayerBehaviour
             if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f ||
             Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, out hit, VaultStart.z, HardGroundMask))
             {
-                ChangeGround(hit.collider.transform);
+                ChangeGround(hit.transform);
                 vaultDir = directionWorld;
                 vaultDelay = VaultStopDelay;
                 velocity.y = 0f;
@@ -210,11 +212,15 @@ public class PlayerMovement : PlayerBehaviour
                     velocity -= velocity.normalized * WallRunDecel * Time.fixedDeltaTime;
                 }
                 wallDir = -hit.normal;
-                ChangeGround(hit.collider.transform);
+                ChangeGround(hit.transform);
+                Vector3 cross = Vector3.Cross(wallDir, Vector3.up);
+                float angle = Vector3.Dot(cross, transform.forward);
+                player.Aim.RotateHead(Vector3.forward * angle * WallRunTiltAngle);
                 return;
             }
         }
 
+        player.Aim.RotateHead(Vector3.zero);
         wallDir = Vector3.zero;
     }
 
@@ -265,7 +271,7 @@ public class PlayerMovement : PlayerBehaviour
             wallRunCooldown = WallRunCooldown;
             return;
         }
-        if(currentFuel >= AirJumpCost)
+        if(HasJetpack && currentFuel >= AirJumpCost)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
             currentFuel -= AirJumpCost;

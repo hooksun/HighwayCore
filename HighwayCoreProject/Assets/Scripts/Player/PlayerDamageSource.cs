@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerDamageSource : PlayerBehaviour
 {
-    public Transform groundChecker;
     public float fallDamage = 10f;
 
     // Start is called before the first frame update
@@ -19,12 +18,12 @@ public class PlayerDamageSource : PlayerBehaviour
         fall();
     }
 
-    void fall(){
-        if(Physics.Raycast(groundChecker.transform.position, Vector3.down, out RaycastHit hit, .2f)){
-            if(hit.collider.name == "Road" && !player.Status.isFallen){
-                player.Status.TakeDamage(fallDamage);
-                player.Status.isFallen = true;
-            }
+    void fall()
+    {
+        if(!player.Status.isFallen && player.Movement.isGrounded && player.Movement.groundInfo.transform.gameObject.layer == 8)
+        {
+            player.Status.isFallen = true;
+            player.Status.TakeDamage(fallDamage);
         }
     }
 }
