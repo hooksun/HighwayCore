@@ -1092,6 +1092,7 @@ MonoBehaviour:
   Movement: {fileID: 8216949968672074435}
   Aim: {fileID: 8216949968672074434}
   Status: {fileID: 1394077368}
+  Head: {fileID: 8454592958025681126}
   TrailTime: 0.5
   positionOffset: {x: 0, y: 0.5, z: 0}
   trailPosition: {x: 0, y: 0, z: 0}
@@ -1107,7 +1108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98beb7e142778de428a74d7b21516ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 8216949969757152875}
+  player: {fileID: 0}
   sensitivity: 25
 --- !u!114 &8216949968672074435
 MonoBehaviour:
@@ -1121,6 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52a52f0bb16b25942b866a084e6adb54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   rb: {fileID: 8216949968672074433}
   Speed: 10
   SpeedWhileVaulting: 5
@@ -1166,6 +1168,7 @@ MonoBehaviour:
   HardGroundMask:
     serializedVersion: 2
     m_Bits: 8
+  isGrounded: 0
   currentFuel: 0
 --- !u!114 &6364680495220450297
 MonoBehaviour:
@@ -1398,6 +1401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: addecc90a4b67c54dbbfe93289c4d7af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   playerData: {fileID: 11400000, guid: 77b5b3d8c3ce71b47b44a4bd9301694d, type: 2}
   healthPointTxt: {fileID: 0}
   groundChecker: {fileID: 1721917228}

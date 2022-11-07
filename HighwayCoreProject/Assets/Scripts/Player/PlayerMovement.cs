@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : PlayerBehaviour
 {
     public Rigidbody rb;
     
@@ -18,10 +18,10 @@ public class PlayerMovement : MonoBehaviour
     Vector2 direction;
     Vector3 directionWorld;
     Vector3 velocity;
-    bool isGrounded;
+    [HideInInspector] public bool isGrounded;
     int groundCheckCooldown;
     int gravityCooldown;
-    RaycastHit groundInfo;
+    [HideInInspector] public RaycastHit groundInfo;
 
     Vector3 groundVel;
     IMovingGround currentGround;

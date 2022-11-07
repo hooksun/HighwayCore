@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus : PlayerBehaviour
 {
     float health;
     public PlayerData playerData;
@@ -25,7 +25,7 @@ public class PlayerStatus : MonoBehaviour
     void PlayerHealthCondition(){
         healthPointTxt.SetText("HP : " + health);
         if(health <=0){
-            //DED
+            player.Die();
         }
     }
 
@@ -34,5 +34,10 @@ public class PlayerStatus : MonoBehaviour
     }
     void ReadyToTakeDamage(){
         //takenDamage = false;
+    }
+
+    public override void Die()
+    {
+        //ded
     }
 }

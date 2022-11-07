@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAim : MonoBehaviour
+public class PlayerAim : PlayerBehaviour
 {
-    public Transform cam;
-    
     public float sensitivity;
 
     Vector3 direction;
@@ -25,7 +23,7 @@ public class PlayerAim : MonoBehaviour
         direction.x = Mathf.Clamp(direction.x, -90f, 90f);
 
         transform.rotation = Quaternion.Euler(Vector3.up * direction.y);
-        cam.transform.localRotation = Quaternion.Euler(Vector3.right * direction.x);
+        player.Head.localRotation = Quaternion.Euler(Vector3.right * direction.x);
     }
 
     void hideCursor(){
