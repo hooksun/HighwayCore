@@ -105,16 +105,16 @@ public class GunScript : PlayerBehaviour
     // }
 
     void ARBullet(){
-        Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
+        BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
     void ShotgunBullet(){
         for(int i=0;i<8;i++){
-            Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
+            BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
         }
     }
 
     void SniperBullet(){
-        Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
+        BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
 
     int prevSelectedWeapon;
