@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 259255105076096120}
   - component: {fileID: 259255105076096121}
   - component: {fileID: 259255105076096126}
+  - component: {fileID: 6806637070816601232}
+  - component: {fileID: 8344945873007213577}
+  - component: {fileID: 500471132682767721}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -95,7 +98,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 259255105076096127}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -113,8 +116,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Head: {fileID: 2579986990338431861}
+  transformOffset: {x: 0, y: 1, z: 0}
+  StunTime: 0
+  Attack: {fileID: 6806637070816601232}
+  Pathfinding: {fileID: 8344945873007213577}
+  Health: {fileID: 500471132682767721}
+  targetPlayer: {fileID: 0}
+  manager: {fileID: 0}
+--- !u!114 &6806637070816601232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f048a79878fa6a945b4bb72283a6ff63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
   MaxRotateSpeed: 2
   Lead: 0.5
+--- !u!114 &8344945873007213577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3c28d623f5618b49adef8cd3ecb970d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
   DesiredDistance: 0
   MaxHeight: 1.5
   WalkSpeed: 5
@@ -122,13 +158,25 @@ MonoBehaviour:
   JumpGravity: 20
   FallGravity: 30
   JumpDistance: 2
-  MaxJumpDistance: 10
+  MaxJumpDistance: 7
   idleTime: 3
   maxBacknForth: 1
   transformOffset: {x: 0, y: 1, z: 0}
-  targetPlayer: {fileID: 0}
-  manager: {fileID: 0}
   currentState: 1
+--- !u!114 &500471132682767721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed07a2487a623834498c0fbd8eb41438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  MaxHealth: 50
 --- !u!1 &4422788322844886585
 GameObject:
   m_ObjectHideFlags: 0

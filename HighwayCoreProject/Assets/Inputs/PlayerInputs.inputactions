@@ -2,7 +2,7 @@
     "name": "PlayerInputs",
     "maps": [
         {
-            "name": "Movement",
+            "name": "Player",
             "id": "02d395b2-e8bb-498a-ae0e-ad0df38d4188",
             "actions": [
                 {
@@ -27,6 +27,78 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "e4c716db-fa17-413c-bee3-8bd274d3b3d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Fire",
+                    "type": "Button",
+                    "id": "f4a44bec-b39f-4372-aff3-85921929cd3a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryFire",
+                    "type": "Button",
+                    "id": "a87b6f88-4974-4798-a972-7d7c80101582",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "92ae7731-3308-45b9-bb0f-f6a6c9111aa8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon Slot 1",
+                    "type": "Button",
+                    "id": "b29f7074-2b11-4c3b-be85-2548be2c51d8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon Slot 2",
+                    "type": "Button",
+                    "id": "fe2b77cc-1891-4147-859b-df8d5c610ba1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Weapon Slot 3",
+                    "type": "Button",
+                    "id": "3663da04-65a9-4926-b726-7f4cae5bcae5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pickup",
+                    "type": "Button",
+                    "id": "ae86677c-8c1a-4948-ac01-b4688815e8e5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Melee",
+                    "type": "Button",
+                    "id": "82dbe675-33d8-4ee0-b958-f7827b30b689",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -110,81 +182,10 @@
                     "action": "ChangeDirection",
                     "isComposite": false,
                     "isPartOfComposite": true
-                }
-            ]
-        },
-        {
-            "name": "Weapons",
-            "id": "844bcf91-000b-409f-9580-5a0e5452913e",
-            "actions": [
-                {
-                    "name": "Fire",
-                    "type": "Button",
-                    "id": "65b3ecf7-e0fc-4aae-9219-7e4fec8bbbc6",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 },
-                {
-                    "name": "SecondaryFire",
-                    "type": "Button",
-                    "id": "55b0ef60-acfb-4d89-af67-420a25f7807b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "c6f76b05-00fb-4687-8d40-84fb2f34d3b1",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Weapon Slot 1",
-                    "type": "Button",
-                    "id": "f13cd74b-1ca0-4b98-b0b1-e4f4d5dab977",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Weapon Slot 2",
-                    "type": "Button",
-                    "id": "5ce74dbe-1089-4df4-9c79-a59149a14fbe",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Weapon Slot 3",
-                    "type": "Button",
-                    "id": "057ee313-311b-4b7b-9668-4c705452177d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Pickup",
-                    "type": "Button",
-                    "id": "ca35b908-0b22-4b1d-8d83-4e69dcfd7a4e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
                 {
                     "name": "",
-                    "id": "56a22307-570f-4a16-a2b8-81f7629dd508",
+                    "id": "2aba377f-d440-44c4-ab59-7ace5d13de18",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -195,51 +196,18 @@
                 },
                 {
                     "name": "",
-                    "id": "7bd428f8-0738-4018-a130-6d92bf65d208",
-                    "path": "<Keyboard>/1",
+                    "id": "0b20cb2c-d341-42f6-a1bb-9c83c1bfe0a0",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Weapon Slot 1",
+                    "action": "SecondaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "7f2e4d74-d40a-4f01-b176-e3edef283024",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Slot 2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d9fe62a8-b2fe-4e83-9bb5-d19a85e4754d",
-                    "path": "<Keyboard>/3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Weapon Slot 3",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "08090370-b648-4cdb-b9b1-ae13bb390f00",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Pickup",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "025d451e-3745-4146-bfcb-f51395c7081a",
+                    "id": "0fc3c1b2-265b-4229-9286-871719431e9a",
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
@@ -250,12 +218,56 @@
                 },
                 {
                     "name": "",
-                    "id": "e8808d06-aca7-4256-abb9-811bca7cac44",
-                    "path": "<Mouse>/rightButton",
+                    "id": "28df52e5-5569-48de-b30b-05584421d525",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SecondaryFire",
+                    "action": "Weapon Slot 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6de58ba6-058f-4f53-a947-db38ef521795",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Slot 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2b126587-b761-4117-ae26-87b736794f41",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Slot 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f107b2f-a5bb-460f-a893-1f72bbaf9128",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pickup",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a3668ce-a649-4918-8372-1357ed83c0c2",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Melee",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

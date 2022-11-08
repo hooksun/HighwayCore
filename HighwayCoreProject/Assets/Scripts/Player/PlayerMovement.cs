@@ -7,7 +7,7 @@ public class PlayerMovement : PlayerBehaviour
 {
     public Rigidbody rb;
     
-    public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity;
+    public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
     public float WallRunSpeed, WallRunAccel, WallRunDecel, WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
@@ -58,6 +58,8 @@ public class PlayerMovement : PlayerBehaviour
         if(HasJetpack)
             Jetpack();
 
+        jumpCooldown = Mathf.Max(jumpCooldown - Time.fixedDeltaTime, 0f);
+        
         rb.velocity = velocity + groundVel;
     }
 
@@ -246,13 +248,15 @@ public class PlayerMovement : PlayerBehaviour
     }
 
     bool isJumping;
+    float jumpCooldown;
     public void Jump(InputAction.CallbackContext ctx)
     {
         if(!ctx.performed)
             isJumping = ctx.started;
-        if(!ctx.started)
+        if(!ctx.started || jumpCooldown > 0)
             return;
         
+        jumpCooldown = JumpCooldown;
         if(isGrounded)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
@@ -276,9 +280,9 @@ public class PlayerMovement : PlayerBehaviour
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
             currentFuel -= AirJumpCost;
             airJumping = AirJumpTime;
-            print("Air Jump");
             return;
         }
+        jumpCooldown = 0f;
     }
 
     Vector3 forceBuffer;

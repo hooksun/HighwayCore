@@ -21,7 +21,7 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
         }
     }
 
-    public T GetObject(int index)
+    public T GetObject(int index = 0)
     {
         foreach(T tObj in ObjectPools[index].pool)
         {
@@ -41,7 +41,7 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
 [System.Serializable]
 public class Pool<T> where T : Component
 {
-    public List<T> pool = new List<T>();
+    [HideInInspector] public List<T> pool = new List<T>();
     public T Object;
     public int startAmount;
 }
