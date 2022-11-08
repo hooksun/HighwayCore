@@ -19,4 +19,5 @@ public class GunData : ScriptableObject
     public float reloadTime;
     public bool isReloading;
     public float bulletSpread;
+    public float bulletSpeed;
 }

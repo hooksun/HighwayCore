@@ -9,7 +9,7 @@ public class GunScript : PlayerBehaviour
     public GunData gunData;
     bool isShooting;
     float readyTime;
-    public GameObject impact;
+    public GameObject impact, bullet;
     float timeSinceLastShot;
     public TextMeshProUGUI ammoInMagCounter;
     public TextMeshProUGUI ammoLeftCounter;
@@ -98,27 +98,23 @@ public class GunScript : PlayerBehaviour
         }
     }
 
+    // void ARBullet(){
+    //     if(Physics.Raycast(camGameObject.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
+    //         Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
+    //     }
+    // }
+
     void ARBullet(){
-        if(Physics.Raycast(camGameObject.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
-            Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-        }
+        Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
     void ShotgunBullet(){
         for(int i=0;i<8;i++){
-            if(Physics.Raycast(camGameObject.transform.position, transform.forward + randomSpread(), out RaycastHit hit,gunData.maxDistance)){
-                Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-            }
+            Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
         }
     }
 
     void SniperBullet(){
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(camGameObject.transform.position, camGameObject.transform.forward + randomSpread(), 400.0f);
-        for(int i=0;i<hits.Length;i++){
-            Debug.Log(i);
-            RaycastHit hit = hits[i];
-            Instantiate(impact, hit.point, Quaternion.LookRotation(hit.normal));
-        }
+        Instantiate(bullet, camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
 
     int prevSelectedWeapon;
@@ -158,11 +154,11 @@ public class GunScript : PlayerBehaviour
         return false;
     }
 
-    Vector3 randomSpread(){
+    Quaternion randomSpread(){
         float x = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
         float y = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
         float z = Random.Range(-gunData.bulletSpread, gunData.bulletSpread);
 
-        return new Vector3(x,y,z);
+        return new Quaternion(x, y, z, 1);
     }
 }
