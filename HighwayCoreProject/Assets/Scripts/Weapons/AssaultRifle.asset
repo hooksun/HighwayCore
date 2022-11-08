@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8d8302f3f9e8e43aeb500db322f449, type: 3}
   m_Name: AssaultRifle
   m_EditorClassIdentifier: 
-  available: 0
+  available: 1
   name: AR
   damage: 3
   maxDistance: 400
-  currentAmmoInMag: 30
+  currentAmmoInMag: 26
   magazineSize: 30
   maxAmmo: 300
   ammoLeft: 270
