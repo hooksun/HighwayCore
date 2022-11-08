@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class bulletProjectile : MonoBehaviour
 {
-    Rigidbody rb;
     Vector3 startPos;
     Vector3 currPos;
     [SerializeField] LayerMask groundMask;
+    GunScript gundScript;
     private bool collide;
 
     void Start()
     {   
-        rb = GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward*500f);
-
-
+        startPos = transform.position;
+        gundScript = GameObject.Find("Weapon Holder").GetComponent<GunScript>();
     }
 
     void Update(){
+        currPos = transform.position;
+        travel();
+        
         DestroyObj();
     }
 
+    void travel(){
+        transform.position += transform.forward * Time.deltaTime * gundScript.gunData.bulletSpeed; 
+    }
     void DestroyObj(){
-        collide = Physics.CheckSphere(transform.position, .5f, groundMask);
+        collide = Physics.CheckSphere(transform.position, .1f, groundMask);
         if(collide){
             Destroy(gameObject);
         }

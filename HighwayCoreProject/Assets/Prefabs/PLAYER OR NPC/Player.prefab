@@ -1595,6 +1595,7 @@ MonoBehaviour:
   player: {fileID: 0}
   gunData: {fileID: 11400000, guid: 13c098b3a45d48541ab1a7aef12afd76, type: 2}
   impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
+  bullet: {fileID: 8105419304571585314, guid: ec2ea9871411a55438ee9d7ffc203ca7, type: 3}
   ammoInMagCounter: {fileID: 0}
   ammoLeftCounter: {fileID: 0}
   weaponSwitching: {fileID: 1406370825}
