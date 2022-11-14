@@ -24,4 +24,4 @@ MonoBehaviour:
   reloadTime: 1.5
   isReloading: 0
   bulletSpread: 0.05
-  bulletSpeed: 60
+  bulletSpeed: 10
