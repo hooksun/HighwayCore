@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyHealth : EnemyBehaviour
 {
     public float MaxHealth;
-    float Health;
+    public float Health;//tadinya gk public
 
     public override void Activate()
     {

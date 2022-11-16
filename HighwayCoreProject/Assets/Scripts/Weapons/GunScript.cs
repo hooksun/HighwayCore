@@ -124,7 +124,7 @@ public class GunScript : PlayerBehaviour
             prevSelectedWeapon = weaponSwitching.currentWeapon;
             indexSet = true;
         }
-        Debug.Log(prevSelectedWeapon);
+        //Debug.Log(prevSelectedWeapon);
         if(!gunData.isReloading){
             gunData.isReloading = true;
             Invoke("ReloadingFinished", 1f);
