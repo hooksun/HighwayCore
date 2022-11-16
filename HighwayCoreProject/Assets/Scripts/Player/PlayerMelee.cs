@@ -3,16 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMelee : Ability
+public class PlayerMelee : PlayerBehaviour
 {
-    public Vector3 HitboxCenter, HalfExtent;
+    public float cooldown, globalCooldown;
     public float delay, damage, knockback;
+    public Vector3 HitboxCenter, HalfExtent;
     public LayerMask EnemyMask;
+
+    bool onCooldown;
     
-    public override void Activate()
+    public void Input(InputAction.CallbackContext ctx)
+    {
+        if(!ctx.started || onCooldown || player.usingAbility || player.abilityCooldown)
+            return;
+        Activate();
+    }
+
+    IEnumerator Cooldown()
+    {
+        if(cooldown <= 0)
+            yield break;
+        
+        onCooldown = true;
+        yield return new WaitForSeconds(cooldown);
+        onCooldown = false;
+    }
+    IEnumerator GlobalCooldown()
+    {
+        if(globalCooldown <= 0)
+            yield break;
+        
+        player.abilityCooldown = true;
+        yield return new WaitForSeconds(globalCooldown);
+        player.abilityCooldown = false;
+    }
+    
+    public virtual void Activate()
     {
         player.animator.Play("Player Melee test", 0, 0);
         StartCoroutine(Melee());
+        StartCoroutine(Cooldown());
+        StartCoroutine(GlobalCooldown());
     }
 
     IEnumerator Melee()
@@ -25,32 +56,9 @@ public class PlayerMelee : Ability
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 print(enemy.transform.name);
-                enemy.TakeDamage(damage);
                 enemy.Stun(player.Head.forward * knockback);
+                enemy.TakeDamage(damage);
             }
         }
     }
-}
-
-public abstract class Ability : PlayerBehaviour
-{
-    public float cooldown;
-    protected bool onCooldown;
-    
-    public void Input(InputAction.CallbackContext ctx)
-    {
-        if(!ctx.started || onCooldown)
-            return;
-        Activate();
-        StartCoroutine(Cooldown());
-    }
-
-    IEnumerator Cooldown()
-    {
-        onCooldown = true;
-        yield return new WaitForSeconds(cooldown);
-        onCooldown = false;
-    }
-    
-    public virtual void Activate(){}
 }

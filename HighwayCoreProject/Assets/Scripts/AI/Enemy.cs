@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector] public Player targetPlayer;
     [HideInInspector] public EnemyManager manager;
+    [HideInInspector] public bool stunned;
 
     void OnEnable()
     {
@@ -52,6 +53,7 @@ public class Enemy : MonoBehaviour
 
     public void Stun(Vector3 knockback)
     {
+        stunned = true;
         Attack.Stun(knockback);
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);

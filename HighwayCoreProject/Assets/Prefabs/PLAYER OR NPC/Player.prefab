@@ -1156,6 +1156,8 @@ MonoBehaviour:
   TrailTime: 0.5
   positionOffset: {x: 0, y: 0.5, z: 0}
   trailPosition: {x: 0, y: 0, z: 0}
+  abilityCooldown: 0
+  usingAbility: 0
 --- !u!114 &8216949968672074434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,6 +1205,11 @@ MonoBehaviour:
   RefuelRate: 5
   GroundRefuelRate: 25
   AirJumpAccel: 100
+  GrapplingHookSpeed: 0
+  GrappleSpeed: 0
+  GrappleDrag: 0
+  GrappleCooldown: 0
+  GlobalGrappleCooldown: 0
   WallRunSpeed: 12
   WallRunAccel: 20
   WallRunDecel: 15
@@ -1225,7 +1232,7 @@ MonoBehaviour:
   GroundCheckRadius: 0.48
   MaxSlope: 20
   HasJetpack: 1
-  HasGrapple: 1
+  HasGrapple: 0
   GroundMask:
     serializedVersion: 2
     m_Bits: 264
@@ -1248,11 +1255,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   cooldown: 2
-  HitboxCenter: {x: 0, y: 0, z: 1.25}
-  HalfExtent: {x: 1.5, y: 1, z: 1.5}
+  globalCooldown: 0
   delay: 0.2
   damage: 26
   knockback: 0
+  HitboxCenter: {x: 0, y: 0, z: 1.25}
+  HalfExtent: {x: 1.5, y: 1, z: 1.5}
   EnemyMask:
     serializedVersion: 2
     m_Bits: 128
@@ -1470,6 +1478,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 82dbe675-33d8-4ee0-b958-f7827b30b689
     m_ActionName: Player/Melee[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8216949968672074435}
+        m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
+        m_MethodName: GrappleInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1ebf9121-023e-4567-a0b1-2a0b1f8c7e2e
+    m_ActionName: Player/Grapple[/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

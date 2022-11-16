@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : PlayerBehaviour
+public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 {
     public Rigidbody rb;
     
     public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
+    public float GrapplingHookSpeed, GrappleSpeed, GrappleDrag, GrappleCooldown, GlobalGrappleCooldown;
     public float WallRunSpeed, WallRunAccel, WallRunDecel, WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public int AirJumpTime, WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
@@ -16,13 +17,13 @@ public class PlayerMovement : PlayerBehaviour
     public bool HasJetpack, HasGrapple;
     public LayerMask GroundMask, HardGroundMask;
 
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public RaycastHit groundInfo;
     Vector2 direction;
     Vector3 directionWorld;
     Vector3 velocity;
-    [HideInInspector] public bool isGrounded;
     int groundCheckCooldown;
     int gravityCooldown;
-    [HideInInspector] public RaycastHit groundInfo;
 
     Vector3 groundVel;
     IMovingGround currentGround;
@@ -50,6 +51,8 @@ public class PlayerMovement : PlayerBehaviour
         Move();
 
         DoGravity();
+
+        Grappling();
 
         Vault();
 
@@ -153,13 +156,90 @@ public class PlayerMovement : PlayerBehaviour
             gravityCooldown = GravityCooldown;
         }
     }
+
+    bool isGrappling, grappleCooldown;
+    TransformPoint grapplePoint;
+    public void GrappleInput(InputAction.CallbackContext ctx)
+    {
+        if(!ctx.started || !HasGrapple || grappleCooldown || player.abilityCooldown)
+            return;
+
+        if(!isGrappling)
+        {
+            if(player.usingAbility)
+                return;
+            player.abilityCooldown = true;
+            //grapple.Fire(player.Head.forward, player.Head.position, this);
+        }
+        else
+        {
+            StopGrapple();
+            //grapple.Retract();
+        }
+        grapplePoint.transform = null;
+    }
+
+    void Grappling()
+    {
+        if(!isGrappling)
+            return;
+        
+        if(grapplePoint.transform == null)
+        {
+            StopGrapple();
+            return;
+        }
+
+        //grapple
+    }
+
+    void StopGrapple()
+    {
+        if(!isGrappling)
+            return;
+
+        isGrappling = false;
+        player.usingAbility = false;
+        StartCoroutine(GrapplingCooldown());
+        StartCoroutine(GlobalCooldown(GlobalGrappleCooldown));
+    }
+
+    IEnumerator GrapplingCooldown()
+    {
+        if(GrappleCooldown <= 0)
+            yield break;
+
+        grappleCooldown = true;
+        yield return new WaitForSeconds(GrappleCooldown);
+        grappleCooldown = false;
+    }
+    IEnumerator GlobalCooldown(float cooldown)
+    {
+        if(cooldown <= 0)
+            yield break;
+        
+        player.abilityCooldown = true;
+        yield return new WaitForSeconds(cooldown);
+        player.abilityCooldown = false;
+    }
+
+    public void SetHit(RaycastHit hit)
+    {
+        isGrappling = true;
+        player.usingAbility = true;
+        grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
+    }
+    public void OnTargetNotFound()
+    {
+        StopGrapple();
+    }
     
     int vaultDelay;
     Vector3 vaultDir;
     bool isVaulting{get => vaultDelay > 0;}
     void Vault()
     {
-        if(!isGrounded && direction.sqrMagnitude > 0 && (velocity.y <= VaultSpeed))
+        if(!isGrounded && !player.usingAbility && direction.sqrMagnitude > 0 && (velocity.y <= VaultSpeed))
         {
             Vector3 origin = transform.position + Quaternion.LookRotation(directionWorld) * VaultStart;
 
@@ -199,7 +279,7 @@ public class PlayerMovement : PlayerBehaviour
             return;
         }
         
-        if(!isGrounded && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
+        if(!isGrounded && !player.usingAbility && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
         {
             RaycastHit hit = groundInfo;
             if((wallDir != Vector3.zero && Physics.Raycast(transform.position + WallCheckPoint, wallDir, out hit, WallCheckDist, GroundMask))
@@ -234,7 +314,7 @@ public class PlayerMovement : PlayerBehaviour
         {
             airJumping--;
         }
-        if(isJumping && !isGrounded && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
+        if(isJumping && !isGrounded && !player.usingAbility && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
         {
             float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + (velocity.y>0?JumpGravity:FallGravity)) * Time.fixedDeltaTime);
             velocity.y = 0f;
