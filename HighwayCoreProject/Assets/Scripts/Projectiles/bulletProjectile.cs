@@ -31,12 +31,11 @@ public class bulletProjectile : MonoBehaviour, IPooledBullet
     }
 
     void hit(){
-        collided = Physics.SphereCast(transform.position, .1f, transform.forward, out collideInfo, .1f);
-
+        collided = Physics.SphereCast(transform.position, .2f, transform.forward, out collideInfo, .2f);
         if(collided && collideInfo.transform.gameObject.layer == 7 ){
             Debug.Log("hit enemy");
             EnemyHealth enemyHealth = collideInfo.collider.gameObject.GetComponent<EnemyHealth>();
-            enemyHealth.TakeDamage(-1*damage); //delete -1 biar kasih damage, buat test aja karena .Die() blom ada
+            enemyHealth.TakeDamage(damage);
             gameObject.SetActive(false);
             
         }

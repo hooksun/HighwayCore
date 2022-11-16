@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   available: 1
   name: Pistol
-  damage: 5
+  damage: 10
   maxDistance: 400
-  currentAmmoInMag: 0
+  currentAmmoInMag: 12
   magazineSize: 12
   maxAmmo: 64
   ammoLeft: 0
@@ -24,4 +24,4 @@ MonoBehaviour:
   reloadTime: 1.5
   isReloading: 0
   bulletSpread: 0.01
-  bulletSpeed: 10
+  bulletSpeed: 80
