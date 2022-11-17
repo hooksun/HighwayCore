@@ -21,6 +21,10 @@ public class WeaponSwitching : PlayerBehaviour
         currentWeapon = 0;
         prevSelectedWeapon = 0;
         selectWeapon(currentWeapon);
+        shotgun.ammoLeft = shotgun.maxAmmo;
+        rifle.ammoLeft = rifle.maxAmmo;
+        pistol.ammoLeft = pistol.maxAmmo;
+        sniper.ammoLeft = sniper.maxAmmo;
     }
 
 
