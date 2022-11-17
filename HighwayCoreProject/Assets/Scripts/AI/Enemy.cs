@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public Transform Head;
     public Vector3 transformOffset;
-    public float StunTime;
+    public float StunTime, StunResistance;
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;
@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
         Health.Die();
 
         print("ded");
-        manager.ActiveEnemies.Remove(this);
+        manager.RequestDie(this);
         gameObject.SetActive(false);
     }
 
@@ -53,14 +53,24 @@ public class Enemy : MonoBehaviour
 
     public void Stun(Vector3 knockback)
     {
-        stunned = true;
+        knockback *= 1f - StunResistance;
+
         Attack.Stun(knockback);
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);
+
+        if(stunned)
+            StopCoroutine(Stunning());
+        StartCoroutine(Stunning());
+    }
+
+    IEnumerator Stunning()
+    {
+        stunned = true;
+        yield return new WaitForSeconds(StunTime);
+        stunned = false;
     }
 }
-
-public enum EnemyState{idle, pathfinding, attack, stunned}
 
 public abstract class EnemyBehaviour : MonoBehaviour
 {

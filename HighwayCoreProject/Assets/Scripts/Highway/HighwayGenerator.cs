@@ -108,10 +108,3 @@ public class HighwayGenerator : MonoBehaviour
         }
     }
 }
-
-[System.Serializable]
-public class Lane
-{
-    public List<Vehicle> Vehicles = new List<Vehicle>();
-    public Transform transform;
-}

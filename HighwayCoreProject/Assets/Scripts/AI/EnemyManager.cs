@@ -49,6 +49,13 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void RequestDie(Enemy enemy)
+    {
+        ActiveEnemies.Remove(enemy);
+        if(ActiveEnemies.Count == 0)
+            SpawnEnemies(5);
+    }
+
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
     {
         List<PlatformAddress> answer = new List<PlatformAddress>();

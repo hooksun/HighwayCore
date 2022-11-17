@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GrappleProjectile : MonoBehaviour
 {
+    public LineRenderer lRenderer;
+    
     public float speed, maxDistance, approachRate, castRadius;
     public LayerMask hitMask;
 
@@ -42,6 +44,13 @@ public class GrappleProjectile : MonoBehaviour
     }
 
     void Update()
+    {
+        Simulate();
+        lRenderer.SetPosition(0, transform.position);
+        lRenderer.SetPosition(1, grapplePos);
+    }
+
+    void Simulate()
     {
         if(retracting)
         {

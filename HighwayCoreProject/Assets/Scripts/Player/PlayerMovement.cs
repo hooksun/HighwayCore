@@ -9,7 +9,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     
     public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
-    public float GrapplingHookSpeed, GrappleSpeed, GrappleDrag, GrappleCooldown, GlobalGrappleCooldown;
+    public GrappleProjectile Grapple;
+    public float GrappleSpeed, GrappleAccel, GrappleDrag, GrappleCooldown, GlobalGrappleCooldown;
     public float WallRunSpeed, WallRunAccel, WallRunDecel, WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public int AirJumpTime, WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
@@ -73,6 +74,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             groundCheckCooldown--;
             return;
         }
+        if(isGrappling)
+        {
+            isGrounded = false;
+            return;
+        }
 
         isGrounded = Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask);
         if(isGrounded)
@@ -98,7 +104,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     Vector3 groundDir;
     void Move()
     {
-        directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
+        if(!isGrappling)
+            directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
         Vector3 horizVel = new Vector3(velocity.x, 0f, velocity.z);
         
         if(isGrounded)
@@ -126,8 +133,12 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
     }
 
+    bool doGravity = true;
     void DoGravity()
     {
+        if(!doGravity)
+            return;
+
         if(isGrounded)
         {
             if(gravityCooldown > 0)
@@ -159,22 +170,23 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
     bool isGrappling, grappleCooldown;
     TransformPoint grapplePoint;
+    Enemy grappledEnemy;
     public void GrappleInput(InputAction.CallbackContext ctx)
     {
-        if(!ctx.started || !HasGrapple || grappleCooldown || player.abilityCooldown)
+        if(!ctx.started || !HasGrapple || grappleCooldown)
             return;
 
         if(!isGrappling)
         {
-            if(player.usingAbility)
+            if(player.usingAbility || player.abilityCooldown)
                 return;
+            grappledEnemy = null;
             player.abilityCooldown = true;
-            //grapple.Fire(player.Head.forward, player.Head.position, this);
+            Grapple.Fire(player.Head.forward, player.Head.position, this);
         }
         else
         {
             StopGrapple();
-            //grapple.Retract();
         }
         grapplePoint.transform = null;
     }
@@ -190,7 +202,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
         }
 
-        //grapple
+        ChangeGround(grapplePoint.transform);
+
+        velocity = Vector3.MoveTowards(velocity, (grapplePoint.worldPoint - transform.position).normalized * GrappleSpeed, GrappleAccel * Time.fixedDeltaTime);
+        if(grappledEnemy != null)
+        {
+            grappledEnemy.Stun(Vector3.zero);
+        }
     }
 
     void StopGrapple()
@@ -198,8 +216,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrappling)
             return;
 
+        Grapple.Retract();
         isGrappling = false;
         player.usingAbility = false;
+        doGravity = true;
         StartCoroutine(GrapplingCooldown());
         StartCoroutine(GlobalCooldown(GlobalGrappleCooldown));
     }
@@ -207,7 +227,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     IEnumerator GrapplingCooldown()
     {
         if(GrappleCooldown <= 0)
+        {
+            grappleCooldown = false;
             yield break;
+        }
 
         grappleCooldown = true;
         yield return new WaitForSeconds(GrappleCooldown);
@@ -216,7 +239,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     IEnumerator GlobalCooldown(float cooldown)
     {
         if(cooldown <= 0)
+        {
+            player.abilityCooldown = false;
             yield break;
+        }
         
         player.abilityCooldown = true;
         yield return new WaitForSeconds(cooldown);
@@ -228,9 +254,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         isGrappling = true;
         player.usingAbility = true;
         grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
+        grappledEnemy = hit.transform.GetComponent<Enemy>();
+        velocity *= GrappleDrag;
+        doGravity = false;
     }
     public void OnTargetNotFound()
     {
+        isGrappling = true;
         StopGrapple();
     }
     
@@ -337,6 +367,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
         
         jumpCooldown = JumpCooldown;
+        if(isGrappling)
+        {
+            StopGrapple();
+            return;
+        }
         if(isGrounded)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
