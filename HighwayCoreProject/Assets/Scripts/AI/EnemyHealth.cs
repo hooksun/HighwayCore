@@ -20,4 +20,12 @@ public class EnemyHealth : EnemyBehaviour
             enemy.Die();
         }
     }
+
+    public override void Die()
+    {
+        if(enemy.stunned)
+        {
+            //drop items
+        }
+    }
 }

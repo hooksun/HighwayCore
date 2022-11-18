@@ -340,7 +340,7 @@ MonoBehaviour:
   lRenderer: {fileID: 2765104551517608750}
   speed: 35
   maxDistance: 25
-  approachRate: 1
+  approachRate: 3
   castRadius: 0.2
   hitMask:
     serializedVersion: 2
@@ -1350,7 +1350,7 @@ MonoBehaviour:
   FallGravity: 30
   JumpCooldown: 0.2
   JetpackSpeed: 4
-  JetpackForce: 6
+  JetpackForce: 5
   JetpackDecel: 10
   JetpackFuel: 50
   FuelCost: 12
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   WallRunSpeed: 12
   WallRunAccel: 20
   WallRunDecel: 15
-  WallRunTiltAngle: 7
+  WallRunTiltAngle: 6
   WallCheckDist: 0.6
   MinWallRunYSpeed: 3
   VaultSpeed: 3

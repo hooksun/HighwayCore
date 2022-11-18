@@ -196,7 +196,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrappling)
             return;
         
-        if(grapplePoint.transform == null)
+        if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
         {
             StopGrapple();
             return;

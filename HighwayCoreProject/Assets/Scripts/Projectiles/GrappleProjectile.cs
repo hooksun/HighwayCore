@@ -20,6 +20,7 @@ public class GrappleProjectile : MonoBehaviour
         if(isFiring)
             return;
         isFiring = true;
+        retracting = false;
         offset = transform.position - spawnPoint;
         velocity = direction * speed;
         projPos = spawnPoint;
@@ -65,7 +66,7 @@ public class GrappleProjectile : MonoBehaviour
             if(!Physics.SphereCast(projPos, castRadius, velocity, out hit, velocity.magnitude * Time.deltaTime, hitMask))
             {
                 projPos += velocity * Time.deltaTime;
-                offset *= approachRate * Time.deltaTime;
+                offset *= 1f - approachRate * Time.deltaTime;
                 grapplePos = projPos + offset;
                 distance += speed * Time.deltaTime;
                 if(distance > maxDistance)
@@ -80,7 +81,7 @@ public class GrappleProjectile : MonoBehaviour
             grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
             spawner.SetHit(hit);
         }
-        if(grapplePoint.transform == null)
+        if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
         {
             Retract();
             return;
