@@ -339,6 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lRenderer: {fileID: 2765104551517608750}
   speed: 35
+  retractSpeed: 50
   maxDistance: 25
   approachRate: 3
   castRadius: 0.2

@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 932973447}
   - component: {fileID: 932973448}
   - component: {fileID: 932973449}
+  - component: {fileID: 932973450}
   m_Layer: 0
   m_Name: ObjectPool
   m_TagString: Untagged
@@ -465,7 +466,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932973446}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -518,6 +519,31 @@ MonoBehaviour:
   - pool: []
     Object: {fileID: 259255105076096126, guid: 94b70a42cf5084549888e55a0c68574d, type: 3}
     startAmount: 10
+--- !u!114 &932973450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932973446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cfe05e559c10ed4d8a48dcf66f85f48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectPools:
+  - pool: []
+    Object: {fileID: 6340516119556271655, guid: f289aa9f17b8d474ba886e6f2f8c3ebe,
+      type: 3}
+    startAmount: 5
+  - pool: []
+    Object: {fileID: 6306882456142565786, guid: a9638d8b093062e44a24147f5c09d017,
+      type: 3}
+    startAmount: 5
+  - pool: []
+    Object: {fileID: 3512611140508833430, guid: c2f6891ef8311314286ad6039e366ba6,
+      type: 3}
+    startAmount: 5
 --- !u!114 &1217877353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1217877353, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -674,6 +700,7 @@ GameObject:
   - component: {fileID: 1472807253}
   - component: {fileID: 1472807257}
   - component: {fileID: 1472807258}
+  - component: {fileID: 1472807259}
   m_Layer: 8
   m_Name: Road
   m_TagString: Untagged
@@ -814,6 +841,9 @@ MonoBehaviour:
   player: {fileID: 7459199334214734757}
   Highway: {fileID: 1472807257}
   enemyPool: {fileID: 932973449}
+  itemSpawner: {fileID: 1472807259}
+  maxItems: 6
+  minItems: 4
   Enemies:
     Pool:
     - weight: 1
@@ -822,6 +852,29 @@ MonoBehaviour:
         minDistance: 5
         maxDistance: 50
   ActiveEnemies: []
+--- !u!114 &1472807259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472807252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d1ce1e2133d8114db72bf93f3315451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemPool: {fileID: 932973450}
+  Items:
+    Pool:
+    - weight: 1
+      variable: 0
+    - weight: 1
+      variable: 1
+    - weight: 1
+      variable: 2
+  MinVelocity: {x: -5, y: 5, z: -5}
+  MaxVelocity: {x: 5, y: 8, z: 5}
 --- !u!1 &2056577076
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class EnemyPathfinding : EnemyBehaviour
     public int maxBacknForth = 1;
     public Vector3 transformOffset;
     public LayerMask GroundMask;
+
     public PlatformAddress currentPlatform;
     public TransformPoint transformPosition;
 
@@ -20,6 +21,18 @@ public class EnemyPathfinding : EnemyBehaviour
     bool isJumping, groundCooldown;
     int backnForth;
     
+    public override void Activate()
+    {
+        isGrounded = true;
+        isJumping = false;
+        groundCooldown = false;
+        backnForth = 0;
+        idleing = false;
+        targetPlatform.lane = null;
+        lastPlatform.lane = null;
+        FindNewPath();
+    }
+
     void Update()
     {
         if(transformPosition.transform == null || !transformPosition.transform.gameObject.activeInHierarchy)
@@ -196,6 +209,7 @@ public class EnemyPathfinding : EnemyBehaviour
         if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform)
         {
             targetPoint = currentPlatform.ClosestPointTo(enemy.targetPlayer.position);
+            jumpPoint.transform = null;
             return;
         }
         jumpPoint = targetPlatform.ClosestPointTo(transform.position);

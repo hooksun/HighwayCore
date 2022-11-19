@@ -217,11 +217,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
 
         Grapple.Retract();
-        isGrappling = false;
         player.usingAbility = false;
+        isGrappling = false;
         doGravity = true;
-        StartCoroutine(GrapplingCooldown());
-        StartCoroutine(GlobalCooldown(GlobalGrappleCooldown));
     }
 
     IEnumerator GrapplingCooldown()
@@ -249,7 +247,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         player.abilityCooldown = false;
     }
 
-    public void SetHit(RaycastHit hit)
+    public void OnTargetHit(RaycastHit hit)
     {
         isGrappling = true;
         player.usingAbility = true;
@@ -262,6 +260,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     {
         isGrappling = true;
         StopGrapple();
+    }
+    public void OnReset()
+    {
+        StartCoroutine(GrapplingCooldown());
+        StartCoroutine(GlobalCooldown(GlobalGrappleCooldown));
     }
     
     int vaultDelay;

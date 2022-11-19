@@ -7,6 +7,8 @@ public class EnemyManager : MonoBehaviour
     public Player player; // temp
     public HighwayGenerator Highway;
     public EnemyPool enemyPool;
+    public ItemSpawner itemSpawner;
+    public int maxItems, minItems;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
@@ -51,6 +53,11 @@ public class EnemyManager : MonoBehaviour
 
     public void RequestDie(Enemy enemy)
     {
+        if(enemy.stunned)
+        {
+            itemSpawner.SpawnItems(Random.Range(minItems, maxItems), enemy.transform.position);
+        }
+        
         ActiveEnemies.Remove(enemy);
         if(ActiveEnemies.Count == 0)
             SpawnEnemies(5);

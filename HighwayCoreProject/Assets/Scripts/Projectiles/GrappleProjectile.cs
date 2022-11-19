@@ -6,7 +6,7 @@ public class GrappleProjectile : MonoBehaviour
 {
     public LineRenderer lRenderer;
     
-    public float speed, maxDistance, approachRate, castRadius;
+    public float speed, retractSpeed, maxDistance, approachRate, castRadius;
     public LayerMask hitMask;
 
     IProjectileSpawner spawner;
@@ -55,9 +55,12 @@ public class GrappleProjectile : MonoBehaviour
     {
         if(retracting)
         {
-            grapplePos = Vector3.MoveTowards(grapplePos, transform.position, speed * Time.deltaTime);
+            grapplePos = Vector3.MoveTowards(grapplePos, transform.position, retractSpeed * Time.deltaTime);
             if(grapplePos == transform.position)
+            {
+                spawner.OnReset();
                 Disable();
+            }
             return;
         }
         if(isFiring)
@@ -79,7 +82,7 @@ public class GrappleProjectile : MonoBehaviour
 
             isFiring = false;
             grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
-            spawner.SetHit(hit);
+            spawner.OnTargetHit(hit);
         }
         if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
         {
@@ -92,6 +95,7 @@ public class GrappleProjectile : MonoBehaviour
 
 public interface IProjectileSpawner
 {
-    void SetHit(RaycastHit hit);
+    void OnTargetHit(RaycastHit hit);
     void OnTargetNotFound();
+    void OnReset();
 }

@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
 
     public void Activate()
     {
+        stunned = false;
         Attack.Activate();
         Pathfinding.Activate();
         Health.Activate();

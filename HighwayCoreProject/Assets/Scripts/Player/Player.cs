@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     public WeaponSwitching WeaponSwitch;
     public PlayerMelee Melee;
 
+    public static Player ActivePlayer;
+    
     public float TrailTime;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
@@ -32,6 +34,9 @@ public class Player : MonoBehaviour
         WeaponSwitch.player = this;
         Melee.player = this;
     }
+
+    void OnEnable() => ActivePlayer = this;
+    void OnDisable() => ActivePlayer = null;
     
     void Update()
     {
