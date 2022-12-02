@@ -5,9 +5,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerAim : PlayerBehaviour
 {
+    public Camera MainCam, WeaponCam;
     public float sensitivity, HeadRotateSpeed;
+    [Range(30f, 140f)]
+    public float fov, scopedFov;
+    public float fovSpeed;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
+    float currFov, targetFov;
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
@@ -23,6 +28,11 @@ public class PlayerAim : PlayerBehaviour
         direction.x = Mathf.Clamp(direction.x, -90f, 90f);
     }
 
+    void OnEnable()
+    {
+        currFov = fov;
+    }
+
     void Update()
     {
         transform.rotation = Quaternion.Euler(Vector3.up * direction.y);
@@ -33,11 +43,19 @@ public class PlayerAim : PlayerBehaviour
         {
             player.Head.Rotate(headRotateOffset);
         }
+
+        currFov = Mathf.MoveTowards(currFov, targetFov, fovSpeed * Time.deltaTime);
+        //MainCam.fieldOfView = currFov;
     }
 
     public void RotateHead(Vector3 offset)
     {
         headTargetOffset = offset;
+    }
+
+    public void ScopeIn(bool scope = false)
+    {
+        targetFov = (scope?scopedFov:fov);
     }
 
     void hideCursor(){

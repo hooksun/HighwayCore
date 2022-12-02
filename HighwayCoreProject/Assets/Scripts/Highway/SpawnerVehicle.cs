@@ -21,7 +21,7 @@ public class SpawnerVehicle : Vehicle, IEnemySpawner
         
         StartCoroutine(SpawnCooldown());
     }
-    public float DistanceFrom(Vector3 pos) => Mathf.Abs(pos.z - position);
+    public float DistanceFrom(Vector3 pos) => position - pos.z;
 
     IEnumerator SpawnCooldown()
     {

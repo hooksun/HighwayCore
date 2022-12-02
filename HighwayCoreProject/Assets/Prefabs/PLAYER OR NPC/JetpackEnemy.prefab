@@ -14,10 +14,10 @@ GameObject:
   - component: {fileID: 259255105076096121}
   - component: {fileID: 259255105076096126}
   - component: {fileID: 6806637070816601232}
-  - component: {fileID: 8344945873007213577}
+  - component: {fileID: 7348029212694512201}
   - component: {fileID: 500471132682767721}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: JetpackEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   StunTime: 0.4
   StunResistance: 0
   Attack: {fileID: 6806637070816601232}
-  Pathfinding: {fileID: 8344945873007213577}
+  Pathfinding: {fileID: 7348029212694512201}
   Health: {fileID: 500471132682767721}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
@@ -140,7 +140,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxRotateSpeed: 2
   Lead: 0.5
---- !u!114 &8344945873007213577
+--- !u!114 &7348029212694512201
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 259255105076096127}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3c28d623f5618b49adef8cd3ecb970d, type: 3}
+  m_Script: {fileID: 11500000, guid: 33239379421ed06418fa43726c01ee71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
@@ -171,6 +171,15 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 264
+  jetpackForce: 10
+  launchTime: 0.5
+  flyCooldown: 4
+  jetpackCooldown: 1
+  airTime: 30
+  flyDistance: {x: 10, y: 10, z: 10}
+  flySpeed: {x: 6, y: 4, z: 8}
+  minPos: {x: -15, y: 8, z: -10}
+  maxPos: {x: 15, y: 15, z: 20}
 --- !u!114 &500471132682767721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +256,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e9236f7824d080f4792ae2549a10f39d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -47,6 +47,7 @@ public class EnemyManager : MonoBehaviour
                 spawner.SpawnEnemy(nme);
                 ActiveEnemies.Add(nme);
                 nme.Activate();
+                break;
             }
         }
     }
@@ -63,7 +64,7 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemies(5);
     }
 
-    public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
+    public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset, float maxDistance)
     {
         List<PlatformAddress> answer = new List<PlatformAddress>();
 
@@ -82,12 +83,14 @@ public class EnemyManager : MonoBehaviour
         if(platform.platformIndex == 0 && platform.vehicleIndex > 0)
         {
             Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex-1];
-            answer.Add(new PlatformAddress(platform.lane, nextVehicle, nextVehicle.Platforms.Length - 1));
+            if(nextVehicle.position + nextVehicle.length >= platform.vehicle.position - maxDistance)
+                answer.Add(new PlatformAddress(platform.lane, nextVehicle, nextVehicle.Platforms.Length - 1));
         }
         if(platform.platformIndex == platform.vehicle.Platforms.Length - 1 && platform.vehicleIndex < platform.lane.Vehicles.Count - 1)
         {
             Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex+1];
-            answer.Add(new PlatformAddress(platform.lane, nextVehicle, 0));
+            if(platform.vehicle.position + platform.vehicle.length >= nextVehicle.position - maxDistance)
+                answer.Add(new PlatformAddress(platform.lane, nextVehicle, 0));
         }
         float boundsStart = platform.vehicle.position + platform.platform.BoundsStart.y;
         float boundsEnd = platform.vehicle.position + platform.platform.BoundsEnd.y;

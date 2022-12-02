@@ -7,24 +7,28 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 {
     public Rigidbody rb;
     
-    public float Speed, SpeedWhileVaulting, GroundAccel, AirAccel, JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
-    public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate, AirJumpAccel;
-    public GrappleProjectile Grapple;
-    public float GrappleSpeed, GrappleAccel, GrappleDrag, GrappleCooldown, GlobalGrappleCooldown;
-    public float WallRunSpeed, WallRunAccel, WallRunDecel, WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultDecel;
+    public MoveState Walk, Air;
+    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
+    public MoveState AirJump;
+    public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
+    public MoveState Grapple;
+    public GrappleProjectile GrappleObj;
+    public float GrappleSpeed, GrappleAccel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
+    public MoveState WallRun, Vault;
+    public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
-    public int AirJumpTime, WallRunCooldown, VaultStopDelay, GroundCheckCooldown, GravityCooldown;
-    public float GroundCheckDist, GroundCheckRadius, MaxSlope;
+    public int WallRunCooldown, GroundCheckCooldown;
+    public float GroundCheckDist, GroundCheckRadius, MaxSlope, GroundCenter;
     public bool HasJetpack, HasGrapple;
     public LayerMask GroundMask, HardGroundMask;
 
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public RaycastHit groundInfo;
+    MoveState current;
     Vector2 direction;
     Vector3 directionWorld;
     Vector3 velocity;
     int groundCheckCooldown;
-    int gravityCooldown;
 
     Vector3 groundVel;
     IMovingGround currentGround;
@@ -35,11 +39,16 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         Vector2 dir = ctx.ReadValue<Vector2>();
         direction = dir;
     }
+
+    void Start()
+    {
+        current = Air;
+    }
     
     void FixedUpdate()
     {
-        velocity = rb.velocity;
-        velocity -= groundVel;
+        //velocity = rb.velocity;
+        //velocity -= groundVel;
 
         velocity.y *= (velocity.y > 0?posBuffer:negBuffer);
         velocity += forceBuffer;
@@ -47,17 +56,19 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         posBuffer = 1f;
         negBuffer = 1f;
 
+        directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
+        
         GroundCheck();
+
+        Grappling();
 
         Move();
 
         DoGravity();
 
-        Grappling();
+        Vaulting();
 
-        Vault();
-
-        WallRun();
+        WallRunning();
 
         if(HasJetpack)
             Jetpack();
@@ -80,9 +91,20 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
         }
 
-        isGrounded = Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask);
+        if(isGrounded != Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask))
+        {
+            isGrounded = !isGrounded;
+            if(!isGrounded)
+            {
+                velocity.y = Mathf.Min(velocity.y, 0f);
+            }
+        }
         if(isGrounded)
         {
+            SetCurrent(Walk);
+            RaycastHit normalCorrected;
+            if(groundInfo.collider.Raycast(new Ray(groundInfo.point + groundInfo.normal * 0.1f + Vector3.up*0.001f, -groundInfo.normal), out normalCorrected, 0.11f))
+                groundInfo = normalCorrected;
             ChangeGround(groundInfo.transform);
         }
     }
@@ -101,36 +123,48 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
     }
 
-    Vector3 groundDir;
     void Move()
     {
-        if(!isGrappling)
-            directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
         Vector3 horizVel = new Vector3(velocity.x, 0f, velocity.z);
         
         if(isGrounded)
         {
-            //velocity = Vector3.MoveTowards(Vector3.ClampMagnitude(horizVel, Speed), directionWorld * Speed, GroundAccel * Time.fixedDeltaTime);
-            groundDir = Vector3.MoveTowards(groundDir, directionWorld * Speed, GroundAccel * Time.fixedDeltaTime);
-            velocity = groundDir;
-        }
-        else
-        {
-            float maxSpeed = (isVaulting?SpeedWhileVaulting:(isWallRunning?WallRunSpeed:Speed));
-            float accel = (isWallRunning?WallRunAccel:(airJumping>0?AirJumpAccel:AirAccel));
-            Vector3 targetVel = horizVel + directionWorld * accel * Time.fixedDeltaTime;
-            float targetSqrSpeed = targetVel.sqrMagnitude;
-            float SqrHorizSpeed = horizVel.sqrMagnitude;
-            if(targetSqrSpeed > SqrHorizSpeed && targetSqrSpeed > maxSpeed * maxSpeed)
+            if(current.maxSpeed >= current.speed)
             {
-                float speedThreshold = Mathf.Max(Mathf.Sqrt(SqrHorizSpeed), maxSpeed);
-
-                targetVel = Vector3.ClampMagnitude(targetVel, speedThreshold);
+                horizVel = Vector3.ClampMagnitude(horizVel, current.maxSpeed);
             }
-            velocity = targetVel + Vector3.up * velocity.y;
-
-            groundDir = (SqrHorizSpeed <= Speed * Speed?horizVel:horizVel.normalized * Speed);
+            float accel = (current.decel != 0f && horizVel.sqrMagnitude > current.speed * current.speed?current.decel:current.accel);
+            velocity = Vector3.MoveTowards(horizVel, directionWorld * current.speed, accel * Time.fixedDeltaTime);
+            SetCurrent(Air);
+            return;
         }
+
+        Vector3 targetVel = horizVel + directionWorld * current.accel * Time.fixedDeltaTime;
+        float SqrHorizSpeed = horizVel.sqrMagnitude;
+        float speedThreshold = Mathf.Max(current.speed, Mathf.Sqrt(SqrHorizSpeed));
+        if(current.maxSpeed >= current.speed)
+        {
+            speedThreshold = Mathf.Min(speedThreshold, current.maxSpeed);
+        }
+        targetVel = Vector3.ClampMagnitude(targetVel, speedThreshold);
+        if(current.decel != 0f && targetVel.sqrMagnitude > current.speed * current.speed)
+        {
+            targetVel -= targetVel.normalized * current.decel * Time.fixedDeltaTime;
+        }
+        velocity = targetVel + Vector3.up * velocity.y;
+        
+        if(current.cooldown > 0)
+        {
+            current.cooldown--;
+            return;
+        }
+        current = Air;
+    }
+    void SetCurrent(MoveState newState)
+    {
+        current.cooldown = 0;
+        current = newState;
+        current.cooldown = current.coyote;
     }
 
     bool doGravity = true;
@@ -139,35 +173,25 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!doGravity)
             return;
 
-        if(isGrounded)
-        {
-            if(gravityCooldown > 0)
-            {
-                if(velocity.y > 0)
-                    velocity.y = 0f;
-                
-                velocity.y -= FallGravity * Time.fixedDeltaTime;
-                gravityCooldown--;
-            }
-            if((velocity - Vector3.up * velocity.y).sqrMagnitude > 0 && groundInfo.normal.y > Mathf.Cos(Mathf.Deg2Rad * MaxSlope))
-            {
-                velocity.y = 0f;
-                float newVel = ((velocity.x * groundInfo.normal.x) + (velocity.z * groundInfo.normal.z)) / -groundInfo.normal.y;
-                if(newVel < 0)
-                    velocity.y = newVel;
-                else
-                    velocity -= newVel * (groundInfo.normal - Vector3.up * groundInfo.normal.y);
-                
-                velocity.y -= FallGravity * Time.fixedDeltaTime;
-            }
-        }
-        else
+        if(!isGrounded)
         {
             velocity.y -= ((velocity.y > 0)?JumpGravity:FallGravity) * Time.fixedDeltaTime;
-            gravityCooldown = GravityCooldown;
+            return;
+        }
+        velocity.y = 0f;
+        if((velocity - Vector3.up * velocity.y).sqrMagnitude > 0 && groundInfo.normal.y > Mathf.Cos(Mathf.Deg2Rad * MaxSlope))
+        {
+            float newVel = ((velocity.x * groundInfo.normal.x) + (velocity.z * groundInfo.normal.z)) / -groundInfo.normal.y;
+            if(newVel < 0)
+                velocity.y = newVel;
+            else
+                velocity -= newVel * (groundInfo.normal - Vector3.up * groundInfo.normal.y);
+            
+            velocity.y -= FallGravity * Time.fixedDeltaTime;
         }
     }
 
+    float grappleDelay;
     bool isGrappling, grappleCooldown;
     TransformPoint grapplePoint;
     Enemy grappledEnemy;
@@ -182,7 +206,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
                 return;
             grappledEnemy = null;
             player.abilityCooldown = true;
-            Grapple.Fire(player.Head.forward, player.Head.position, this);
+            GrappleObj.Fire(player.Head.forward, player.Head.position, this);
         }
         else
         {
@@ -196,15 +220,22 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrappling)
             return;
         
-        if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
+        if(grappleDelay < 0f || grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
         {
             StopGrapple();
             return;
         }
+        if((transform.position - grapplePoint.worldPoint).sqrMagnitude <= GrappleRetractRange * GrappleRetractRange)
+        {
+            grappleDelay -= Time.fixedDeltaTime;
+        }
 
         ChangeGround(grapplePoint.transform);
 
-        velocity = Vector3.MoveTowards(velocity, (grapplePoint.worldPoint - transform.position).normalized * GrappleSpeed, GrappleAccel * Time.fixedDeltaTime);
+        SetCurrent(Grapple);
+        Vector3 grappleDir = (grapplePoint.worldPoint - transform.position).normalized;
+        directionWorld -= grappleDir * Mathf.Min(0f, Vector3.Dot(directionWorld, grappleDir));
+        velocity = Vector3.MoveTowards(velocity, grappleDir * GrappleSpeed, GrappleAccel * Time.fixedDeltaTime);
         if(grappledEnemy != null)
         {
             grappledEnemy.Stun(Vector3.zero);
@@ -216,7 +247,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrappling)
             return;
 
-        Grapple.Retract();
+        GrappleObj.Retract();
         player.usingAbility = false;
         isGrappling = false;
         doGravity = true;
@@ -251,6 +282,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     {
         isGrappling = true;
         player.usingAbility = true;
+        grappleDelay = GrappleRetractDelay;
         grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
         grappledEnemy = hit.transform.GetComponent<Enemy>();
         velocity *= GrappleDrag;
@@ -269,8 +301,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     
     int vaultDelay;
     Vector3 vaultDir;
-    bool isVaulting{get => vaultDelay > 0;}
-    void Vault()
+    bool isVaulting{get => Vault.cooldown > 0;}
+    void Vaulting()
     {
         if(!isGrounded && !player.usingAbility && direction.sqrMagnitude > 0 && (velocity.y <= VaultSpeed))
         {
@@ -281,29 +313,21 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, out hit, VaultStart.z, HardGroundMask))
             {
                 ChangeGround(hit.transform);
+                SetCurrent(Vault);
                 vaultDir = directionWorld;
-                vaultDelay = VaultStopDelay;
-                velocity.y = 0f;
-                if(velocity.sqrMagnitude > SpeedWhileVaulting * SpeedWhileVaulting)
-                {
-                    velocity -= velocity.normalized * VaultDecel * Time.fixedDeltaTime;
-                }
-                velocity.y = VaultSpeed;
-                return;
             }
         }
         
         if(isVaulting)
         {
             velocity.y = Mathf.Max(VaultSpeed, velocity.y);
-            vaultDelay--;
         }
     }
 
     bool isWallRunning;
     int wallRunCooldown;
     Vector3 wallDir;
-    void WallRun()
+    void WallRunning()
     {
         isWallRunning = false;
         if(wallRunCooldown > 0)
@@ -320,12 +344,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             || Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
             {
                 isWallRunning = true;
+                SetCurrent(WallRun);
                 velocity.y = 0f;
                 velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
-                if(velocity.sqrMagnitude > WallRunSpeed * WallRunSpeed)
-                {
-                    velocity -= velocity.normalized * WallRunDecel * Time.fixedDeltaTime;
-                }
                 wallDir = -hit.normal;
                 ChangeGround(hit.transform);
                 Vector3 cross = Vector3.Cross(wallDir, Vector3.up);
@@ -336,17 +357,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
 
         player.Aim.RotateHead(Vector3.zero);
-        wallDir = Vector3.zero;
+        if(WallRun.cooldown == 0)
+            wallDir = Vector3.zero;
     }
 
     public float currentFuel;
-    int airJumping;
     void Jetpack()
     {
-        if(airJumping > 0)
-        {
-            airJumping--;
-        }
         if(isJumping && !isGrounded && !player.usingAbility && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
         {
             float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + (velocity.y>0?JumpGravity:FallGravity)) * Time.fixedDeltaTime);
@@ -375,29 +392,32 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             StopGrapple();
             return;
         }
-        if(isGrounded)
+        if(Air.cooldown > 0)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
+            Air.cooldown = 0;
             return;
         }
-        if(isVaulting)
+        if(Vault.cooldown > 0)
         {
             AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, 0f);
+            Vault.cooldown = 0;
             return;
         }
-        if(isWallRunning)
+        if(WallRun.cooldown > 0)
         {
             Vector3 jumpForce = WallJumpForce;
             jumpForce.x = 0;
             AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, 0f);
             wallRunCooldown = WallRunCooldown;
+            WallRun.cooldown = 0;
             return;
         }
         if(HasJetpack && currentFuel >= AirJumpCost)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
             currentFuel -= AirJumpCost;
-            airJumping = AirJumpTime;
+            SetCurrent(AirJump);
             return;
         }
         jumpCooldown = 0f;
@@ -417,9 +437,18 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(isGrounded)
         {
             groundCheckCooldown = GroundCheckCooldown;
+            Air.cooldown = 0;
             isGrounded = false;
         }
     }
+}
+
+[System.Serializable]
+public class MoveState
+{
+    public float speed, accel, decel, maxSpeed;
+    public int coyote;
+    [HideInInspector] public int cooldown;
 }
 
 public interface IMovingGround

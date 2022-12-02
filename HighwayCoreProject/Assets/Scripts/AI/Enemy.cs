@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public EnemyManager manager;
     [HideInInspector] public bool stunned;
 
+    float stunTime;
+
     void OnEnable()
     {
         Attack.enemy = this;
@@ -60,16 +62,20 @@ public class Enemy : MonoBehaviour
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);
 
-        if(stunned)
-            StopCoroutine(Stunning());
-        StartCoroutine(Stunning());
+        stunTime = StunTime;
+        stunned = true;
     }
 
-    IEnumerator Stunning()
+    void Update()
     {
-        stunned = true;
-        yield return new WaitForSeconds(StunTime);
-        stunned = false;
+        if(stunned)
+        {
+            stunTime -= Time.deltaTime;
+            if(stunTime <= 0)
+            {
+                stunned = false;
+            }
+        }
     }
 }
 

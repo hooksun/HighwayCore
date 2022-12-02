@@ -13,13 +13,16 @@ public class EnemyPathfinding : EnemyBehaviour
     public PlatformAddress currentPlatform;
     public TransformPoint transformPosition;
 
-    PlatformAddress targetPlatform, lastPlatform;
-    TransformPoint targetPoint, jumpPoint;
-    Vector3 airVelocity;
-    RaycastHit groundInfo;
-    bool isGrounded = true;
-    bool isJumping, groundCooldown;
-    int backnForth;
+    protected virtual float jumpGrav{get => JumpGravity;}
+    protected virtual float fallGrav{get => FallGravity;}
+
+    protected PlatformAddress targetPlatform, lastPlatform;
+    protected TransformPoint targetPoint, jumpPoint;
+    protected Vector3 airVelocity;
+    protected RaycastHit groundInfo;
+    protected bool isGrounded = true;
+    protected bool isJumping, groundCooldown;
+    protected int backnForth;
     
     public override void Activate()
     {
@@ -33,7 +36,7 @@ public class EnemyPathfinding : EnemyBehaviour
         FindNewPath();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if(transformPosition.transform == null || !transformPosition.transform.gameObject.activeInHierarchy)
         {
@@ -54,9 +57,9 @@ public class EnemyPathfinding : EnemyBehaviour
         }
     }
 
-    bool GroundCheck() => Physics.Raycast(transform.position, Vector3.down, out groundInfo, groundDist, GroundMask);
+    protected virtual bool GroundCheck() => Physics.Raycast(transform.position, Vector3.down, out groundInfo, groundDist, GroundMask);
     
-    void Simulate()
+    protected virtual void Simulate()
     {
         if(idleing || enemy.stunned)
             return;
@@ -66,40 +69,31 @@ public class EnemyPathfinding : EnemyBehaviour
         PathFind();
     }
 
-    void AirSimulate()
+    protected virtual void AirSimulate()
     {
+        if(transform.position.y < -100f)
+        {
+            enemy.Die();
+            return;
+        }
+
         if(isJumping)
         {
             Jumping();
         }
-        if(!groundCooldown && airVelocity.y <= 0 && GroundCheck() && transform.position.y - groundInfo.point.y <= transformOffset.y)
+
+        airVelocity.y -= (airVelocity.y > 0?jumpGrav:fallGrav) * Time.deltaTime;
+        if(airVelocity.y <= 0 && GroundCheck() && transform.position.y - groundInfo.point.y <= transformOffset.y)
         {
-            if(groundInfo.transform.gameObject.layer == 8)
+            if(!groundCooldown)
             {
-                enemy.Die();
+                Land();
                 return;
             }
-            
-            lastPlatform = currentPlatform;
-            if(transformPosition.transform != groundInfo.transform)
-            {
-                currentPlatform = groundInfo.transform.GetComponent<Vehicle>().ClosestPlatform(transform.position);
-                transformPosition.transform = groundInfo.transform;
-            }
-            else
-                currentPlatform = targetPlatform;
-            transformPosition.point = transform.position - transformOffset - transformPosition.transform.position;
-            isJumping = false;
-            isGrounded = true;
-            FindNewPath();
-            return;
+            airVelocity.y = 0f;
         }
 
-        airVelocity.y -= (airVelocity.y > 0?JumpGravity:FallGravity) * Time.deltaTime;
         transform.position += airVelocity * Time.deltaTime;
-
-        if(transform.position.y < -100f)
-            enemy.Die();
     }
 
     public override void Stun(Vector3 knockback)
@@ -130,7 +124,7 @@ public class EnemyPathfinding : EnemyBehaviour
         FindNewPath();
     }
 
-    void PathFind()
+    protected virtual void PathFind()
     {
         if(targetPoint.transform == null)
         {
@@ -138,7 +132,7 @@ public class EnemyPathfinding : EnemyBehaviour
             return;
         }
         
-        if(transformPosition.point == targetPoint.point)
+        if(transformPosition.point == targetPoint.point && transformPosition.transform == targetPoint.transform)
         {
             if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
             {
@@ -146,23 +140,7 @@ public class EnemyPathfinding : EnemyBehaviour
                 return;
             }
             
-            Vector3 jumpWorldPoint = jumpPoint.worldPoint;
-            jumpWorldPoint.y = transform.position.y;
-            if((jumpWorldPoint - transform.position).sqrMagnitude > MaxJumpDistance * MaxJumpDistance)
-            {
-                FindNewPath();
-                return;
-            }
-            
-            isJumping = true;
-            isGrounded = false;
-            airVelocity = Vector3.zero;
-            float height1 = Mathf.Max(currentPlatform.platform.height, targetPlatform.platform.height) + JumpHeight - currentPlatform.platform.height;
-            float height2 = height1 + currentPlatform.platform.height - targetPlatform.platform.height;
-            airVelocity.y = Mathf.Sqrt(2f * JumpGravity * height1);
-            float fallVelY = Mathf.Sqrt(2f * FallGravity * height2);
-            jumpTime = (2f * height1 / airVelocity.y) + (2f * height2 / fallVelY);
-            transformPosition.transform = jumpPoint.transform;
+            Jump();
             return;
         }
 
@@ -174,7 +152,7 @@ public class EnemyPathfinding : EnemyBehaviour
     {
         float sqrDist = Mathf.Infinity;
         bool found = false;
-        List<PlatformAddress> neighbours = enemy.manager.RequestPlatformNeighbours(currentPlatform, JumpDistance);
+        List<PlatformAddress> neighbours = enemy.manager.RequestPlatformNeighbours(currentPlatform, JumpDistance, MaxJumpDistance);
         for(int i = 0; i < neighbours.Count; i++)
         {
             PlatformAddress plat = neighbours[i];
@@ -216,7 +194,59 @@ public class EnemyPathfinding : EnemyBehaviour
         targetPoint = currentPlatform.ClosestPointTo(jumpPoint.worldPoint);
     }
 
-    float jumpTime;
+    protected virtual void Jump()
+    {
+        Vector3 jumpWorldPoint = jumpPoint.worldPoint;
+        jumpWorldPoint.y = transform.position.y;
+        float sqrDist = (jumpWorldPoint - transform.position).sqrMagnitude;
+        if(sqrDist > MaxJumpDistance * MaxJumpDistance)
+        {
+            FindNewPath();
+            return;
+        }
+        
+        isJumping = true;
+        isGrounded = false;
+        airVelocity = Vector3.zero;
+        CalculateJump(currentPlatform.platform.height, targetPlatform.platform.height, JumpHeight, JumpGravity, FallGravity);
+        transformPosition.transform = jumpPoint.transform;
+        if(Mathf.Sqrt(sqrDist) / jumpTime > WalkSpeed)
+        {
+            //jump animation
+        }
+    }
+
+    protected void CalculateJump(float h1, float h2, float jumpH, float jumpG, float fallG)
+    {
+        float height1 = Mathf.Max(h1, h2) + jumpH - h1;
+        float height2 = height1 + h1 - h2;
+        airVelocity.y = Mathf.Sqrt(2f * jumpG * height1);
+        float fallVelY = Mathf.Sqrt(2f * fallG * height2);
+        jumpTime = (2f * height1 / airVelocity.y) + (2f * height2 / fallVelY);
+    }
+
+    protected virtual void Land()
+    {
+        if(groundInfo.transform.gameObject.layer == 8)
+        {
+            enemy.Die();
+            return;
+        }
+        
+        lastPlatform = currentPlatform;
+        currentPlatform = targetPlatform;
+        if(!isJumping || transformPosition.transform != groundInfo.transform)
+        {
+            currentPlatform = groundInfo.transform.GetComponent<Vehicle>().ClosestPlatform(transform.position);
+            transformPosition.transform = groundInfo.transform;
+        }
+        transformPosition.point = transform.position - transformOffset - transformPosition.transform.position;
+        isJumping = false;
+        isGrounded = true;
+        FindNewPath();
+    }
+
+    protected float jumpTime;
     protected virtual void Jumping()
     {
         if(jumpTime > 0)

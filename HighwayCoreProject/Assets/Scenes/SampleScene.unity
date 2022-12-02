@@ -519,6 +519,12 @@ MonoBehaviour:
   - pool: []
     Object: {fileID: 259255105076096126, guid: 94b70a42cf5084549888e55a0c68574d, type: 3}
     startAmount: 10
+  - pool: []
+    Object: {fileID: 259255105076096126, guid: 9c484253d7afeec47ad114708b790d48, type: 3}
+    startAmount: 10
+  - pool: []
+    Object: {fileID: 259255105076096126, guid: 4392e16c552e5814488a05f1be72048a, type: 3}
+    startAmount: 10
 --- !u!114 &932973450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,7 +855,17 @@ MonoBehaviour:
     - weight: 1
       variable:
         enemyIndex: 0
-        minDistance: 5
+        minDistance: -50
+        maxDistance: 50
+    - weight: 1
+      variable:
+        enemyIndex: 1
+        minDistance: -50
+        maxDistance: 50
+    - weight: 1
+      variable:
+        enemyIndex: 2
+        minDistance: -50
         maxDistance: 50
   ActiveEnemies: []
 --- !u!114 &1472807259
