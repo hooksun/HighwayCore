@@ -8,9 +8,10 @@ public class GunScript : PlayerBehaviour
 {
     public GunData gunData;
     bool isShooting;
-    float readyTime;
+    float fireRate;
     public GameObject impact, bullet;
     float timeSinceLastShot;
+    public float timeSinceLastSwitch;
     public TextMeshProUGUI ammoInMagCounter;
     public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
@@ -32,8 +33,10 @@ public class GunScript : PlayerBehaviour
     // Update is called once per frame
     void Update()
     {
-        readyTime = 1f/(gunData.fireRate/60f);
+        fireRate = 1f/(gunData.fireRate/60f);
         timeSinceLastShot += Time.deltaTime;
+        timeSinceLastSwitch += Time.deltaTime;
+
 
         if(Input.GetKey(KeyCode.Mouse0)){
             shooting();
@@ -46,7 +49,6 @@ public class GunScript : PlayerBehaviour
         }
         else if(!Input.GetKey(KeyCode.Mouse1)){
             isScope = false;
-            //player.Aim.ScopeIn(false);
         }
 
         player.Aim.ScopeIn(isScope);
@@ -147,7 +149,7 @@ public class GunScript : PlayerBehaviour
         }
     }
     bool ReadyToShoot(){
-        if(!gunData.isReloading && timeSinceLastShot > readyTime){
+        if(!gunData.isReloading && timeSinceLastShot > fireRate && timeSinceLastSwitch > gunData.switchSpeed){
             return true;
         }
         return false;
