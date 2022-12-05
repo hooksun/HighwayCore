@@ -17,18 +17,18 @@ public class Vehicle : MonoBehaviour, IMovingGround
 
     public PlatformAddress ClosestPlatform(Vector3 point)
     {
-        float dist = Mathf.Infinity;
         int min = 0;
-        for(int i = 0; i < Platforms.Length; i++)
+        float dist = DistanceToPlatform(point, 0);
+        for(int i = 1; i < Platforms.Length; i++)
         {
+            if(dist == 0f)
+                break;
             float newDist = DistanceToPlatform(point, i);
             if(newDist <= dist)
             {
                 min = i;
                 dist = newDist;
             }
-            if(dist == 0f)
-                break;
         }
         return new PlatformAddress(transform.parent.GetComponent<Lane>(), this, min);
     }
@@ -36,11 +36,11 @@ public class Vehicle : MonoBehaviour, IMovingGround
     {
         float dist = 0f;
         Platform platform = Platforms[index];
-        point += transformOffset - transform.position;
+        point -= transform.position - transformOffset;
         dist += Mathf.Max(0f, platform.BoundsStart.x - point.x);
-        dist += Mathf.Max(0f, platform.BoundsStart.y - point.y);
+        dist += Mathf.Max(0f, platform.BoundsStart.y - point.z);
         dist += Mathf.Max(0f, point.x - platform.BoundsEnd.x);
-        dist += Mathf.Max(0f, point.y - platform.BoundsEnd.y);
+        dist += Mathf.Max(0f, point.z - platform.BoundsEnd.y);
         return dist;
     }
 

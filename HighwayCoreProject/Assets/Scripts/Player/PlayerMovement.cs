@@ -202,7 +202,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         if(!isGrappling)
         {
-            if(player.usingAbility || player.abilityCooldown)
+            if(player.usingAbility || player.abilityCooldown || player.usingWeapon)
                 return;
             grappledEnemy = null;
             player.abilityCooldown = true;

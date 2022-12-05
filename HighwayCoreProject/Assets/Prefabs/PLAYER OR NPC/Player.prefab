@@ -1438,9 +1438,9 @@ MonoBehaviour:
   WeaponCam: {fileID: 1706173410471807903}
   sensitivity: 25
   HeadRotateSpeed: 45
-  fov: 60
+  fov: 70
   scopedFov: 30
-  fovSpeed: 0
+  fovSpeed: 4
 --- !u!114 &8216949968672074435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  cooldown: 2
+  cooldown: 1
   globalCooldown: 0.3
   delay: 0.2
   damage: 1

@@ -806,6 +806,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyManager: {fileID: 1472807258}
   Pool: {fileID: 932973448}
+  Sections:
+  - distance: 0
   Vehicles:
     Pool:
     - weight: 4
@@ -822,8 +824,7 @@ MonoBehaviour:
   - {fileID: 442180243}
   - {fileID: 2106397327}
   - {fileID: 1431077806}
-  StartLength: 200
-  StartPosition: -50
+  StartPosition: -150
   minGap: 3
   maxGap: 5
   accelRange: 5

@@ -16,8 +16,6 @@ public class PlayerAim : PlayerBehaviour
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
-        hideCursor();
-
         Vector2 input = ctx.ReadValue<Vector2>();
 
         input.x *= sensitivity;
@@ -30,6 +28,7 @@ public class PlayerAim : PlayerBehaviour
 
     void OnEnable()
     {
+        hideCursor();
         currFov = fov;
     }
 
@@ -46,6 +45,7 @@ public class PlayerAim : PlayerBehaviour
 
         currFov = Mathf.MoveTowards(currFov, targetFov, fovSpeed * Time.deltaTime);
         //MainCam.fieldOfView = currFov;
+        //WeaponCam.fieldOfView = currFov;
     }
 
     public void RotateHead(Vector3 offset)

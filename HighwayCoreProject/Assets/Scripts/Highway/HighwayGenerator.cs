@@ -6,17 +6,31 @@ public class HighwayGenerator : MonoBehaviour
 {
     public EnemyManager enemyManager;
     public VehiclePool Pool;
+    public HighwaySection[] Sections;
     public VariablePool<int> Vehicles;
     public Lane[] Lanes;
-    public float StartLength;
     public float StartPosition, minGap, maxGap, accelRange, minGapTime, maxGapTime, gapDistance;
 
     public Transform player; // temp
     public float PlayerGenerateDist;
 
+    HighwaySection currentSection{get => Sections[sectionIndex];}
+    int sectionIndex;
+    float nextSectionPosition;
+
     void Start()
     {
-        GenerateHighway(StartLength);
+        GenerateInitialHighway();
+    }
+
+    void GenerateInitialHighway()
+    {
+        sectionIndex = 0;
+        nextSectionPosition = StartPosition + currentSection.distance;
+        foreach(Lane lane in Lanes)
+        {
+            AddVehicle(lane, StartPosition);
+        }
     }
 
     void Update()
@@ -24,31 +38,18 @@ public class HighwayGenerator : MonoBehaviour
         SimulateHighway();
     }
 
-    void GenerateHighway(float length)
-    {
-        length += StartPosition;
-        foreach(Lane lane in Lanes)
-        {
-            float position = StartPosition;
-            while(position < length)
-            {
-                position = AddVehicle(lane, position);
-            }
-        }
-    }
-
     void SimulateHighway()
     {
         foreach(Lane lane in Lanes)
         {
-            if(Mathf.Abs(lane.Vehicles[0].position - player.position.z) > PlayerGenerateDist)
-            {
-                RemoveVehicle(lane, 0);
-            }
             Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
-            if(Mathf.Abs(lastVehicle.position - player.position.z) < PlayerGenerateDist)
+            if(lastVehicle.position - player.position.z < PlayerGenerateDist)
             {
                 AddVehicle(lane, lastVehicle.position + lastVehicle.length);
+            }
+            if(player.position.z - lane.Vehicles[0].position > PlayerGenerateDist)
+            {
+                RemoveVehicle(lane, 0);
             }
             
             for(int i = lane.Vehicles.Count - 2; i >= 0; i--)
@@ -74,6 +75,12 @@ public class HighwayGenerator : MonoBehaviour
 
     float AddVehicle(Lane lane, float position)
     {
+        if(position >= nextSectionPosition)
+        {
+            sectionIndex = Mathf.Min(sectionIndex + 1, Sections.Length - 1);
+            nextSectionPosition += currentSection.distance;
+        }
+        
         Vehicle newVehicle = Pool.GetObject(Vehicles.GetRandomVar());
         lane.Vehicles.Add(newVehicle);
         newVehicle.transform.parent = lane.transform;
@@ -107,4 +114,17 @@ public class HighwayGenerator : MonoBehaviour
             enemyManager.Spawners.Remove((IEnemySpawner)vehicle);
         }
     }
+}
+
+[System.Serializable]
+public struct HighwaySection
+{
+    public float distance;
+
+}
+public struct ForceVehicleSpawn
+{
+    public int lane, vehicle;
+    public float distance;
+    public bool spawned;
 }

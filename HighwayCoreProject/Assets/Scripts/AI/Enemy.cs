@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public Transform Head;
     public Vector3 transformOffset;
-    public float StunTime, StunResistance;
+    public float Cost, StunTime, StunResistance;
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;

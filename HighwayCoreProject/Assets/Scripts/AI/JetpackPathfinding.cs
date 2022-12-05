@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class JetpackPathfinding : EnemyPathfinding
 {
-    public float jetpackForce, launchTime, flyCooldown, jetpackCooldown, airTime;
+    public float jetpackForce, launchTime, flyCooldown, jetpackCooldown, airTime, jetpackJumpGravity, minJetpackJumpHeight;
     public Vector3 flyDistance, flySpeed, minPos, maxPos;
     
     float groundTime, flyTime;
     Vector3 targetFlyPos, targetFlyTime;
-    bool jetpacking;
+    bool jetpacking, jetpackJump;
+
+    protected override float jumpGrav{get => (jetpackJump?jetpackJumpGravity:JumpGravity);}
 
     public override void Activate()
     {
@@ -17,6 +19,7 @@ public class JetpackPathfinding : EnemyPathfinding
         groundTime = flyCooldown;
         flyTime = 0f;
         jetpacking = false;
+        jetpackJump = false;
     }
 
     protected override void Simulate()
@@ -44,6 +47,18 @@ public class JetpackPathfinding : EnemyPathfinding
             return;
         }
         base.AirSimulate();
+    }
+
+    public override void Stun(Vector3 knockback)
+    {
+        jetpackJump = false;
+        base.Stun(knockback);
+    }
+
+    protected override void Jump()
+    {
+        jetpackJump = jumpPoint.worldPoint.y - transformPosition.worldPoint.y > minJetpackJumpHeight;
+        base.Jump();
     }
 
     protected virtual void Fly()

@@ -117,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Head: {fileID: 2579986990338431861}
   transformOffset: {x: 0, y: 1, z: 0}
+  Cost: 0
   StunTime: 0.4
   StunResistance: 0
   Attack: {fileID: 6806637070816601232}
@@ -154,13 +155,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   DesiredDistance: 0
-  MaxHeight: 1.5
-  WalkSpeed: 5
+  MaxHeight: 3
+  WalkSpeed: 7
   JumpHeight: 1
   JumpGravity: 20
   FallGravity: 30
-  JumpDistance: 2
+  JumpDistance: 4
   MaxJumpDistance: 7
+  JumpDelay: 0
+  LongJumpDelay: 0
   groundDist: 1.1
   groundStunResistance: 0
   groundCheckCooldown: 0.1
@@ -176,6 +179,8 @@ MonoBehaviour:
   flyCooldown: 4
   jetpackCooldown: 1
   airTime: 30
+  jetpackJumpGravity: 10
+  minJetpackJumpHeight: 1.5
   flyDistance: {x: 10, y: 10, z: 10}
   flySpeed: {x: 6, y: 4, z: 8}
   minPos: {x: -15, y: 8, z: -10}

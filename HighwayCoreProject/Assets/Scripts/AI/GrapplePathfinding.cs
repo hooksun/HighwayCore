@@ -5,7 +5,7 @@ using UnityEngine;
 public class GrapplePathfinding : EnemyPathfinding
 {
     public LineRenderer grapple;
-    public float maxJumpHeightwoGrapple, grappleSpeed, grappleGravity, grappleHeight;
+    public float minGrappleJumpHeight, grappleSpeed, grappleGravity, grappleHeight;
 
     protected override float jumpGrav{get => (grappleLanded?grappleGravity:JumpGravity);}
 
@@ -53,20 +53,17 @@ public class GrapplePathfinding : EnemyPathfinding
         }
         if(!enemy.stunned && !isJumping)
         {
-            CalculateJump(transform.position.y - transformOffset.y, jumpPoint.worldPoint.y, grappleHeight, grappleGravity, FallGravity);
-            isJumping = true;
-            isGrounded = false;
+            InitiateJump(grappleHeight);
         }
     }
 
     protected override void Jump()
     {
-        if(!grappling && jumpPoint.worldPoint.y - transformPosition.worldPoint.y <= maxJumpHeightwoGrapple)
+        if(!grappling && jumpPoint.worldPoint.y - transformPosition.worldPoint.y <= minGrappleJumpHeight)
         {
             base.Jump();
             return;
         }
-        airVelocity = Vector3.zero;
         Grappling();
     }
 

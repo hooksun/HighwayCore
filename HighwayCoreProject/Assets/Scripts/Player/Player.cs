@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public float TrailTime;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
-    [HideInInspector] public bool abilityCooldown, usingAbility;
+    [HideInInspector] public bool abilityCooldown, usingAbility, usingWeapon;
     public Vector3 position{get => transform.position + positionOffset;}
 
     void Awake()

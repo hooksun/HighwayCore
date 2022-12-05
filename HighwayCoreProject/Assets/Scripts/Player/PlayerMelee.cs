@@ -14,7 +14,7 @@ public class PlayerMelee : PlayerBehaviour
     
     public void Input(InputAction.CallbackContext ctx)
     {
-        if(!ctx.started || onCooldown || player.usingAbility || player.abilityCooldown)
+        if(!ctx.started || onCooldown || player.usingAbility || player.abilityCooldown || player.usingWeapon)
             return;
         Activate();
     }
