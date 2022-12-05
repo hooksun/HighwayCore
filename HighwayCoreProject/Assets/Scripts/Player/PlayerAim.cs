@@ -44,8 +44,8 @@ public class PlayerAim : PlayerBehaviour
         }
 
         currFov = Mathf.MoveTowards(currFov, targetFov, fovSpeed * Time.deltaTime);
-        //MainCam.fieldOfView = currFov;
-        //WeaponCam.fieldOfView = currFov;
+        MainCam.fieldOfView = currFov;
+        WeaponCam.fieldOfView = currFov;
     }
 
     public void RotateHead(Vector3 offset)
@@ -53,10 +53,11 @@ public class PlayerAim : PlayerBehaviour
         headTargetOffset = offset;
     }
 
-    public void ScopeIn(bool scope = false)
+    public void ScopeIn(bool scope)
     {
         targetFov = (scope?scopedFov:fov);
     }
+    
 
     void hideCursor(){
         Cursor.lockState = CursorLockMode.Locked;
