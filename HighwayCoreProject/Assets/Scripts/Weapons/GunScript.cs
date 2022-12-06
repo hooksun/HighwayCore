@@ -16,9 +16,6 @@ public class GunScript : PlayerBehaviour
     public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
     public GameObject camGameObject;
-    public Camera camera;
-    public float camZoomOut = 60f;
-    public float camZoomIn = 20f;
     public float t = 0f;
     bool isScope = false;
     
@@ -27,7 +24,6 @@ public class GunScript : PlayerBehaviour
     {
         gunData.currentAmmoInMag = gunData.magazineSize;
         gunData.isReloading = false;
-        camera.fieldOfView = camZoomOut;
     }
 
     // Update is called once per frame

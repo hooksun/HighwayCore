@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Head: {fileID: 2579986990338431861}
   transformOffset: {x: 0, y: 1, z: 0}
-  Cost: 0
+  Cost: 10
   StunTime: 0.4
   StunResistance: 0
   Attack: {fileID: 6806637070816601232}

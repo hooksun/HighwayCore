@@ -16,7 +16,7 @@ public class HighwayGenerator : MonoBehaviour
 
     HighwaySection currentSection{get => Sections[sectionIndex];}
     int sectionIndex;
-    float nextSectionPosition;
+    float sectionPosition, nextSectionPosition;
 
     void Start()
     {
@@ -26,7 +26,9 @@ public class HighwayGenerator : MonoBehaviour
     void GenerateInitialHighway()
     {
         sectionIndex = 0;
+        sectionPosition = StartPosition;
         nextSectionPosition = StartPosition + currentSection.distance;
+        currentSection.HighwayTable.Reset();
         foreach(Lane lane in Lanes)
         {
             AddVehicle(lane, StartPosition);
@@ -78,10 +80,24 @@ public class HighwayGenerator : MonoBehaviour
         if(position >= nextSectionPosition)
         {
             sectionIndex = Mathf.Min(sectionIndex + 1, Sections.Length - 1);
+            currentSection.HighwayTable.Reset();
+            sectionPosition = nextSectionPosition;
             nextSectionPosition += currentSection.distance;
         }
         
-        Vehicle newVehicle = Pool.GetObject(Vehicles.GetRandomVar());
+        Vehicle newVehicle = null;
+        if(currentSection.HighwayTable.SpawnVehicles != null)
+        {
+            foreach(SpawnVehicle veh in currentSection.HighwayTable.SpawnVehicles)
+            {
+                if(veh.spawned || position < sectionPosition + veh.distance || lane.transform.GetSiblingIndex() != veh.lane)
+                    continue;
+                newVehicle = Pool.GetObject(veh.vehicle);
+                veh.spawned = true;
+            }
+        }
+        if(newVehicle == null)
+            newVehicle = Pool.GetObject(currentSection.HighwayTable.GetRandomVehicle());
         lane.Vehicles.Add(newVehicle);
         newVehicle.transform.parent = lane.transform;
 
@@ -120,11 +136,14 @@ public class HighwayGenerator : MonoBehaviour
 public struct HighwaySection
 {
     public float distance;
+    public HighwaySpawnTable HighwayTable;
 
 }
-public struct ForceVehicleSpawn
+
+[System.Serializable]
+public class SpawnVehicle
 {
     public int lane, vehicle;
     public float distance;
-    public bool spawned;
+    [HideInInspector] public bool spawned;
 }

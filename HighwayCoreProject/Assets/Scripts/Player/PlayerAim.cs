@@ -9,10 +9,10 @@ public class PlayerAim : PlayerBehaviour
     public float sensitivity, HeadRotateSpeed;
     [Range(30f, 140f)]
     public float fov, scopedFov;
-    public float fovSpeed;
+    public float fovTime;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
-    float currFov, targetFov;
+    float currFov, targetFov, fovSpeed;
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
@@ -56,6 +56,7 @@ public class PlayerAim : PlayerBehaviour
     public void ScopeIn(bool scope)
     {
         targetFov = (scope?scopedFov:fov);
+        fovSpeed = (fov - scopedFov) / fovTime;
     }
     
 

@@ -8,29 +8,51 @@ public class EnemyManager : MonoBehaviour
     public HighwayGenerator Highway;
     public EnemyPool enemyPool;
     public ItemSpawner itemSpawner;
+    public EnemySpawnTable[] EnemyTables;
     public int maxItems, minItems;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
     public List<Enemy> ActiveEnemies = new List<Enemy>();
 
-    IEnumerator Start()
+    EnemySpawnTable currentTable;
+    float TotalCost, ActiveCost, AggroCost;
+
+    void Start()
     {
-        yield return new WaitForSeconds(5f);
-        SpawnEnemies(10);
+        currentTable = EnemyTables[0];
+        time = currentTable.StartInterval;
+    }
+
+    void Update()
+    {
+        SpawnUpdate();
     }
     
-    void EnemyUpdate()
+    float time;
+    void SpawnUpdate()
     {
+        if(time > 0)
+        {
+            time -= Time.deltaTime;
+            return;
+        }
 
+        SpawnEnemies(currentTable.SpawnCost);
+        time = Random.Range(currentTable.SpawnIntervalMin, currentTable.SpawnIntervalMax);
     }
 
-    void SpawnEnemies(int amount)
+    void SpawnEnemies(float cost)
     {
-        for(int i = 0; i < amount; i++)
+        float spawned = 0f;
+        while(spawned < cost)
         {
-            EnemyType enemy = Enemies.GetRandomVar();
+            if(ActiveCost >= currentTable.ActiveCost || Spawners.Count == 0)
+                return;
+
+            EnemyType enemy = currentTable.GetRandomEnemy();
             int[] seq = Util.RandomSequence(Spawners.Count);
+            bool success = false;
             for(int j = 0; j < seq.Length; j++)
             {
                 IEnemySpawner spawner = Spawners[seq[j]];
@@ -46,10 +68,20 @@ public class EnemyManager : MonoBehaviour
 
                 spawner.SpawnEnemy(nme);
                 ActiveEnemies.Add(nme);
+                ActiveCost += nme.Cost;
+                spawned += nme.Cost;
                 nme.Activate();
+                success = true;
                 break;
             }
+            if(!success)
+                spawned += currentTable.FailCost;
         }
+    }
+
+    public void StartCombat()
+    {
+
     }
 
     public void RequestDie(Enemy enemy)
@@ -60,8 +92,7 @@ public class EnemyManager : MonoBehaviour
         }
         
         ActiveEnemies.Remove(enemy);
-        if(ActiveEnemies.Count == 0)
-            SpawnEnemies(5);
+        ActiveCost -= enemy.Cost;
     }
 
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)

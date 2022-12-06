@@ -909,7 +909,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1421,6 +1421,7 @@ MonoBehaviour:
   trailPosition: {x: 0, y: 0, z: 0}
   abilityCooldown: 0
   usingAbility: 0
+  usingWeapon: 0
 --- !u!114 &8216949968672074434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1440,7 +1441,7 @@ MonoBehaviour:
   HeadRotateSpeed: 45
   fov: 70
   scopedFov: 30
-  fovSpeed: 4
+  fovTime: 0.25
 --- !u!114 &8216949968672074435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1923,11 +1924,12 @@ MonoBehaviour:
   gunData: {fileID: 11400000, guid: 13c098b3a45d48541ab1a7aef12afd76, type: 2}
   impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
   bullet: {fileID: 8105419304571585314, guid: ec2ea9871411a55438ee9d7ffc203ca7, type: 3}
+  timeSinceLastSwitch: 0
   ammoInMagCounter: {fileID: 0}
   ammoLeftCounter: {fileID: 0}
   weaponSwitching: {fileID: 1406370825}
   camGameObject: {fileID: 8216949969757152870}
-  camera: {fileID: 8216949969757152872}
+  t: 0
 --- !u!114 &1406370825
 MonoBehaviour:
   m_ObjectHideFlags: 0

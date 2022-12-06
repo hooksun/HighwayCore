@@ -503,6 +503,10 @@ MonoBehaviour:
     Object: {fileID: -142073367996895342, guid: 71d681a5a00b78c4b88d30d5146319d7,
       type: 3}
     startAmount: 10
+  - pool: []
+    Object: {fileID: 2074021377265111950, guid: 9230dd3ec9028b84a9550d26dcf5f632,
+      type: 3}
+    startAmount: 1
 --- !u!114 &932973449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -807,7 +811,18 @@ MonoBehaviour:
   enemyManager: {fileID: 1472807258}
   Pool: {fileID: 932973448}
   Sections:
-  - distance: 0
+  - distance: 200
+    HighwayTable: {fileID: 11400000, guid: 004f855ba244dd248bf2f4147955a583, type: 2}
+  - distance: 500
+    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
+  - distance: 100
+    HighwayTable: {fileID: 11400000, guid: 9748e845bdd2af441935299b51c2259d, type: 2}
+  - distance: 500
+    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
+  - distance: 100
+    HighwayTable: {fileID: 11400000, guid: 9748e845bdd2af441935299b51c2259d, type: 2}
+  - distance: 100
+    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
   Vehicles:
     Pool:
     - weight: 4
@@ -849,6 +864,8 @@ MonoBehaviour:
   Highway: {fileID: 1472807257}
   enemyPool: {fileID: 932973449}
   itemSpawner: {fileID: 1472807259}
+  EnemyTables:
+  - {fileID: 11400000, guid: 633b74afa08b1b94f9e607901855d6f6, type: 2}
   maxItems: 6
   minItems: 4
   Enemies:
