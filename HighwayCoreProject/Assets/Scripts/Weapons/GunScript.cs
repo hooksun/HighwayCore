@@ -8,17 +8,19 @@ public class GunScript : PlayerBehaviour
 {
     public GunData gunData;
     bool isShooting;
-    float readyTime;
+    float fireRate;
     public GameObject impact, bullet;
     float timeSinceLastShot;
+    public float timeSinceLastSwitch;
     public TextMeshProUGUI ammoInMagCounter;
     public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
     public GameObject camGameObject;
     public Camera camera;
-    float camZoomOut = 60f;
-    float camZoomIn = 20f;
-    float t = 0f;
+    public float camZoomOut = 60f;
+    public float camZoomIn = 20f;
+    public float t = 0f;
+    bool isScope = false;
     
     // Start is called before the first frame update
     void Start()
@@ -31,23 +33,37 @@ public class GunScript : PlayerBehaviour
     // Update is called once per frame
     void Update()
     {
-        readyTime = 1f/(gunData.fireRate/60f);
+        fireRate = 1f/(gunData.fireRate/60f);
         timeSinceLastShot += Time.deltaTime;
+        timeSinceLastSwitch += Time.deltaTime;
 
-        ZoomingOut(); // Camera zoom Reset
 
         if(Input.GetKey(KeyCode.Mouse0)){
             shooting();
         }
-        if(Input.GetKey(KeyCode.R)){
+        if(Input.GetKey(KeyCode.R) && !player.usingAbility && !player.abilityCooldown){
             Reloading();
         }
         else if(Input.GetKey(KeyCode.Mouse1)){
             SecondaryFire();
         }
+        else if(!Input.GetKey(KeyCode.Mouse1)){
+            isScope = false;
+        }
+
+        player.Aim.ScopeIn(isScope);
 
         ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
         ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
+
+        if(gunData.isReloading || isScope){
+            player.usingWeapon = true;
+        }
+        else{
+            player.usingWeapon = false;
+        }
+        
+        Debug.Log(player.usingWeapon);
     }
 
     void whatIsWeaponShoot(){
@@ -69,27 +85,12 @@ public class GunScript : PlayerBehaviour
         if(gunData.name == "AR" || gunData.name == "Pistol"){
             
         }
-        if(gunData.name == "Sniper"){
-            ZoomingIn();
+        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown){
+            isScope = true;
+            //player.Aim.ScopeIn(true);
         }
     }
 
-    void ZoomingOut(){
-        if(!Input.GetKey(KeyCode.Mouse1) && gunData.name == "Sniper"){
-            camera.fieldOfView = Mathf.Lerp(camZoomOut, camZoomIn, t);
-        
-        if(t>=0.0f){
-            t-=4f*Time.deltaTime;
-        }
-        }
-    }
-    void ZoomingIn(){
-        camera.fieldOfView = Mathf.Lerp(camZoomOut, camZoomIn, t);
-        
-        if(t<=1.0f){
-            t+=4f*Time.deltaTime;
-        }
-    }
     void shooting(){
         if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
             whatIsWeaponShoot();
@@ -148,7 +149,7 @@ public class GunScript : PlayerBehaviour
         }
     }
     bool ReadyToShoot(){
-        if(!gunData.isReloading && timeSinceLastShot > readyTime){
+        if(!gunData.isReloading && timeSinceLastShot > fireRate && timeSinceLastSwitch > gunData.switchSpeed){
             return true;
         }
         return false;

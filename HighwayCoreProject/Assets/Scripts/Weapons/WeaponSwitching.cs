@@ -63,6 +63,7 @@ public class WeaponSwitching : PlayerBehaviour
             }
             gunScript.gunData = pistol;
             gunScript.gunData.isReloading = false;
+            gunScript.timeSinceLastSwitch = 0f;
         }
         if(index == 1 && shotgun.available){
             for(int i=0;i<weapons.Length;i++){
@@ -70,6 +71,7 @@ public class WeaponSwitching : PlayerBehaviour
             }
             gunScript.gunData = shotgun;
             gunScript.gunData.isReloading = false;
+            gunScript.timeSinceLastSwitch = 0f;
         }
         if(index == 2 && rifle.available){
             for(int i=0;i<weapons.Length;i++){
@@ -77,6 +79,7 @@ public class WeaponSwitching : PlayerBehaviour
             }
             gunScript.gunData = rifle;
             gunScript.gunData.isReloading = false;
+            gunScript.timeSinceLastSwitch = 0f;
         }
         if(index == 3 && sniper.available){
             for(int i=0;i<weapons.Length;i++){
@@ -84,6 +87,7 @@ public class WeaponSwitching : PlayerBehaviour
             }
             gunScript.gunData = sniper;
             gunScript.gunData.isReloading = false;
+            gunScript.timeSinceLastSwitch = 0f;
         }
     }
 

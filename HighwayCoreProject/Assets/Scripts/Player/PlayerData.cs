@@ -6,7 +6,5 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     public float maxHealth;
-    //speed?
-    //jumping power?
-    //Gatau lagi
+    
 }

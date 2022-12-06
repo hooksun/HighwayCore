@@ -16,12 +16,13 @@ MonoBehaviour:
   name: Sniper
   damage: 50
   maxDistance: 400
-  currentAmmoInMag: 0
+  currentAmmoInMag: 3
   magazineSize: 5
   maxAmmo: 25
-  ammoLeft: 25
+  ammoLeft: 20
   fireRate: 200
   reloadTime: 1.5
   isReloading: 0
   bulletSpread: 0
   bulletSpeed: 120
+  switchSpeed: 1.75
