@@ -10,26 +10,24 @@ public class Enemy : MonoBehaviour
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;
+    public EnemyAnimation Animation;
 
     [HideInInspector] public Player targetPlayer;
     [HideInInspector] public EnemyManager manager;
-    [HideInInspector] public bool stunned;
+    [HideInInspector] public bool stunned, aggro;
 
     float stunTime;
 
-    void OnEnable()
+    public void Activate()
     {
         Attack.enemy = this;
         Pathfinding.enemy = this;
         Health.enemy = this;
-    }
-
-    public void Activate()
-    {
         stunned = false;
         Attack.Activate();
         Pathfinding.Activate();
         Health.Activate();
+        Animation.Activate();
     }
 
     public void Die()

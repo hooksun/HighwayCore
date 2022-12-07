@@ -32,7 +32,7 @@ public class Vehicle : MonoBehaviour, IMovingGround
         }
         return new PlatformAddress(transform.parent.GetComponent<Lane>(), this, min);
     }
-    float DistanceToPlatform(Vector3 point, int index)
+    public float DistanceToPlatform(Vector3 point, int index)
     {
         float dist = 0f;
         Platform platform = Platforms[index];

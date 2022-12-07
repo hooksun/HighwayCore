@@ -16,13 +16,14 @@ GameObject:
   - component: {fileID: 6806637070816601232}
   - component: {fileID: 8344945873007213577}
   - component: {fileID: 500471132682767721}
+  - component: {fileID: 5738362404995044442}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &259255105076096122
 Transform:
   m_ObjectHideFlags: 0
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c58ff92ff8dc3714ab154951b8e03fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Head: {fileID: 2058240982946511484}
+  Head: {fileID: 4953187632892792377}
   transformOffset: {x: 0, y: 1, z: 0}
   Cost: 5
   StunTime: 0.4
@@ -124,9 +125,11 @@ MonoBehaviour:
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
   Health: {fileID: 500471132682767721}
+  Animation: {fileID: 5738362404995044442}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
   stunned: 0
+  aggro: 0
 --- !u!114 &6806637070816601232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,6 +145,9 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxRotateSpeed: 2
   Lead: 0.5
+  ForceLookSpeed: 0
+  MaxAttackDistance: 0
+  desiredDistance: 0
 --- !u!114 &8344945873007213577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +196,24 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 50
   Health: 0
+--- !u!114 &5738362404995044442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4fe56b52e8c814a972231bdc8542b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  animator: {fileID: 8639571061110596563}
+  Waist: {fileID: 0}
+  Spine: []
+  walkAnim: forward1
+  MoveAnimations: []
 --- !u!1 &5451625371424833567
 GameObject:
   m_ObjectHideFlags: 0
@@ -290,15 +314,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e29cbc217f7e8b459a4eca798544100, type: 3}
---- !u!4 &2058240982946511484 stripped
+--- !u!4 &4953187632892792377 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 2058240982072815084, guid: 2e29cbc217f7e8b459a4eca798544100,
+  m_CorrespondingSourceObject: {fileID: 4953187633226996137, guid: 2e29cbc217f7e8b459a4eca798544100,
     type: 3}
   m_PrefabInstance: {fileID: 2083821456}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8101788152765137965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8101788151896101821, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2083821456}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8639571061110596563 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8639571062784881731, guid: 2e29cbc217f7e8b459a4eca798544100,
     type: 3}
   m_PrefabInstance: {fileID: 2083821456}
   m_PrefabAsset: {fileID: 0}

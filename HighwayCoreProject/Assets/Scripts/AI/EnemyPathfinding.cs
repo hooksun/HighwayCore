@@ -264,6 +264,12 @@ public class EnemyPathfinding : EnemyBehaviour
     protected float jumpTime;
     protected virtual void Jumping()
     {
+        if(jumpPoint.transform == null || !jumpPoint.transform.gameObject.activeInHierarchy)
+        {
+            isJumping = false;
+            return;
+        }
+        
         if(jumpTime > 0)
         {
             Vector3 distance = jumpPoint.worldPoint - transform.position;
@@ -301,6 +307,8 @@ public struct PlatformAddress
         point.y = platform.height - vehicle.transformOffset.y;
         return new TransformPoint(vehicle.transform, point);
     }
+
+    public float DistanceFrom(Vector3 point) => vehicle.DistanceToPlatform(point, platformIndex);
 }
 
 public struct TransformPoint
@@ -314,5 +322,5 @@ public struct TransformPoint
         point = _point;
     }
 
-    public Vector3 worldPoint => transform.position + point;
+    public Vector3 worldPoint => (transform == null?point:transform.position + point);
 }

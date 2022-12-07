@@ -21,19 +21,20 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
         }
     }
 
-    public T GetObject(int index = 0)
+    public T GetObject(int index = 0, bool autoActivate = true)
     {
         foreach(T tObj in ObjectPools[index].pool)
         {
             if(!tObj.gameObject.activeInHierarchy)
             {
-                tObj.gameObject.SetActive(true);
+                tObj.gameObject.SetActive(autoActivate);
                 return tObj;
             }
         }
         GameObject obj = Instantiate(ObjectPools[index].Object.gameObject, transform);
         T t = obj.GetComponent<T>();
         ObjectPools[index].pool.Add(t);
+        t.gameObject.SetActive(autoActivate);
         return t;
     }
 }

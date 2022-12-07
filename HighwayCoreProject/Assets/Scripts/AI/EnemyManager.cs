@@ -95,6 +95,11 @@ public class EnemyManager : MonoBehaviour
         ActiveCost -= enemy.Cost;
     }
 
+    public void UpdateAggro(Enemy enemy)
+    {
+        AggroCost += enemy.Cost * (enemy.aggro?1f:-1f);
+    }
+
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
     {
         List<PlatformAddress> answer = new List<PlatformAddress>();

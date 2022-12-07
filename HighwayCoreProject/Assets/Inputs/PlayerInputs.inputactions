@@ -87,6 +87,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Weapon Slot 4",
+                    "type": "Button",
+                    "id": "b90ba3a5-416d-4f87-90f7-356bc7de0eac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Pickup",
                     "type": "Button",
                     "id": "ae86677c-8c1a-4948-ac01-b4688815e8e5",
@@ -288,6 +297,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d317156d-1c7a-4250-b12d-372a153998e0",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Weapon Slot 4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

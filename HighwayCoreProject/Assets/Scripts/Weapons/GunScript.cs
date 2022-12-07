@@ -18,12 +18,33 @@ public class GunScript : PlayerBehaviour
     public GameObject camGameObject;
     public float t = 0f;
     bool isScope = false;
+    bool fireInput, secondaryInput;
     
     // Start is called before the first frame update
     void Start()
     {
         gunData.currentAmmoInMag = gunData.magazineSize;
         gunData.isReloading = false;
+    }
+
+    public void FireInput(InputAction.CallbackContext ctx)
+    {
+        if(ctx.performed)
+            return;
+        fireInput = ctx.started;
+    }
+    public void SecondaryInput(InputAction.CallbackContext ctx)
+    {
+        if(ctx.performed)
+            return;
+        secondaryInput = ctx.started;
+    }
+    public void ReloadInput(InputAction.CallbackContext ctx)
+    {
+        if(!ctx.started || player.usingAbility || player.abilityCooldown)
+            return;
+        
+        Reloading();
     }
 
     // Update is called once per frame
@@ -34,16 +55,13 @@ public class GunScript : PlayerBehaviour
         timeSinceLastSwitch += Time.deltaTime;
 
 
-        if(Input.GetKey(KeyCode.Mouse0)){
+        if(fireInput){
             shooting();
         }
-        if(Input.GetKey(KeyCode.R) && !player.usingAbility && !player.abilityCooldown){
-            Reloading();
-        }
-        else if(Input.GetKey(KeyCode.Mouse1)){
+        if(secondaryInput){
             SecondaryFire();
         }
-        else if(!Input.GetKey(KeyCode.Mouse1)){
+        else{
             isScope = false;
         }
 
