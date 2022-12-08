@@ -1301,7 +1301,6 @@ GameObject:
   - component: {fileID: 8216949968672074434}
   - component: {fileID: 8216949968672074435}
   - component: {fileID: 3000816702267359016}
-  - component: {fileID: 6364680495220450297}
   - component: {fileID: 8216949968672074432}
   - component: {fileID: 6924828980525085004}
   - component: {fileID: 8216949968672074433}
@@ -1567,18 +1566,6 @@ MonoBehaviour:
   EnemyMask:
     serializedVersion: 2
     m_Bits: 128
---- !u!114 &6364680495220450297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8216949968672074490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21a1d6ea7a76d744b72721ed58a73e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8216949968672074432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1749,6 +1736,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 1ebf9121-023e-4567-a0b1-2a0b1f8c7e2e
     m_ActionName: Player/Grapple[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b90ba3a5-416d-4f87-90f7-356bc7de0eac
+    m_ActionName: Player/Weapon Slot 4[/Keyboard/4]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1975,7 +1966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8216949969757152870}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

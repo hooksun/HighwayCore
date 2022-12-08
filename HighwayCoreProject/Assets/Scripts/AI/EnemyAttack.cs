@@ -36,6 +36,7 @@ public class EnemyAttack : EnemyBehaviour
     {
         currentDirection = Vector3.RotateTowards(currentDirection, targetDirection, lookAtSpeed * Time.deltaTime, 0f);
         enemy.Head.rotation = Quaternion.LookRotation(currentDirection);
+        enemy.Animation.SetLook(currentDirection);
     }
 
     public virtual PlatformAddress PickPlatform(List<PlatformAddress> neighbours, PlatformAddress current)

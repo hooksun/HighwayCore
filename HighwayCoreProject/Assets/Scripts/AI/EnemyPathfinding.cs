@@ -144,6 +144,7 @@ public class EnemyPathfinding : EnemyBehaviour
         
         if(transformPosition.point == targetPoint.point && transformPosition.transform == targetPoint.transform)
         {
+            enemy.Animation.SetMove(Vector3.zero);
             if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
             {
                 StartCoroutine(Idleing());
@@ -155,6 +156,7 @@ public class EnemyPathfinding : EnemyBehaviour
         }
 
         //movetowards logic
+        enemy.Animation.SetMove((targetPoint.point - transformPosition.point).normalized);
         transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
     }
 

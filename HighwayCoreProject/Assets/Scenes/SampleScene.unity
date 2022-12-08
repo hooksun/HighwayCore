@@ -865,7 +865,7 @@ MonoBehaviour:
   enemyPool: {fileID: 932973449}
   itemSpawner: {fileID: 1472807259}
   EnemyTables:
-  - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
+  - {fileID: 11400000, guid: 633b74afa08b1b94f9e607901855d6f6, type: 2}
   maxItems: 6
   minItems: 4
   Enemies:

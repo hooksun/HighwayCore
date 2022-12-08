@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6806637070816601232}
   - component: {fileID: 3315381891334651298}
   - component: {fileID: 500471132682767721}
+  - component: {fileID: 1350389818819486831}
   m_Layer: 7
   m_Name: GrappleEnemy
   m_TagString: Untagged
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c58ff92ff8dc3714ab154951b8e03fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Head: {fileID: 2058240982920392797}
+  Head: {fileID: 2579986990338431861}
   transformOffset: {x: 0, y: 1, z: 0}
   Cost: 7
   StunTime: 0.4
@@ -124,9 +125,11 @@ MonoBehaviour:
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 3315381891334651298}
   Health: {fileID: 500471132682767721}
+  Animation: {fileID: 1350389818819486831}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
   stunned: 0
+  aggro: 0
 --- !u!114 &6806637070816601232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,8 +143,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  MaxRotateSpeed: 2
+  MaxRotateSpeed: 3
   Lead: 0.5
+  ForceLookSpeed: 0
+  MaxAttackDistance: 0
+  desiredDistance: 0
 --- !u!114 &3315381891334651298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +201,34 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 50
   Health: 0
+--- !u!114 &1350389818819486831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4fe56b52e8c814a972231bdc8542b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  animator: {fileID: 8639571061132650994}
+  spine:
+  - {fileID: 4409149690395075042}
+  - {fileID: 2058240982920392797}
+  - {fileID: 2471604315890937362}
+  - {fileID: 4953187632950363160}
+  waistSpeed: 5
+  maxWaistAngle: 60
+  walkAnim: 
+  idleAnim: 
+  MoveAnimations:
+  - 
+  - 
+  - 
+  - 
 --- !u!1 &5451625371424833567
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,9 +467,33 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2139561393}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2471604315890937362 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2471604316084335523, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2139561393}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4409149690395075042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4409149689262423123, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2139561393}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4953187632950363160 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4953187633226996137, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2139561393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8101788152726507020 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8101788151896101821, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2139561393}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8639571061132650994 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8639571062784881731, guid: 2e29cbc217f7e8b459a4eca798544100,
     type: 3}
   m_PrefabInstance: {fileID: 2139561393}
   m_PrefabAsset: {fileID: 0}

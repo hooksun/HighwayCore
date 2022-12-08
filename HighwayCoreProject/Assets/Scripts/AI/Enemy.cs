@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
         Attack.enemy = this;
         Pathfinding.enemy = this;
         Health.enemy = this;
+        Animation.enemy = this;
         stunned = false;
         Attack.Activate();
         Pathfinding.Activate();
