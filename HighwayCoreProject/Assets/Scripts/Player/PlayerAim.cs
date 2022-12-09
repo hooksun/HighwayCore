@@ -7,10 +7,10 @@ public class PlayerAim : PlayerBehaviour
 {
     public Camera MainCam, WeaponCam;
     public float sensitivity, HeadRotateSpeed;
-    public float fov, weaponFov, scopeMulti, fovTime;
+    public float scopeMulti, fovTime;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
-    float currFov, currWeaponFov, currMulti, fovSpeed, weaponFovSpeed;
+    float fov, weaponFov, currFov, currWeaponFov, currMulti, fovSpeed, weaponFovSpeed;
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
@@ -71,6 +71,7 @@ public class PlayerAim : PlayerBehaviour
         weaponFovSpeed = weaponFov * (1 - scopeMulti) / fovTime;
     }
     
+    //public void ChangeWeaponFov(float newFov) => weaponFov = newFov;
 
     void hideCursor(){
         Cursor.lockState = CursorLockMode.Locked;
