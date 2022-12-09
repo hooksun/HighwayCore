@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class EnemyPathfinding : EnemyBehaviour
 {
-    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance, JumpDelay, LongJumpDelay;
+    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance, JumpDelay;
+    public float LongJumpDelay, LongJumpTilt, TiltSpeed, TiltRecovery;
     public float groundDist, groundStunResistance, groundCheckCooldown, velocityStunMulti, idleTime;
     public int maxBacknForth = 1;
     public Vector3 transformOffset;
@@ -18,15 +19,17 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected PlatformAddress targetPlatform, lastPlatform;
     protected TransformPoint targetPoint, jumpPoint;
-    protected Vector3 airVelocity;
+    protected Vector3 airVelocity, tilt;
     protected RaycastHit groundInfo;
     protected float jumpDelay;
     protected bool isGrounded = true;
-    protected bool isJumping, groundCooldown;
+    protected bool isJumping, groundCooldown, longJump;
     protected int backnForth;
     
     public override void Activate()
     {
+        transform.position = transformPosition.worldPoint + transformOffset;
+        transform.rotation = Quaternion.LookRotation(Vector3.forward);
         isGrounded = true;
         isJumping = false;
         groundCooldown = false;
@@ -39,6 +42,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected virtual void Update()
     {
+        Tilt();
         if(isGrounded)
         {
             if(transformPosition.transform == null || !transformPosition.transform.gameObject.activeInHierarchy)
@@ -74,7 +78,52 @@ public class EnemyPathfinding : EnemyBehaviour
         if((transform.position - enemy.targetPlayer.position).sqrMagnitude < DesiredDistance * DesiredDistance)
             return;
         
-        PathFind();
+        if(targetPoint.transform == null)
+        {
+            FindNewPath();
+            return;
+        }
+
+        if(isJumping)
+        {
+            jumpDelay -= Time.deltaTime;
+            if(jumpDelay <= 0)
+            {
+                isGrounded = false;
+                if(longJump)
+                {
+                    tilt = (Vector3.up + (jumpPoint.worldPoint - transform.position).normalized * LongJumpTilt).normalized;
+                }
+            }
+            return;
+        }
+        
+        if(transformPosition.point == targetPoint.point && transformPosition.transform == targetPoint.transform)
+        {
+            enemy.Animation.SetMove(Vector3.zero);
+            if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
+            {
+                StartCoroutine(Idleing());
+                return;
+            }
+            
+            Jump();
+            return;
+        }
+
+        //movetowards logic
+        enemy.Animation.SetMove((targetPoint.point - transformPosition.point).normalized);
+        transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
+    }
+
+    protected virtual void Tilt()
+    {
+        if(tilt == Vector3.zero || transform.up == tilt)
+            return;
+        
+        Vector3 forwardTilt = Vector3.Cross(Vector3.Cross(tilt, Vector3.forward), tilt);
+        float delta = (tilt==Vector3.up?TiltRecovery:TiltSpeed) * Time.deltaTime;
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(forwardTilt, tilt), delta);
     }
 
     protected virtual void AirSimulate()
@@ -108,7 +157,9 @@ public class EnemyPathfinding : EnemyBehaviour
         }
         airVelocity *= velocityStunMulti;
         airVelocity += knockback;
+        tilt = Vector3.up;
         isJumping = false;
+        longJump = false;
     }
     IEnumerator GroundCooldown()
     {
@@ -123,47 +174,12 @@ public class EnemyPathfinding : EnemyBehaviour
         idleing = true;
         yield return new WaitForSeconds(idleTime);
         idleing = false;
-        FindNewPath();
-    }
-
-    protected virtual void PathFind()
-    {
-        if(targetPoint.transform == null)
-        {
-            FindNewPath();
-            return;
-        }
-
-        if(isJumping)
-        {
-            jumpDelay -= Time.deltaTime;
-            if(jumpDelay <= 0)
-                isGrounded = false;
-            return;
-        }
-        
-        if(transformPosition.point == targetPoint.point && transformPosition.transform == targetPoint.transform)
-        {
-            enemy.Animation.SetMove(Vector3.zero);
-            if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
-            {
-                StartCoroutine(Idleing());
-                return;
-            }
-            
-            Jump();
-            return;
-        }
-
-        //movetowards logic
-        enemy.Animation.SetMove((targetPoint.point - transformPosition.point).normalized);
-        transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
+        targetPoint.transform = null;
     }
 
     protected virtual void FindNewPath()
     {
         float sqrDist = Mathf.Infinity;
-        bool found = false;
         List<PlatformAddress> neighbours = enemy.manager.RequestPlatformNeighbours(currentPlatform, JumpDistance);
         for(int i = 0; i < neighbours.Count; i++)
         {
@@ -187,14 +203,13 @@ public class EnemyPathfinding : EnemyBehaviour
             float newSqrDist = (plat.ClosestPointTo(enemy.targetPlayer.position).worldPoint - enemy.targetPlayer.position).sqrMagnitude;
             if(newSqrDist < sqrDist)
             {
-                found = true;
                 sqrDist = newSqrDist;
                 targetPlatform = plat;
             }
         }
+        //targetPlatform = enemy.Attack.PickPlatform(neighbours, currentPlatform);
         isGrounded = true;
-        SetTargetPoint();
-        if(found && lastPlatform.lane != null && lastPlatform.platform == targetPlatform.platform)
+        if(SetTargetPoint() && lastPlatform.lane != null && lastPlatform.platform == targetPlatform.platform)
         {
             backnForth++;
             return;
@@ -202,26 +217,27 @@ public class EnemyPathfinding : EnemyBehaviour
         backnForth = 0;
     }
 
-    protected virtual void SetTargetPoint()
+    protected virtual bool SetTargetPoint()
     {
         if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform)
         {
-            targetPoint = currentPlatform.ClosestPointTo(enemy.targetPlayer.position);
+            targetPoint = currentPlatform.RandomPoint();
             jumpPoint.transform = null;
-            return;
+            return false;
         }
         jumpPoint = targetPlatform.ClosestPointTo(transform.position);
         targetPoint = currentPlatform.ClosestPointTo(jumpPoint.worldPoint);
+        return true;
     }
 
     protected virtual void Jump()
     {
-        Vector3 jumpWorldPoint = jumpPoint.worldPoint;
-        jumpWorldPoint.y = transform.position.y;
-        float sqrDist = (jumpWorldPoint - transform.position).sqrMagnitude;
+        Vector3 jumpDirection = jumpPoint.worldPoint - transform.position;
+        jumpDirection.y = 0f;
+        float sqrDist = jumpDirection.sqrMagnitude;
         if(sqrDist > MaxJumpDistance * MaxJumpDistance)
         {
-            FindNewPath();
+            targetPoint.transform = null;
             return;
         }
         
@@ -229,6 +245,7 @@ public class EnemyPathfinding : EnemyBehaviour
         if(Mathf.Sqrt(sqrDist) / jumpTime > WalkSpeed)
         {
             jumpDelay = LongJumpDelay;
+            longJump = true;
         }
     }
 
@@ -243,7 +260,9 @@ public class EnemyPathfinding : EnemyBehaviour
         jumpTime = (2f * height1 / airVelocity.y) + (2f * height2 / fallVelY);
 
         isJumping = true;
+        longJump = false;
         jumpDelay = JumpDelay;
+        tilt = Vector3.up;
     }
 
     protected virtual void Land()
@@ -260,12 +279,17 @@ public class EnemyPathfinding : EnemyBehaviour
         transformPosition.point = transform.position - transformOffset - transformPosition.transform.position;
         isJumping = false;
         isGrounded = true;
-        FindNewPath();
+        longJump = false;
+        tilt = Vector3.up;
+        targetPoint.transform = null;
     }
 
     protected float jumpTime;
     protected virtual void Jumping()
     {
+        if(longJump && transform.up == tilt)
+            tilt = Vector3.up;
+
         if(jumpPoint.transform == null || !jumpPoint.transform.gameObject.activeInHierarchy)
         {
             isJumping = false;
@@ -305,6 +329,16 @@ public struct PlatformAddress
         point += vehicle.transformOffset - vehicle.transform.position;
         point.x = Mathf.Clamp(point.x, platform.BoundsStart.x, platform.BoundsEnd.x);
         point.z = Mathf.Clamp(point.z, platform.BoundsStart.y, platform.BoundsEnd.y);
+        point -= vehicle.transformOffset;
+        point.y = platform.height - vehicle.transformOffset.y;
+        return new TransformPoint(vehicle.transform, point);
+    }
+
+    public TransformPoint RandomPoint()
+    {
+        Vector3 point = Vector3.zero;
+        point.x = Random.Range(platform.BoundsStart.x, platform.BoundsEnd.x);
+        point.z = Random.Range(platform.BoundsStart.y, platform.BoundsEnd.y);
         point -= vehicle.transformOffset;
         point.y = platform.height - vehicle.transformOffset.y;
         return new TransformPoint(vehicle.transform, point);

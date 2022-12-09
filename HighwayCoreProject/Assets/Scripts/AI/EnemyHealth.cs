@@ -12,7 +12,7 @@ public class EnemyHealth : EnemyBehaviour
         Health = MaxHealth;
     }
 
-    public void TakeDamage(float amount)
+    public override void TakeDamage(float amount)
     {
         Health -= amount;
         if(Health <= 0f)

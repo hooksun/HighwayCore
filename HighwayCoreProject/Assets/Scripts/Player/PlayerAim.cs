@@ -7,12 +7,10 @@ public class PlayerAim : PlayerBehaviour
 {
     public Camera MainCam, WeaponCam;
     public float sensitivity, HeadRotateSpeed;
-    [Range(30f, 140f)]
-    public float fov, scopedFov;
-    public float fovTime;
+    public float fov, weaponFov, scopeMulti, fovTime;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
-    float currFov, targetFov, fovSpeed;
+    float currFov, currWeaponFov, currMulti, fovSpeed, weaponFovSpeed;
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
@@ -29,7 +27,19 @@ public class PlayerAim : PlayerBehaviour
     void OnEnable()
     {
         hideCursor();
+        fov = MainCam.fieldOfView;
+        weaponFov = WeaponCam.fieldOfView;
         currFov = fov;
+        currWeaponFov = weaponFov;
+        currMulti = 1f;
+        fovSpeed = fov * (1 - scopeMulti) / fovTime;
+        weaponFovSpeed = weaponFov * (1 - scopeMulti) / fovTime;
+    }
+
+    void OnDisable()
+    {
+        MainCam.fieldOfView = fov;
+        WeaponCam.fieldOfView = weaponFov;
     }
 
     void Update()
@@ -43,9 +53,10 @@ public class PlayerAim : PlayerBehaviour
             player.Head.Rotate(headRotateOffset);
         }
 
-        currFov = Mathf.MoveTowards(currFov, targetFov, fovSpeed * Time.deltaTime);
+        currFov = Mathf.MoveTowards(currFov, fov * currMulti, fovSpeed * Time.deltaTime);
+        currWeaponFov = Mathf.MoveTowards(currWeaponFov, weaponFov * currMulti, weaponFovSpeed * Time.deltaTime);
         MainCam.fieldOfView = currFov;
-        WeaponCam.fieldOfView = currFov;
+        WeaponCam.fieldOfView = currWeaponFov;
     }
 
     public void RotateHead(Vector3 offset)
@@ -55,8 +66,9 @@ public class PlayerAim : PlayerBehaviour
 
     public void ScopeIn(bool scope)
     {
-        targetFov = (scope?scopedFov:fov);
-        fovSpeed = (fov - scopedFov) / fovTime;
+        currMulti = (scope?scopeMulti:1f);
+        fovSpeed = fov * (1 - scopeMulti) / fovTime;
+        weaponFovSpeed = weaponFov * (1 - scopeMulti) / fovTime;
     }
     
 

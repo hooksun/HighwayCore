@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAnimation : EnemyBehaviour
 {
-    public Animator animator;
+    [SerializeField] Animator animator;
     public Transform[] spine;
     public float waistSpeed, maxWaistAngle;
     public string walkAnim;
@@ -20,6 +20,12 @@ public class EnemyAnimation : EnemyBehaviour
         SetMove(Vector3.zero);
         waistDirection = horizLook;
         waistDir = waistDirection;
+        Play("forward1"); // temp, always need to play something on activate
+    }
+
+    public void Play(string anim, float time = 0f)
+    {
+        animator.Play(anim, -1, time);
     }
 
     public void SetLook(Vector3 dir)
@@ -46,17 +52,18 @@ public class EnemyAnimation : EnemyBehaviour
 
         animator.Update(Time.deltaTime);
         float step = 1f/(spine.Length - 1);
-        Vector3[] rotateOffset = new Vector3[spine.Length];
+        Quaternion[] rotateOffset = new Quaternion[spine.Length];
+        Quaternion inverseRotation = Quaternion.Inverse(transform.rotation);
         for(int i = 0; i < spine.Length; i++)
         {
-            rotateOffset[i] = spine[i].rotation.eulerAngles;
+            rotateOffset[i] = inverseRotation * spine[i].rotation;
         }
-        for(int i = 0; i < spine.Length; i++)
+        for(int i = 0; i < spine.Length-1; i++)
         {
-            Vector3 newRot = (i==3?lookDirection:Vector3.Slerp(waistDir, horizLook, step * (float)i));
-            spine[i].rotation = Quaternion.LookRotation(newRot);
-            spine[i].Rotate(rotateOffset[i]);
+            Vector3 newRot = Vector3.Slerp(waistDir, horizLook, step * (float)i);
+            spine[i].rotation = transform.rotation * Quaternion.LookRotation(newRot) * rotateOffset[i];
         }
+        spine[spine.Length-1].rotation = Quaternion.LookRotation(lookDirection, transform.up) * rotateOffset[spine.Length-1];
     }
 
     void CalculateDirection()

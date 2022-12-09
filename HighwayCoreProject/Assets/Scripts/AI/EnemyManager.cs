@@ -9,6 +9,7 @@ public class EnemyManager : MonoBehaviour
     public EnemyPool enemyPool;
     public ItemSpawner itemSpawner;
     public EnemySpawnTable[] EnemyTables;
+    public EnemyBattle[] Battles;
     public int maxItems, minItems;
 
     public VariablePool<EnemyType> Enemies;
@@ -16,12 +17,16 @@ public class EnemyManager : MonoBehaviour
     public List<Enemy> ActiveEnemies = new List<Enemy>();
 
     EnemySpawnTable currentTable;
-    float TotalCost, ActiveCost, AggroCost;
+    EnemyBattle currentBattle;
+    EnemyWave currentWave;
+    float TotalCost, ActiveCost, AggroCost, StartCost;
+    int iTable, iBattle, iWave;
+    bool battling;
 
     void Start()
     {
         currentTable = EnemyTables[0];
-        time = currentTable.StartInterval;
+        spawnTime = currentTable.StartInterval;
     }
 
     void Update()
@@ -29,17 +34,40 @@ public class EnemyManager : MonoBehaviour
         SpawnUpdate();
     }
     
-    float time;
+    float spawnTime;
     void SpawnUpdate()
     {
-        if(time > 0)
+        if(spawnTime > 0)
         {
-            time -= Time.deltaTime;
+            spawnTime -= Time.deltaTime;
             return;
         }
 
+        if(battling && StartCost >= 0f && ActiveCost > StartCost)
+        {
+            spawnTime = currentTable.StartInterval;
+            return;
+        }
+        
+        spawnTime = Random.Range(currentTable.SpawnIntervalMin, currentTable.SpawnIntervalMax);
+        //StartCost = currentTable.MinCost;
         SpawnEnemies(currentTable.SpawnCost);
-        time = Random.Range(currentTable.SpawnIntervalMin, currentTable.SpawnIntervalMax);
+        if(!battling)
+            return;
+        
+        StartCost = -1f;
+        if(TotalCost >= currentWave.TotalCost)
+            StartWave();
+    }
+
+    float aggroTime;
+    void AggroUpdate()
+    {
+        if(aggroTime > 0)
+        {
+            aggroTime -= Time.deltaTime;
+            return;
+        }
     }
 
     void SpawnEnemies(float cost)
@@ -69,6 +97,7 @@ public class EnemyManager : MonoBehaviour
                 spawner.SpawnEnemy(nme);
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
+                TotalCost += nme.Cost;
                 spawned += nme.Cost;
                 nme.Activate();
                 success = true;
@@ -79,9 +108,32 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void StartCombat()
+    public void StartBattle()
     {
+        battling = true;
+        currentBattle = Battles[iBattle];
+        currentTable = currentBattle.SpawnTable;
+        iWave = 0;
+        StartWave();
+    }
 
+    void StartWave()
+    {
+        if(iWave >= currentBattle.Waves.Length)
+            EndBattle();
+
+        currentWave = currentBattle.Waves[iWave];
+        StartCost = currentWave.StartCost;
+        TotalCost = 0f;
+        iWave++;
+    }
+
+    void EndBattle()
+    {
+        iBattle++;
+        iTable++;
+        currentTable = EnemyTables[iTable];
+        battling = false;
     }
 
     public void RequestDie(Enemy enemy)
@@ -91,6 +143,11 @@ public class EnemyManager : MonoBehaviour
             itemSpawner.SpawnItems(Random.Range(minItems, maxItems), enemy.transform.position);
         }
         
+        if(enemy.aggro)
+        {
+            enemy.aggro = false;
+            UpdateAggro(enemy);
+        }
         ActiveEnemies.Remove(enemy);
         ActiveCost -= enemy.Cost;
     }
@@ -98,6 +155,20 @@ public class EnemyManager : MonoBehaviour
     public void UpdateAggro(Enemy enemy)
     {
         AggroCost += enemy.Cost * (enemy.aggro?1f:-1f);
+        if(!enemy.aggro)
+            return;
+        
+        if(AggroCost > currentTable.AggroCost)
+        {
+            for(int i = 0; i < ActiveEnemies.Count; i++)
+            {
+                if(ActiveEnemies[i].aggro)
+                {
+                    ActiveEnemies[i].SetAggro(false);
+                    break;
+                }
+            }
+        }
     }
 
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
@@ -164,10 +235,4 @@ public struct EnemyType
 {
     public int enemyIndex;
     public float minDistance, maxDistance;
-}
-
-[System.Serializable]
-public struct EnemyWave
-{
-    public float TotalCost, ActiveCost, AggroCost, StartCost;
 }

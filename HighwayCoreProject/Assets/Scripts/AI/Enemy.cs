@@ -51,6 +51,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         Health.TakeDamage(amount);
+        Attack.TakeDamage(amount);
     }
 
     public void Stun(Vector3 knockback)
@@ -63,6 +64,16 @@ public class Enemy : MonoBehaviour
 
         stunTime = StunTime;
         stunned = true;
+    }
+
+    public void SetAggro(bool yes)
+    {
+        if(yes == aggro)
+            return;
+        
+        aggro = yes;
+        manager.UpdateAggro(this);
+        Attack.SetAggro(yes);
     }
 
     void Update()
@@ -84,5 +95,6 @@ public abstract class EnemyBehaviour : MonoBehaviour
 
     public virtual void Activate(){}
     public virtual void Die(){}
+    public virtual void TakeDamage(float amount){}
     public virtual void Stun(Vector3 knockback){}
 }

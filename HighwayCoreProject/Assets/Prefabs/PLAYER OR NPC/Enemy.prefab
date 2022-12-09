@@ -148,6 +148,12 @@ MonoBehaviour:
   ForceLookSpeed: 0
   MaxAttackDistance: 0
   desiredDistance: 0
+  Aggro:
+    desiredDistance: 0
+    rotateSpeed: 3
+  Passive:
+    desiredDistance: 10
+    rotateSpeed: 3
 --- !u!114 &8344945873007213577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +176,10 @@ MonoBehaviour:
   JumpDistance: 4
   MaxJumpDistance: 7
   JumpDelay: 0
-  LongJumpDelay: 0.2
+  LongJumpDelay: 0.4
+  LongJumpTilt: 0.4
+  TiltSpeed: 90
+  TiltRecovery: 60
   groundDist: 1.1
   groundStunResistance: 0
   groundCheckCooldown: 0.1
