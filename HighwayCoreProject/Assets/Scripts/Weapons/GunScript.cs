@@ -18,7 +18,8 @@ public class GunScript : PlayerBehaviour
     public GameObject camGameObject;
     public float t = 0f;
     bool isScope = false;
-    bool fireInput, secondaryInput;
+    public bool fireInput, secondaryInput;
+    public bool isReloading;
     
     // Start is called before the first frame update
     void Start()
@@ -77,7 +78,7 @@ public class GunScript : PlayerBehaviour
             player.usingWeapon = false;
         }
         
-        Debug.Log(player.usingWeapon);
+        isReloading = gunData.isReloading;
     }
 
     void whatIsWeaponShoot(){
@@ -162,7 +163,7 @@ public class GunScript : PlayerBehaviour
             gunData.isReloading = false;
         }
     }
-    bool ReadyToShoot(){
+    public bool ReadyToShoot(){
         if(!gunData.isReloading && timeSinceLastShot > fireRate && timeSinceLastSwitch > gunData.switchSpeed){
             return true;
         }
