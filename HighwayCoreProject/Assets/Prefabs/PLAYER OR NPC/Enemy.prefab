@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6806637070816601232}
   - component: {fileID: 8344945873007213577}
   - component: {fileID: 500471132682767721}
+  - component: {fileID: 7175017660930352230}
   - component: {fileID: 5738362404995044442}
   m_Layer: 7
   m_Name: Enemy
@@ -125,6 +126,7 @@ MonoBehaviour:
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
   Health: {fileID: 500471132682767721}
+  Weapon: {fileID: 7175017660930352230}
   Animation: {fileID: 5738362404995044442}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
@@ -143,17 +145,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  MaxRotateSpeed: 3
   Lead: 0.5
   ForceLookSpeed: 0
   MaxAttackDistance: 0
-  desiredDistance: 0
+  MaxAttackAngle: 30
+  AggroDistance: 20
+  MinVerticalAngle: -45
+  MaxVerticalAngle: 45
   Aggro:
     desiredDistance: 0
     rotateSpeed: 3
   Passive:
-    desiredDistance: 10
+    desiredDistance: 15
     rotateSpeed: 3
+  ObstacleMask:
+    serializedVersion: 2
+    m_Bits: 264
 --- !u!114 &8344945873007213577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +212,33 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 50
   Health: 0
+--- !u!114 &7175017660930352230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bd30c1b0426824cbff9c2fb9f0b0cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  firePoint: {fileID: 1726794785345622422}
+  damage: 0
+  fireRate: 300
+  reloadSpeed: 3
+  bulletSpread: 0.05
+  bulletSpeed: 150
+  magSize: 8
+  bulletsPerShot: 8
+  bulletIndex: 0
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 328
+  shoot: 0
+  cantShoot: 0
 --- !u!114 &5738362404995044442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +367,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e29cbc217f7e8b459a4eca798544100, type: 3}
+--- !u!4 &1726794785345622422 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1726794784610272774, guid: 2e29cbc217f7e8b459a4eca798544100,
+    type: 3}
+  m_PrefabInstance: {fileID: 2083821456}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2058240982946511484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2058240982072815084, guid: 2e29cbc217f7e8b459a4eca798544100,

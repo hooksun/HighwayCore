@@ -346,7 +346,7 @@ GameObject:
   - component: {fileID: 4543102458437067902}
   - component: {fileID: 1496631837453819899}
   - component: {fileID: 2765104551517608750}
-  m_Layer: 9
+  m_Layer: 6
   m_Name: Grapple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2398,8 +2398,6 @@ MonoBehaviour:
   WeaponCam: {fileID: 1706173410471807903}
   sensitivity: 25
   HeadRotateSpeed: 45
-  fov: 70
-  weaponFov: 50
   scopeMulti: 0.5
   fovTime: 0.25
 --- !u!114 &8216949968672074435
@@ -2455,11 +2453,12 @@ MonoBehaviour:
     accel: 40
     decel: 0
     maxSpeed: 0
-    coyote: 0
+    coyote: 1
     cooldown: 0
   GrappleObj: {fileID: 1496631837453819899}
   GrappleSpeed: 20
   GrappleAccel: 50
+  GrappleDecel: 80
   GrappleDrag: 0.2
   GrappleRetractRange: 1.5
   GrappleRetractDelay: 1
@@ -2741,7 +2740,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 3
 --- !u!114 &1394077368
 MonoBehaviour:
   m_ObjectHideFlags: 0

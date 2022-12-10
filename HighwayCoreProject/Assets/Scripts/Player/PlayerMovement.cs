@@ -13,7 +13,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
     public MoveState Grapple;
     public GrappleProjectile GrappleObj;
-    public float GrappleSpeed, GrappleAccel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
+    public float GrappleSpeed, GrappleAccel, GrappleDecel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
     public MoveState WallRun, Vault;
     public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
@@ -37,7 +37,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public void ChangeDirection(InputAction.CallbackContext ctx)
     {
         Vector2 dir = ctx.ReadValue<Vector2>();
-        direction = dir;
+        direction = dir.normalized;
     }
 
     void Start()
@@ -47,8 +47,15 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     
     void FixedUpdate()
     {
-        //velocity = rb.velocity;
-        //velocity -= groundVel;
+        GroundCheck();
+
+        if(!isGrounded)
+        {
+            Vector3 newVel = rb.velocity - groundVel;
+            velocity.y = newVel.y;
+            if(current != Air)
+                velocity = newVel;
+        }
 
         velocity.y *= (velocity.y > 0?posBuffer:negBuffer);
         velocity += forceBuffer;
@@ -58,8 +65,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
         
-        GroundCheck();
-
         Grappling();
 
         Move();
@@ -91,17 +96,17 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
         }
 
-        if(isGrounded != Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask))
-        {
-            isGrounded = !isGrounded;
-            if(!isGrounded)
-            {
-                velocity.y = Mathf.Min(velocity.y, 0f);
-            }
-        }
+        isGrounded = Physics.SphereCast(transform.position, GroundCheckRadius, Vector3.down, out groundInfo, GroundCheckDist - GroundCheckRadius, GroundMask);
+        // {
+        //     isGrounded = !isGrounded;
+        //     if(!isGrounded)
+        //     {
+        //         //velocity.y = Mathf.Min(velocity.y, 0f);
+        //     }
+        // }
         if(isGrounded)
         {
-            SetCurrent(Walk);
+            SetCurrentState(Walk);
             RaycastHit normalCorrected;
             if(groundInfo.collider.Raycast(new Ray(groundInfo.point + groundInfo.normal * 0.1f + Vector3.up*0.001f, -groundInfo.normal), out normalCorrected, 0.11f))
                 groundInfo = normalCorrected;
@@ -135,7 +140,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             }
             float accel = (current.decel != 0f && horizVel.sqrMagnitude > current.speed * current.speed?current.decel:current.accel);
             velocity = Vector3.MoveTowards(horizVel, directionWorld * current.speed, accel * Time.fixedDeltaTime);
-            SetCurrent(Air);
+            SetCurrentState(Air);
             return;
         }
 
@@ -160,7 +165,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
         current = Air;
     }
-    void SetCurrent(MoveState newState)
+    void SetCurrentState(MoveState newState)
     {
         current.cooldown = 0;
         current = newState;
@@ -215,6 +220,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         grapplePoint.transform = null;
     }
 
+    float grappleSqrDist;
     void Grappling()
     {
         if(!isGrappling)
@@ -232,10 +238,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         ChangeGround(grapplePoint.transform);
 
-        SetCurrent(Grapple);
-        Vector3 grappleDir = (grapplePoint.worldPoint - transform.position).normalized;
+        SetCurrentState(Grapple);
+        Vector3 grappleDir = grapplePoint.worldPoint - transform.position;
+        float newSqrDist = grappleDir.sqrMagnitude;
+        grappleDir.Normalize();
         directionWorld -= grappleDir * Mathf.Min(0f, Vector3.Dot(directionWorld, grappleDir));
-        velocity = Vector3.MoveTowards(velocity, grappleDir * GrappleSpeed, GrappleAccel * Time.fixedDeltaTime);
+        velocity = Vector3.MoveTowards(velocity, grappleDir * GrappleSpeed, (newSqrDist<grappleSqrDist?GrappleAccel:GrappleDecel) * Time.fixedDeltaTime);
+        grappleSqrDist = newSqrDist;
         if(grappledEnemy != null)
         {
             grappledEnemy.Stun(Vector3.zero);
@@ -284,6 +293,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         player.usingAbility = true;
         grappleDelay = GrappleRetractDelay;
         grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
+        grappleSqrDist = (hit.point - transform.position).sqrMagnitude;
         grappledEnemy = hit.transform.GetComponent<Enemy>();
         velocity *= GrappleDrag;
         doGravity = false;
@@ -313,7 +323,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, out hit, VaultStart.z, HardGroundMask))
             {
                 ChangeGround(hit.transform);
-                SetCurrent(Vault);
+                SetCurrentState(Vault);
                 vaultDir = directionWorld;
             }
         }
@@ -344,7 +354,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             || Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
             {
                 isWallRunning = true;
-                SetCurrent(WallRun);
+                SetCurrentState(WallRun);
                 velocity.y = 0f;
                 velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
                 wallDir = -hit.normal;
@@ -417,7 +427,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
             currentFuel -= AirJumpCost;
-            SetCurrent(AirJump);
+            SetCurrentState(AirJump);
             return;
         }
         jumpCooldown = 0f;

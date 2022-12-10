@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
     public Player player; // temp
     public HighwayGenerator Highway;
     public EnemyPool enemyPool;
+    public ProjectilePool projectilePool;
     public ItemSpawner itemSpawner;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
@@ -27,11 +28,13 @@ public class EnemyManager : MonoBehaviour
     {
         currentTable = EnemyTables[0];
         spawnTime = currentTable.StartInterval;
+        aggroTime = currentTable.AggroInterval;
     }
 
     void Update()
     {
         SpawnUpdate();
+        AggroUpdate();
     }
     
     float spawnTime;
@@ -54,20 +57,13 @@ public class EnemyManager : MonoBehaviour
         SpawnEnemies(currentTable.SpawnCost);
         if(!battling)
             return;
+
+        if(StartCost >= 0f)
+            aggroTime = 0f;
         
         StartCost = -1f;
         if(TotalCost >= currentWave.TotalCost)
             StartWave();
-    }
-
-    float aggroTime;
-    void AggroUpdate()
-    {
-        if(aggroTime > 0)
-        {
-            aggroTime -= Time.deltaTime;
-            return;
-        }
     }
 
     void SpawnEnemies(float cost)
@@ -105,6 +101,31 @@ public class EnemyManager : MonoBehaviour
             }
             if(!success)
                 spawned += currentTable.FailCost;
+        }
+    }
+
+    float aggroTime;
+    void AggroUpdate()
+    {
+        if(aggroTime > 0)
+        {
+            aggroTime -= Time.deltaTime;
+            return;
+        }
+
+        aggroTime = currentTable.AggroInterval;
+        AggroEnemies();
+    }
+
+    void AggroEnemies()
+    {
+        if(AggroCost > currentTable.AggroCost || ActiveEnemies.Count == 0)
+            return;
+        int[] seq = Util.RandomSequence(ActiveEnemies.Count);
+        for(int i = 0; i < ActiveEnemies.Count; i++)
+        {
+            if(ActiveEnemies[seq[i]].TrySetAggro() && AggroCost > currentTable.AggroCost)
+                return;
         }
     }
 
@@ -152,23 +173,30 @@ public class EnemyManager : MonoBehaviour
         ActiveCost -= enemy.Cost;
     }
 
-    public void UpdateAggro(Enemy enemy)
+    public bool UpdateAggro(Enemy enemy, bool prioritize = false)
     {
         AggroCost += enemy.Cost * (enemy.aggro?1f:-1f);
         if(!enemy.aggro)
-            return;
+            return true;
         
         if(AggroCost > currentTable.AggroCost)
         {
+            if(!prioritize)
+            {
+                AggroCost -= enemy.Cost;
+                return false;
+            }
+
             for(int i = 0; i < ActiveEnemies.Count; i++)
             {
-                if(ActiveEnemies[i].aggro)
+                if(ActiveEnemies[i].aggro && ActiveEnemies[i] != enemy)
                 {
-                    ActiveEnemies[i].SetAggro(false);
-                    break;
+                    if(ActiveEnemies[i].SetAggro(false))
+                        return true;
                 }
             }
         }
+        return true;
     }
 
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)

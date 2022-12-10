@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[SelectionBase]
 public class Enemy : MonoBehaviour
 {
     public Transform Head;
@@ -10,6 +11,7 @@ public class Enemy : MonoBehaviour
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;
+    public EnemyWeapon Weapon;
     public EnemyAnimation Animation;
 
     [HideInInspector] public Player targetPlayer;
@@ -23,11 +25,13 @@ public class Enemy : MonoBehaviour
         Attack.enemy = this;
         Pathfinding.enemy = this;
         Health.enemy = this;
+        Weapon.enemy = this;
         Animation.enemy = this;
         stunned = false;
         Attack.Activate();
         Pathfinding.Activate();
         Health.Activate();
+        Weapon.Activate();
         Animation.Activate();
     }
 
@@ -36,6 +40,8 @@ public class Enemy : MonoBehaviour
         Attack.Die();
         Pathfinding.Die();
         Health.Die();
+        Weapon.Die();
+        Animation.Die();
 
         print("ded");
         manager.RequestDie(this);
@@ -66,14 +72,23 @@ public class Enemy : MonoBehaviour
         stunned = true;
     }
 
-    public void SetAggro(bool yes)
+    public bool SetAggro(bool yes, bool prioritize = true)
     {
         if(yes == aggro)
-            return;
+            return false;
+        
+        if(!manager.UpdateAggro(this, prioritize))
+            return false;
         
         aggro = yes;
-        manager.UpdateAggro(this);
+        
         Attack.SetAggro(yes);
+        return true;
+    }
+
+    public bool TrySetAggro()
+    {
+        return Attack.TrySetAggro();
     }
 
     void Update()

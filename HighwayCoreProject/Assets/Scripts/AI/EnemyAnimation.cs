@@ -30,6 +30,9 @@ public class EnemyAnimation : EnemyBehaviour
 
     public void SetLook(Vector3 dir)
     {
+        if(dir == Vector3.zero)
+            return;
+
         lookDirection = dir;
         dir.y = 0f;
         horizLook = dir.normalized;

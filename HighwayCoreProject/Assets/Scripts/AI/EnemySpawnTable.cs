@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemySpawnTable : ScriptableObject
 {
     public VariablePool<EnemyType> EnemyPool;
-    public float ActiveCost, AggroCost, SpawnCost, FailCost, StartInterval, SpawnIntervalMin, SpawnIntervalMax;
+    public float ActiveCost, AggroCost, SpawnCost, FailCost, StartInterval, SpawnIntervalMin, SpawnIntervalMax, AggroInterval;
 
     public EnemyType GetRandomEnemy()
     {

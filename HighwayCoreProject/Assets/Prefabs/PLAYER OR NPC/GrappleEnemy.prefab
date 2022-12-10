@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6806637070816601232}
   - component: {fileID: 3315381891334651298}
   - component: {fileID: 500471132682767721}
+  - component: {fileID: -5117687832266868974}
   - component: {fileID: 1350389818819486831}
   m_Layer: 7
   m_Name: GrappleEnemy
@@ -125,6 +126,7 @@ MonoBehaviour:
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 3315381891334651298}
   Health: {fileID: 500471132682767721}
+  Weapon: {fileID: -5117687832266868974}
   Animation: {fileID: 1350389818819486831}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
@@ -143,17 +145,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  MaxRotateSpeed: 3
   Lead: 0.5
   ForceLookSpeed: 0
   MaxAttackDistance: 0
-  desiredDistance: 0
+  MinVerticalAngle: -60
+  MaxVerticalAngle: 70
   Aggro:
     desiredDistance: 0
     rotateSpeed: 3
   Passive:
-    desiredDistance: 10
+    desiredDistance: 15
     rotateSpeed: 3
+  ObstacleMask:
+    serializedVersion: 2
+    m_Bits: 264
 --- !u!114 &3315381891334651298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +215,26 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 50
   Health: 0
+--- !u!114 &-5117687832266868974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5bd30c1b0426824cbff9c2fb9f0b0cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
+  firePoint: {fileID: 0}
+  damage: 0
+  fireRate: 0
+  reloadSpeed: 0
+  magSize: 0
+  shoot: 0
+  cantShoot: 0
 --- !u!114 &1350389818819486831
 MonoBehaviour:
   m_ObjectHideFlags: 0

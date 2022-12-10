@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class EnemyAttack : EnemyBehaviour
 {
-    public float Lead, ForceLookSpeed, MaxAttackDistance;
+    public float Lead, ForceLookSpeed, MaxAttackDistance, MaxAttackAngle, AggroDistance, MinVerticalAngle, MaxVerticalAngle;
     public EnemyState Aggro, Passive;
+    public LayerMask ObstacleMask;
 
     EnemyState currentState;
     Vector3 currentDirection, targetDirection;
     float lookAtSpeed;
     bool overrideLook;
+
+    bool hasLOS;
 
     public override void Activate()
     {
@@ -20,26 +23,57 @@ public class EnemyAttack : EnemyBehaviour
         SetAggro(enemy.aggro);
     }
 
+    public override void TakeDamage(float amount)
+    {
+        enemy.SetAggro(true);
+    }
+
     public virtual void SetAggro(bool yes)
     {
         currentState = (yes?Aggro:Passive);
     }
 
+    public virtual bool TrySetAggro()
+    {
+        if(enemy.aggro || (enemy.targetPlayer.position - transform.position).sqrMagnitude > AggroDistance * AggroDistance || !hasLOS)
+            return false;
+        
+        return enemy.SetAggro(true, false);
+    }
+
     void Update()
     {
-        LookAtPlayer();
+        hasLOS = !Physics.Linecast(enemy.Head.position, enemy.targetPlayer.position, ObstacleMask);
+
+        FindLook();
         LookAtTarget();
     }
 
-    void LookAtPlayer()
+    protected virtual void FindLook()
     {
         if(overrideLook || enemy.stunned)
             return;
-        
-        targetDirection = (enemy.targetPlayer.trailPosition+(enemy.targetPlayer.position - enemy.targetPlayer.trailPosition) * Lead - enemy.Head.position).normalized;
+
         lookAtSpeed = currentState.rotateSpeed;
+        targetDirection = (enemy.aggro && hasLOS?(GetPlayerPosition() - enemy.Head.position).normalized:enemy.Pathfinding.GetMoveDirection());
+        
+        float sin = Mathf.Sin(Mathf.Deg2Rad*MinVerticalAngle);
+        if(sin > targetDirection.y)
+        {
+            targetDirection.y = 0f;
+            targetDirection = targetDirection.normalized * Mathf.Cos(Mathf.Deg2Rad*MinVerticalAngle);
+            targetDirection.y = sin;
+            return;
+        }
+        sin = Mathf.Sin(Mathf.Deg2Rad*MaxVerticalAngle);
+        if(sin < targetDirection.y)
+        {
+            targetDirection.y = 0f;
+            targetDirection = targetDirection.normalized * Mathf.Cos(Mathf.Deg2Rad*MaxVerticalAngle);
+            targetDirection.y = sin;
+        }
     }
-    void LookAtTarget()
+    protected virtual void LookAtTarget()
     {
         if(enemy.stunned)
             return;
@@ -48,6 +82,8 @@ public class EnemyAttack : EnemyBehaviour
         enemy.Head.rotation = Quaternion.LookRotation(currentDirection, transform.up);
         enemy.Animation.SetLook(currentDirection);
     }
+
+    protected virtual Vector3 GetPlayerPosition() => Vector3.LerpUnclamped(enemy.targetPlayer.trailPosition, enemy.targetPlayer.position, Lead);
 
     public virtual PlatformAddress PickPlatform(List<PlatformAddress> neighbours, PlatformAddress current)
     {

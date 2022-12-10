@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeapon : EnemyBehaviour
+public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
 {
     public Transform firePoint;
-    public float damage, fireRate, reloadSpeed;
-    public int magSize;
+    public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed;
+    public int magSize, bulletsPerShot, bulletIndex;
+    public LayerMask hitMask;
 
     [HideInInspector] public bool shoot, cantShoot;
     float fireTime, reloadTime;
@@ -45,10 +46,19 @@ public class EnemyWeapon : EnemyBehaviour
             return;
         }
 
-        //fire bullet
+        FireBullet();
 
-        mag--;
         fireTime = 60f/fireRate;
+    }
+
+    protected virtual void FireBullet()
+    {
+        for(int i = 0; i < bulletsPerShot; i++)
+        {
+            Projectile proj = enemy.manager.projectilePool.GetObject(bulletIndex, false);
+            proj.Initiate(enemy.Head.position, enemy.Head.rotation * Projectile.RandomSpread(bulletSpread), firePoint.position, bulletSpeed, hitMask, this);
+        }
+        mag--;
     }
 
     protected virtual void Reload()
@@ -59,4 +69,15 @@ public class EnemyWeapon : EnemyBehaviour
         mag = magSize;
         cantShoot = false;
     }
+
+    public void OnTargetHit(RaycastHit hit)
+    {
+        IHurtBox hurtBox = hit.transform.GetComponent<IHurtBox>();
+        if(hurtBox != null)
+        {
+            hurtBox.TakeDamage(damage);
+        }
+    }
+    public void OnTargetNotFound(){}
+    public void OnReset(){}
 }

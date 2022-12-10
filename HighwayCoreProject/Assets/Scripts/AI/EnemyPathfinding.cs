@@ -147,6 +147,13 @@ public class EnemyPathfinding : EnemyBehaviour
         transform.position += airVelocity * Time.deltaTime;
     }
 
+    public Vector3 GetMoveDirection()
+    {
+        Vector3 dir = (isJumping?jumpPoint.worldPoint - transform.position:(isGrounded?targetPoint.worldPoint - transform.position:airVelocity));
+        dir.y = 0f;
+        return dir.normalized;
+    }
+
     public override void Stun(Vector3 knockback)
     {
         if(isGrounded)
@@ -179,7 +186,6 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected virtual void FindNewPath()
     {
-        float sqrDist = Mathf.Infinity;
         List<PlatformAddress> neighbours = enemy.manager.RequestPlatformNeighbours(currentPlatform, JumpDistance);
         for(int i = 0; i < neighbours.Count; i++)
         {
@@ -200,14 +206,8 @@ public class EnemyPathfinding : EnemyBehaviour
                 i--;
                 continue;
             }
-            float newSqrDist = (plat.ClosestPointTo(enemy.targetPlayer.position).worldPoint - enemy.targetPlayer.position).sqrMagnitude;
-            if(newSqrDist < sqrDist)
-            {
-                sqrDist = newSqrDist;
-                targetPlatform = plat;
-            }
         }
-        //targetPlatform = enemy.Attack.PickPlatform(neighbours, currentPlatform);
+        targetPlatform = enemy.Attack.PickPlatform(neighbours, currentPlatform);
         isGrounded = true;
         if(SetTargetPoint() && lastPlatform.lane != null && lastPlatform.platform == targetPlatform.platform)
         {

@@ -17,11 +17,13 @@ MonoBehaviour:
     - weight: 1
       variable:
         enemyIndex: 0
-        minDistance: -20
+        minDistance: 0
         maxDistance: 50
   ActiveCost: 5
+  AggroCost: 20
   SpawnCost: 5
   FailCost: 1
   StartInterval: 5
   SpawnIntervalMin: 5
   SpawnIntervalMax: 5
+  AggroInterval: 2

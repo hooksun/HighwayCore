@@ -34,8 +34,8 @@ public class bulletProjectile : MonoBehaviour, IPooledBullet
         collided = Physics.SphereCast(transform.position, .2f, transform.forward, out collideInfo, .2f);
         if(collided && collideInfo.transform.gameObject.layer == 7 ){
             Debug.Log("hit enemy");
-            EnemyHealth enemyHealth = collideInfo.collider.gameObject.GetComponent<EnemyHealth>();
-            enemyHealth.TakeDamage(damage);
+            Enemy enemy = collideInfo.collider.gameObject.GetComponent<Enemy>();
+            enemy.TakeDamage(damage);
             gameObject.SetActive(false);
             
         }
