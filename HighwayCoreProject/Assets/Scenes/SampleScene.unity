@@ -346,6 +346,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Vehicles: []
+--- !u!114 &652750202 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7342830167351088734, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8454592957504459003}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aa4bca998f6d3e438bf403815c4f6f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705592611
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +566,32 @@ MonoBehaviour:
     Object: {fileID: 3512611140508833430, guid: c2f6891ef8311314286ad6039e366ba6,
       type: 3}
     startAmount: 5
+--- !u!1 &1023073817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7870060881102795855, guid: 7782ee91ef6814e498f41b5da176d8ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 8454592957504459003}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1023073819
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023073817}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cb03df54e3569744aa5449498a3a932d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1217877353 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1217877353, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -1138,6 +1176,66 @@ PrefabInstance:
       propertyPath: healthPointTxt
       value: 
       objectReference: {fileID: 1217877353}
+    - target: {fileID: 1552649164780691460, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: weaponAnim
+      value: 
+      objectReference: {fileID: 652750202}
+    - target: {fileID: 7342830167351088734, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1023073819}
+    - target: {fileID: 7342830167351088734, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: idleAnim
+      value: shoot1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7342830167351088734, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: reloadAnim
+      value: reload1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7382457519721164533, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7382457519721164533, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7382457519721164533, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508047715252276070, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7508047715252276071, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8216949968597737447, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8216949968597737447, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 8216949968597737447, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 8216949968672074490, guid: 7782ee91ef6814e498f41b5da176d8ff,
         type: 3}
       propertyPath: m_Name
