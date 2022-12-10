@@ -881,7 +881,7 @@ MonoBehaviour:
   player: {fileID: 7459199334214734757}
   Highway: {fileID: 1472807257}
   enemyPool: {fileID: 932973449}
-  projectilePool: {fileID: 0}
+  projectilePool: {fileID: 932973451}
   itemSpawner: {fileID: 1472807259}
   EnemyTables:
   - {fileID: 11400000, guid: 350e2babe0ac7e44395a5f25b313c8d9, type: 2}
@@ -1157,6 +1157,26 @@ PrefabInstance:
       propertyPath: healthPointTxt
       value: 
       objectReference: {fileID: 1217877353}
+    - target: {fileID: 5204523013827153884, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 89.98021
+      objectReference: {fileID: 0}
+    - target: {fileID: 5204523013827153884, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5204523013827153884, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7313902918309195235, guid: 7782ee91ef6814e498f41b5da176d8ff,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7378167837705029408, guid: 7782ee91ef6814e498f41b5da176d8ff,
         type: 3}
       propertyPath: m_LocalScale.x

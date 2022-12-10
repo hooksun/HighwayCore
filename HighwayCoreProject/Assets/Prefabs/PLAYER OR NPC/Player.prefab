@@ -318,7 +318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 588465862684119071}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.3}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2223,7 +2223,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 0.000002504478
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
@@ -2240,10 +2240,50 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 135366550370626815, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
       propertyPath: m_Name
       value: shotgunRigged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2656488037974462898, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -79.37629
+      objectReference: {fileID: 0}
+    - target: {fileID: 2656488037974462898, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -179.99922
+      objectReference: {fileID: 0}
+    - target: {fileID: 2656488037974462898, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.0007743915
+      objectReference: {fileID: 0}
+    - target: {fileID: 3196138216412401344, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 89.98021
+      objectReference: {fileID: 0}
+    - target: {fileID: 3196138216412401344, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3196138216412401344, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5038762195561461768, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0.3666935
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc867a74cc9217d4ba8699a17bde5af1, type: 3}

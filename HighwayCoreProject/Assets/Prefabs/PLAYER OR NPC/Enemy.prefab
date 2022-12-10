@@ -147,8 +147,8 @@ MonoBehaviour:
   enemy: {fileID: 0}
   Lead: 0.5
   ForceLookSpeed: 0
-  MaxAttackDistance: 0
-  MaxAttackAngle: 30
+  MaxAttackDistance: 15
+  MaxAttackAngle: 20
   AggroDistance: 20
   MinVerticalAngle: -45
   MaxVerticalAngle: 45
@@ -227,7 +227,7 @@ MonoBehaviour:
   enemy: {fileID: 0}
   firePoint: {fileID: 1726794785345622422}
   damage: 0
-  fireRate: 300
+  fireRate: 100
   reloadSpeed: 3
   bulletSpread: 0.05
   bulletSpeed: 150

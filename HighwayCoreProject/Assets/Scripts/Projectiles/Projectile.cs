@@ -9,7 +9,7 @@ public class Projectile : MonoBehaviour
     LayerMask hitMask;
     IProjectileSpawner spawner;
 
-    const float ActiveTime = 5f;
+    const float ActiveTime = 0.5f;
 
     public void Initiate(Vector3 startPosition, Quaternion rotation, Vector3 transformPosition, float sped, LayerMask layerMask, IProjectileSpawner spawnr)
     {

@@ -35,7 +35,7 @@ public class EnemyAttack : EnemyBehaviour
 
     public virtual bool TrySetAggro()
     {
-        if(enemy.aggro || (enemy.targetPlayer.position - transform.position).sqrMagnitude > AggroDistance * AggroDistance || !hasLOS)
+        if(enemy.aggro || (enemy.targetPlayer.position - transform.position).sqrMagnitude > AggroDistance * AggroDistance || !hasLOS || enemy.Weapon.cantShoot)
             return false;
         
         return enemy.SetAggro(true, false);
@@ -46,6 +46,7 @@ public class EnemyAttack : EnemyBehaviour
         hasLOS = !Physics.Linecast(enemy.Head.position, enemy.targetPlayer.position, ObstacleMask);
 
         FindLook();
+        ShootWeapon();
         LookAtTarget();
     }
 
@@ -72,6 +73,19 @@ public class EnemyAttack : EnemyBehaviour
             targetDirection = targetDirection.normalized * Mathf.Cos(Mathf.Deg2Rad*MaxVerticalAngle);
             targetDirection.y = sin;
         }
+    }
+    protected virtual void ShootWeapon()
+    {
+        if(enemy.Weapon.cantShoot)
+        {
+            enemy.SetAggro(false);
+            return;
+        }
+
+        Vector3 playerDist = enemy.targetPlayer.position - transform.position;
+        bool inRange = playerDist.sqrMagnitude <= MaxAttackDistance * MaxAttackDistance;
+        bool inAngle = Vector3.Dot(playerDist.normalized, enemy.Head.forward) >= Mathf.Cos(Mathf.Deg2Rad * MaxAttackAngle);
+        enemy.Weapon.shoot = (enemy.aggro && !enemy.stunned && hasLOS && inRange && inAngle);
     }
     protected virtual void LookAtTarget()
     {
