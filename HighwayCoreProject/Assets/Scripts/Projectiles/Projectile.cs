@@ -5,11 +5,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     Vector3 position, offset;
-    float speed, approachRate, activeTime;
+    float speed, activeTime;
     LayerMask hitMask;
     IProjectileSpawner spawner;
 
     const float ActiveTime = 0.5f;
+    const float approachRate = 3f;
 
     public void Initiate(Vector3 startPosition, Quaternion rotation, Vector3 transformPosition, float sped, LayerMask layerMask, IProjectileSpawner spawnr)
     {

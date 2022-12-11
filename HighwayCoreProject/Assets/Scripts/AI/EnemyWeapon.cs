@@ -8,6 +8,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed;
     public int magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
+    public string shootAnimation;
 
     [HideInInspector] public bool shoot, cantShoot;
     float fireTime, reloadTime;
@@ -59,6 +60,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
             proj.Initiate(enemy.Head.position, enemy.Head.rotation * Projectile.RandomSpread(bulletSpread), firePoint.position, bulletSpeed, hitMask, this);
         }
         mag--;
+        enemy.Animation.Play(shootAnimation);
     }
 
     protected virtual void Reload()

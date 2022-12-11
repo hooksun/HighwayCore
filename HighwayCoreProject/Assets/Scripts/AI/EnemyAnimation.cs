@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAnimation : EnemyBehaviour
 {
-    [SerializeField] Animator animator;
+    public Animator animator;
     public Transform[] spine;
     public float waistSpeed, maxWaistAngle;
     public string walkAnim;
@@ -20,12 +20,18 @@ public class EnemyAnimation : EnemyBehaviour
         SetMove(Vector3.zero);
         waistDirection = horizLook;
         waistDir = waistDirection;
-        Play("forward1"); // temp, always need to play something on activate
+        animator.Play("forward1", -1, 0f); // temp, always need to play something on activate
+        //animator.Play("shoot_shotgun", -1, 0f);
     }
 
-    public void Play(string anim, float time = 0f)
+    public void Play(string anim, float fadeTime = 0f)
     {
-        animator.Play(anim, -1, time);
+        animator.CrossFadeInFixedTime(anim, fadeTime);
+    }
+
+    public void Reset(float fadeTime = 0f)
+    {
+        animator.CrossFadeInFixedTime("forward1", fadeTime);
     }
 
     public void SetLook(Vector3 dir)

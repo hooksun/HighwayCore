@@ -20,15 +20,21 @@ public class EnemyTestAnim : MonoBehaviour
         vertTarget = Vector3.up;
         anim.enemy = enemy;
         anim.Activate();
+        shootTime = shootShotgunTime;
     }
 
+    bool toggle;
     void Update()
     {
         if(shootTime <= 0f)
         {
-            anim.Play("shoot_shotgun");
+            if(toggle)
+                anim.Play("forward1", .2f);
+            else
+                StartCoroutine(JumpTest());
             shootTime = shootShotgunTime;
             test++;
+            toggle = !toggle;
         }
         shootTime -= Time.deltaTime;
 
@@ -42,8 +48,15 @@ public class EnemyTestAnim : MonoBehaviour
             vertTarget.y *= -1f;
         }
 
-        enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
-        anim.SetLook(lookDir);
+        //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
+        anim.SetLook(moveDir);
         anim.SetMove(moveDir);
+    }
+
+    IEnumerator JumpTest()
+    {
+        anim.Play("Jump", 0.2f);
+        yield return new WaitForSeconds(0.4f);
+        anim.Play("Enemy Midair", 0.2f);
     }
 }

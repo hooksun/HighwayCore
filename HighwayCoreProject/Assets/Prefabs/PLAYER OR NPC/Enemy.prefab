@@ -157,7 +157,7 @@ MonoBehaviour:
     rotateSpeed: 3
   Passive:
     desiredDistance: 15
-    rotateSpeed: 3
+    rotateSpeed: 5
   ObstacleMask:
     serializedVersion: 2
     m_Bits: 264
@@ -182,6 +182,9 @@ MonoBehaviour:
   FallGravity: 30
   JumpDistance: 4
   MaxJumpDistance: 7
+  JumpAnimation: Enemy Midair
+  LongJumpAnimation: Jump
+  JumpFadeTime: 0.2
   JumpDelay: 0
   LongJumpDelay: 0.4
   LongJumpTilt: 0.4
@@ -237,6 +240,7 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 328
+  shootAnimation: shoot_shotgun
   shoot: 0
   cantShoot: 0
 --- !u!114 &5738362404995044442

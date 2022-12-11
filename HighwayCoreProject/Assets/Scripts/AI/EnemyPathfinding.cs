@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class EnemyPathfinding : EnemyBehaviour
 {
-    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance, JumpDelay;
-    public float LongJumpDelay, LongJumpTilt, TiltSpeed, TiltRecovery;
+    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance;
+    public string JumpAnimation, LongJumpAnimation;
+    public float JumpFadeTime, JumpDelay, LongJumpDelay, LongJumpTilt, TiltSpeed, TiltRecovery;
     public float groundDist, groundStunResistance, groundCheckCooldown, velocityStunMulti, idleTime;
     public int maxBacknForth = 1;
     public Vector3 transformOffset;
@@ -90,6 +91,7 @@ public class EnemyPathfinding : EnemyBehaviour
             if(jumpDelay <= 0)
             {
                 isGrounded = false;
+                enemy.Animation.Play(JumpAnimation, JumpFadeTime);
                 if(longJump)
                 {
                     tilt = (Vector3.up + (jumpPoint.worldPoint - transform.position).normalized * LongJumpTilt).normalized;
@@ -246,6 +248,7 @@ public class EnemyPathfinding : EnemyBehaviour
         {
             jumpDelay = LongJumpDelay;
             longJump = true;
+            enemy.Animation.Play(LongJumpAnimation, JumpFadeTime);
         }
     }
 
@@ -282,6 +285,8 @@ public class EnemyPathfinding : EnemyBehaviour
         longJump = false;
         tilt = Vector3.up;
         targetPoint.transform = null;
+
+        enemy.Animation.Reset(JumpFadeTime);
     }
 
     protected float jumpTime;

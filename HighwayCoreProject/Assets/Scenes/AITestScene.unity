@@ -1574,6 +1574,7 @@ MonoBehaviour:
   Attack: {fileID: 0}
   Pathfinding: {fileID: 0}
   Health: {fileID: 5800529237081477184}
+  Weapon: {fileID: 0}
   Animation: {fileID: 1814769747825854835}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
@@ -1597,7 +1598,7 @@ MonoBehaviour:
   lookSpeed: 1
   vertSpeed: 1
   vertSwitchTime: 1
-  shootShotgunTime: 1
+  shootShotgunTime: 3
 --- !u!1001 &6236809611787242169
 PrefabInstance:
   m_ObjectHideFlags: 0
