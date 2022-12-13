@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class GunScript : PlayerBehaviour
 {
     public GunData gunData;
-    bool isShooting;
+    public bool isShooting;
     float fireRate;
     public GameObject impact, bullet;
     float timeSinceLastShot;
@@ -20,6 +20,7 @@ public class GunScript : PlayerBehaviour
     bool isScope = false;
     public bool fireInput, secondaryInput;
     public bool isReloading;
+
     
     // Start is called before the first frame update
     void Start()
@@ -100,7 +101,7 @@ public class GunScript : PlayerBehaviour
         if(gunData.name == "AR" || gunData.name == "Pistol"){
             
         }
-        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown){
+        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown && ReadyToShoot()){
             isScope = true;
             //player.Aim.ScopeIn(true);
         }
@@ -134,21 +135,23 @@ public class GunScript : PlayerBehaviour
     }
 
     int prevSelectedWeapon;
+    int prevNumOfswitch;
     void Reloading(){
         bool indexSet = false;
         if(!indexSet){
             prevSelectedWeapon = weaponSwitching.currentWeapon;
+            prevNumOfswitch = weaponSwitching.numOfSwitch;
             indexSet = true;
         }
         //Debug.Log(prevSelectedWeapon);
-        if(!gunData.isReloading){
+        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && ReadyToShoot()){
             gunData.isReloading = true;
             Invoke("ReloadingFinished", 1f);
             
         }
     }
     void ReloadingFinished(){ //This is where the ammo refill
-        if(prevSelectedWeapon == weaponSwitching.currentWeapon){
+        if(prevSelectedWeapon == weaponSwitching.currentWeapon && weaponSwitching.numOfSwitch == prevNumOfswitch){
             int numOfBulletNeeded = gunData.magazineSize - gunData.currentAmmoInMag;
 
             if(numOfBulletNeeded > gunData.ammoLeft){

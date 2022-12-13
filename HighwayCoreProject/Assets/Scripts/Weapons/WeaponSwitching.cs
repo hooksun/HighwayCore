@@ -12,11 +12,13 @@ public class WeaponSwitching : PlayerBehaviour
     public GunScript gunScript;
     public int currentWeapon;
     int prevSelectedWeapon;
-    
+    public int numOfSwitch;
 
 
     void Start()
     {
+
+        numOfSwitch = 0;
         findWeapon();
         currentWeapon = 0;
         prevSelectedWeapon = 0;
@@ -37,7 +39,9 @@ public class WeaponSwitching : PlayerBehaviour
             }
         }
         if(prevSelectedWeapon!=currentWeapon){
+            player.weaponAnim.Idle();
             selectWeapon(currentWeapon);
+            numOfSwitch++;
         }
         //changeGunData();
     }
@@ -91,25 +95,4 @@ public class WeaponSwitching : PlayerBehaviour
         }
     }
 
-    // void changeGunData(){
-    //     if(currentWeapon == 0){
-    //         if(pistol.available){
-    //             gunScript.gunData = pistol;
-    //             gunScript.gunData.isReloading = false;
-    //             weapons[0].gameObject.SetActive(0 == 0);
-    //         }
-    //     }
-    //     if(currentWeapon == 1){
-    //         if(shotgun.available){
-    //             gunScript.gunData = shotgun;
-    //             gunScript.gunData.isReloading = false;
-    //         }
-    //     }
-    //     else if(currentWeapon == 2){
-    //         if(rifle.available){
-    //             gunScript.gunData = rifle;
-    //             gunScript.gunData.isReloading = false;
-    //         }
-    //     }
-    // }
 }
