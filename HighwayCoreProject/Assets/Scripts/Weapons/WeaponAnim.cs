@@ -10,15 +10,26 @@ public class WeaponAnim : PlayerBehaviour
     // Update is called once per frame
     void Update()
     {
-        AnimationStateControl();    
+        AnimationStateControl();
     }
 
     void AnimationStateControl(){
-        // if(player.Guns.fireInput && player.Guns.gunData.currentAmmoInMag > 0 && player.Guns.timeSinceLastSwitch > player.Guns.gunData.switchSpeed){
-        //     anim.SetBool("shoot", true);
-        // }
-        anim.SetBool("shoot", player.Guns.fireInput && player.Guns.gunData.currentAmmoInMag > 0&& player.Guns.timeSinceLastSwitch > player.Guns.gunData.switchSpeed);
-        anim.SetBool("reload", player.Guns.isReloading);
+        if(player.Guns.fireInput && !player.Guns.isReloading && player.Guns.gunData.currentAmmoInMag>0){
+            anim.SetBool("shoot", true);
+            anim.SetBool("reload", false);
+        }
+        else if(player.Guns.isReloading){
+            anim.SetBool("reload", true);
+            anim.SetBool("shoot", false);
+        }
+        else{
+            Idle();
+        }
+    }
+
+    public void Idle(){
+        anim.SetBool("shoot", false);
+        anim.SetBool("reload", false);
     }
 
 }
