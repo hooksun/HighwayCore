@@ -912,7 +912,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 1000
-  field of view: 55
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -1528,7 +1528,7 @@ MonoBehaviour:
   VaultDist: 1.8
   WallCheckPoint: {x: 0, y: 0.5, z: 0}
   WallJumpForce: {x: 4, y: 8, z: 2}
-  VaultJumpForce: {x: 0, y: 10, z: -14}
+  VaultJumpForce: {x: 0, y: 10, z: -9}
   VaultStart: {x: 0, y: 1, z: 0.6}
   WallRunCooldown: 5
   GroundCheckCooldown: 5
@@ -1869,6 +1869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   gunData: {fileID: 11400000, guid: 13c098b3a45d48541ab1a7aef12afd76, type: 2}
+  isShooting: 0
   impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
   bullet: {fileID: 8105419304571585314, guid: ec2ea9871411a55438ee9d7ffc203ca7, type: 3}
   timeSinceLastSwitch: 0
@@ -1900,6 +1901,7 @@ MonoBehaviour:
   sniper: {fileID: 11400000, guid: ddc3b21cdecc2ab488cb82c3ff061519, type: 2}
   gunScript: {fileID: 8216949968949899696}
   currentWeapon: 0
+  numOfSwitch: 0
 --- !u!114 &289480304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2240,15 +2242,60 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7579103995338469470, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -6771509597838143307, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -6637648066495226430, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -1566574393717776863, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -1034854272695833515, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -926656360759426458, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -171330326972032594, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 135366550370626815, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 811139140954816730, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
       propertyPath: m_Name
       value: shotgunRigged
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2656488037974462898, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}
@@ -2279,6 +2326,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4723813479408397065, guid: bc867a74cc9217d4ba8699a17bde5af1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5038762195561461768, guid: bc867a74cc9217d4ba8699a17bde5af1,
         type: 3}

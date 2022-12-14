@@ -28,10 +28,10 @@ public class EnemyTestAnim : MonoBehaviour
     {
         if(shootTime <= 0f)
         {
-            if(toggle)
-                anim.Play("forward1", .2f);
-            else
-                StartCoroutine(JumpTest());
+            // if(toggle)
+            //     anim.Play("metarig|forward1", .2f);
+            // else
+            //     StartCoroutine(JumpTest());
             shootTime = shootShotgunTime;
             test++;
             toggle = !toggle;
@@ -49,13 +49,13 @@ public class EnemyTestAnim : MonoBehaviour
         }
 
         //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
-        anim.SetLook(moveDir);
+        anim.SetLook(lookDir);
         anim.SetMove(moveDir);
     }
 
     IEnumerator JumpTest()
     {
-        anim.Play("Jump", 0.2f);
+        anim.Play("metarig|Jump", 0.2f);
         yield return new WaitForSeconds(0.4f);
         anim.Play("Enemy Midair", 0.2f);
     }

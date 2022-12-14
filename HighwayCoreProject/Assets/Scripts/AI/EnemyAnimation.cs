@@ -7,12 +7,14 @@ public class EnemyAnimation : EnemyBehaviour
     public Animator animator;
     public Transform[] spine;
     public float waistSpeed, maxWaistAngle;
-    public string walkAnim;
     public string idleAnim;
     public string[] MoveAnimations;
+    public float animationsLength;
 
     Vector3 moveDirection, lookDirection, horizLook, waistDirection, waistDir;
-    string waistAnim;
+    string waistAnim, currentAnim;
+    bool playing;
+    float walkCycle;
 
     public override void Activate()
     {
@@ -20,18 +22,20 @@ public class EnemyAnimation : EnemyBehaviour
         SetMove(Vector3.zero);
         waistDirection = horizLook;
         waistDir = waistDirection;
-        animator.Play("forward1", -1, 0f); // temp, always need to play something on activate
-        //animator.Play("shoot_shotgun", -1, 0f);
+        Reset();
     }
 
     public void Play(string anim, float fadeTime = 0f)
     {
         animator.CrossFadeInFixedTime(anim, fadeTime);
+        playing = true;
     }
 
     public void Reset(float fadeTime = 0f)
     {
-        animator.CrossFadeInFixedTime("forward1", fadeTime);
+        playing = false;
+        currentAnim = "";
+        walkCycle = 0f;
     }
 
     public void SetLook(Vector3 dir)
@@ -57,7 +61,12 @@ public class EnemyAnimation : EnemyBehaviour
         if(moveDirection == Vector3.zero && waistDir == waistDirection)
             waistAnim = idleAnim;
 
-        
+        if(!playing && waistAnim != currentAnim)
+        {
+            currentAnim = waistAnim;
+            animator.CrossFadeInFixedTime(waistAnim, 0.2f);
+        }
+        walkCycle = (walkCycle + Time.deltaTime) % animationsLength;
 
         animator.Update(Time.deltaTime);
         float step = 1f/(spine.Length - 1);

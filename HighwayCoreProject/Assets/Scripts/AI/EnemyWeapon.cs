@@ -8,7 +8,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed;
     public int magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
-    public string shootAnimation;
+    public string shootAnimation, reloadAnimation;
 
     [HideInInspector] public bool shoot, cantShoot;
     float fireTime, reloadTime;
@@ -44,6 +44,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
             cantShoot = true;
             shoot = false;
             reloadTime = reloadSpeed;
+            enemy.Animation.Play(reloadAnimation);
             return;
         }
 

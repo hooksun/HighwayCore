@@ -227,7 +227,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -94.098816, y: -0.028459555, z: -0.026493499}
+        value: {x: -50, y: -0.028459555, z: -0.026493499}
         inSlope: {x: -0, y: 0, z: 0}
         outSlope: {x: -0, y: 0, z: 0}
         tangentMode: 0
@@ -403,7 +403,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: {x: -94.098915, y: 0.028487042, z: 0.026492476}
+        value: {x: -45.3, y: 0.028487042, z: 0.026492476}
         inSlope: {x: -0, y: 0, z: 0}
         outSlope: {x: -0, y: 0, z: 0}
         tangentMode: 0
@@ -4151,7 +4151,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -94.098816
+        value: -50
         inSlope: -0
         outSlope: -0
         tangentMode: 0
@@ -4778,7 +4778,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: -94.098915
+        value: -45.3
         inSlope: -0
         outSlope: -0
         tangentMode: 0
@@ -11735,7 +11735,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: metarig/spine/thigh.R/thigh.R.001
+    path: metarig/spine/thigh.L/thigh.L.001
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -11745,7 +11745,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: metarig/spine/thigh.R/thigh.R.001
+    path: metarig/spine/thigh.L/thigh.L.001
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -11755,7 +11755,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: metarig/spine/thigh.R/thigh.R.001
+    path: metarig/spine/thigh.L/thigh.L.001
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -12905,7 +12905,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: metarig/spine/thigh.L/thigh.L.001
+    path: metarig/spine/thigh.R/shin.R
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -12915,7 +12915,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: metarig/spine/thigh.L/thigh.L.001
+    path: metarig/spine/thigh.R/shin.R
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -12925,7 +12925,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: metarig/spine/thigh.L/thigh.L.001
+    path: metarig/spine/thigh.R/shin.R
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -13235,7 +13235,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: metarig/spine/thigh.R/shin.R
+    path: metarig/spine/thigh.R/thigh.R.001
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -13245,7 +13245,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: metarig/spine/thigh.R/shin.R
+    path: metarig/spine/thigh.R/thigh.R.001
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -13255,7 +13255,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: metarig/spine/thigh.R/shin.R
+    path: metarig/spine/thigh.R/thigh.R.001
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

@@ -52,7 +52,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrounded)
         {
             Vector3 newVel = rb.velocity - groundVel;
-            velocity.y = newVel.y;
+            if(newVel.y <= 0f)
+                velocity.y = newVel.y;
             if(current != Air)
                 velocity = newVel;
         }
