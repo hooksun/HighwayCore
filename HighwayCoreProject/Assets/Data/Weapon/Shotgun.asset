@@ -16,13 +16,13 @@ MonoBehaviour:
   name: Shotgun
   damage: 8
   maxDistance: 400
-  currentAmmoInMag: 8
+  currentAmmoInMag: 7
   magazineSize: 8
   maxAmmo: 64
-  ammoLeft: 40
-  fireRate: 400
+  ammoLeft: 0
+  fireRate: 100
   reloadTime: 1.8
   isReloading: 0
-  bulletSpread: 0.05
-  bulletSpeed: 80
-  switchSpeed: 1.25
+  bulletSpread: 0.03
+  bulletSpeed: 150
+  switchSpeed: 0.5
