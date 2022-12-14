@@ -10,7 +10,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
 
-    [HideInInspector] public bool shoot, cantShoot;
+    [HideInInspector] public bool shoot, cantShoot, reloading;
     float fireTime, reloadTime;
     int mag;
 
@@ -18,15 +18,27 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     {
         shoot = false;
         cantShoot = false;
+        reloading = false;
         fireTime = 0f;
         reloadTime = 0f;
         mag = magSize;
+    }
+
+    public override void Stun(Vector3 knockback)
+    {
+        if(!cantShoot)
+            return;
+        reloadTime = reloadSpeed;
+        reloading = false;
     }
 
     void Update()
     {
         Shoot();
         Reload();
+
+        if(enemy.stunned)
+            return;
 
         if(fireTime > 0)
             fireTime -= Time.deltaTime;
@@ -43,14 +55,12 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
         {
             cantShoot = true;
             shoot = false;
-            reloadTime = reloadSpeed;
-            enemy.Animation.Play(reloadAnimation);
             return;
         }
 
         FireBullet();
 
-        fireTime = 60f/fireRate;
+        fireTime += 60f/fireRate;
     }
 
     protected virtual void FireBullet()
@@ -66,11 +76,19 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
 
     protected virtual void Reload()
     {
+        if(cantShoot && !reloading)
+        {
+            reloading = true;
+            reloadTime = reloadSpeed;
+            enemy.Animation.Play(reloadAnimation);
+        }
+
         if(!cantShoot || reloadTime > 0)
             return;
         
         mag = magSize;
         cantShoot = false;
+        reloading = false;
     }
 
     public void OnTargetHit(RaycastHit hit)

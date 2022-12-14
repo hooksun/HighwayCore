@@ -50,7 +50,7 @@ public class EnemyTestAnim : MonoBehaviour
 
         //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
         anim.SetLook(lookDir);
-        anim.SetMove(moveDir);
+        anim.SetMove(Vector3.zero);
     }
 
     IEnumerator JumpTest()

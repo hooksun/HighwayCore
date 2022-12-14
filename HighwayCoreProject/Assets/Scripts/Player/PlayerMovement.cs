@@ -54,7 +54,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Vector3 newVel = rb.velocity - groundVel;
             if(newVel.y <= 0f)
                 velocity.y = newVel.y;
-            if(current != Air)
+            if(current != Air || direction == Vector2.zero)
                 velocity = newVel;
         }
 
@@ -91,7 +91,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             groundCheckCooldown--;
             return;
         }
-        if(isGrappling)
+        if(!doGravity)
         {
             isGrounded = false;
             return;
@@ -111,6 +111,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             RaycastHit normalCorrected;
             if(groundInfo.collider.Raycast(new Ray(groundInfo.point + groundInfo.normal * 0.1f + Vector3.up*0.001f, -groundInfo.normal), out normalCorrected, 0.11f))
                 groundInfo = normalCorrected;
+            else
+                print("failed normal correction " + groundInfo.normal + " " + groundInfo.transform.gameObject.name);
             ChangeGround(groundInfo.transform);
         }
     }

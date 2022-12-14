@@ -57,7 +57,7 @@ public class EnemyAnimation : EnemyBehaviour
     {
         CalculateDirection();
 
-        waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 0f);
+        waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
         if(moveDirection == Vector3.zero && waistDir == waistDirection)
             waistAnim = idleAnim;
 

@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour
         Attack.Stun(knockback);
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);
+        Weapon.Stun(knockback);
 
         stunTime = StunTime;
         stunned = true;

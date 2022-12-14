@@ -770,12 +770,13 @@ MonoBehaviour:
   - {fileID: 7965105132088744745}
   waistSpeed: 5
   maxWaistAngle: 60
-  idleAnim: 
+  idleAnim: metarig|baseline
   MoveAnimations:
   - metarig|forward1
   - metarig|right
   - metarig|backward
   - metarig|left
+  animationsLength: 0
 --- !u!1001 &1472512787639547837
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1186,6 +1187,7 @@ MonoBehaviour:
   reloadAnimation: 
   shoot: 0
   cantShoot: 0
+  reloading: 0
 --- !u!1001 &2976518492519263381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1482,8 +1484,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 1149183244332963070}
   enemy: {fileID: 4884563925769120986}
-  moveSpeed: 0.5
-  lookSpeed: 0
+  moveSpeed: 0
+  lookSpeed: 2
   vertSpeed: 0
   vertSwitchTime: 1
   shootShotgunTime: 5
