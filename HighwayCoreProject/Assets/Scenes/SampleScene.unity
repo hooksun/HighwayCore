@@ -884,7 +884,7 @@ MonoBehaviour:
   projectilePool: {fileID: 932973451}
   itemSpawner: {fileID: 1472807259}
   EnemyTables:
-  - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
+  - {fileID: 11400000, guid: 350e2babe0ac7e44395a5f25b313c8d9, type: 2}
   Battles:
   - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
   maxItems: 6

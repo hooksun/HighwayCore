@@ -270,9 +270,10 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected virtual void Land()
     {
+        isGrounded = true;
         if(groundInfo.transform.gameObject.layer == 8)
         {
-            enemy.Die();
+            transformPosition.transform = null;
             return;
         }
         
@@ -281,7 +282,6 @@ public class EnemyPathfinding : EnemyBehaviour
         transformPosition.transform = groundInfo.transform;
         transformPosition.point = transform.position - transformOffset - transformPosition.transform.position;
         isJumping = false;
-        isGrounded = true;
         longJump = false;
         tilt = Vector3.up;
         targetPoint.transform = null;
@@ -300,6 +300,9 @@ public class EnemyPathfinding : EnemyBehaviour
             isJumping = false;
             return;
         }
+
+        if(jumpTime <= JumpFadeTime)
+            enemy.Animation.PlayIdle(JumpFadeTime);
         
         if(jumpTime > 0)
         {

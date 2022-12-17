@@ -9,7 +9,7 @@ public class EnemyAnimation : EnemyBehaviour
     public float waistSpeed, maxWaistAngle;
     public string idleAnim;
     public string[] MoveAnimations;
-    public float animationsLength;
+    public float animationsLength, crossFadeDuration;
 
     Vector3 moveDirection, lookDirection, horizLook, waistDirection, waistDir;
     string waistAnim, currentAnim;
@@ -27,9 +27,14 @@ public class EnemyAnimation : EnemyBehaviour
 
     public void Play(string anim, float fadeTime = 0f)
     {
-        animator.CrossFadeInFixedTime(anim, fadeTime);
         playing = true;
+        if(anim == currentAnim)
+            return;
+        animator.CrossFadeInFixedTime(anim, fadeTime);
+        currentAnim = anim;
     }
+
+    public void PlayIdle(float fadeTime = -1f) => Play(idleAnim, (fadeTime<0?crossFadeDuration:fadeTime));
 
     public void Reset(float fadeTime = 0f)
     {
@@ -55,16 +60,19 @@ public class EnemyAnimation : EnemyBehaviour
 
     void Update()
     {
-        CalculateDirection();
+        CalculateDirections();
 
         waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
         if(moveDirection == Vector3.zero && waistDir == waistDirection)
+        {
             waistAnim = idleAnim;
+            walkCycle = 0f;
+        }
 
         if(!playing && waistAnim != currentAnim)
         {
             currentAnim = waistAnim;
-            animator.CrossFadeInFixedTime(waistAnim, 0.2f);
+            animator.CrossFadeInFixedTime(waistAnim, crossFadeDuration, -1, walkCycle);
         }
         walkCycle = (walkCycle + Time.deltaTime) % animationsLength;
 
@@ -84,7 +92,7 @@ public class EnemyAnimation : EnemyBehaviour
         spine[spine.Length-1].rotation = Quaternion.LookRotation(lookDirection, transform.up) * rotateOffset[spine.Length-1];
     }
 
-    void CalculateDirection()
+    void CalculateDirections()
     {
         waistAnim = MoveAnimations[0];
         if(moveDirection == Vector3.zero)
@@ -94,22 +102,31 @@ public class EnemyAnimation : EnemyBehaviour
             return;
         }
 
-        Vector3 dir = moveDirection;
-        waistDirection = dir;
-        float dot = Vector3.Dot(horizLook, dir);
+        int i;
+        waistDirection = BestDirection(moveDirection, horizLook, out i);
+        BestDirection(waistDir, moveDirection, out i);
+        waistAnim = MoveAnimations[i];
+    }
+
+    Vector3 BestDirection(Vector3 from, Vector3 to, out int index)
+    {
+        Vector3 dir = from;
+        float dot = Vector3.Dot(to, dir);
+        index = 0;
         for(int i = 1; i < 4; i++)
         {
             //rotate clockwise
             float buffer = dir.x;
             dir.x = dir.z;
             dir.z = -buffer;
-            float newDot = Vector3.Dot(horizLook, dir);
+            float newDot = Vector3.Dot(to, dir);
             if(newDot > dot)
             {
                 dot = newDot;
-                waistDirection = dir;
-                waistAnim = MoveAnimations[i];
+                from = dir;
+                index = i;
             }
         }
+        return from;
     }
 }

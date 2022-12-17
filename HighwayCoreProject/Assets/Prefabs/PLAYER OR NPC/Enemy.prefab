@@ -184,13 +184,13 @@ MonoBehaviour:
   MaxJumpDistance: 7
   JumpAnimation: Enemy Midair
   LongJumpAnimation: metarig|Jump
-  JumpFadeTime: 0.2
+  JumpFadeTime: 0.3
   JumpDelay: 0
   LongJumpDelay: 0.4
   LongJumpTilt: 0.4
   TiltSpeed: 90
   TiltRecovery: 60
-  groundDist: 1.1
+  groundDist: 1.5
   groundStunResistance: 0
   groundCheckCooldown: 0.1
   velocityStunMulti: 0.2
@@ -244,6 +244,7 @@ MonoBehaviour:
   reloadAnimation: metarig|reload1
   shoot: 0
   cantShoot: 0
+  reloading: 0
 --- !u!114 &5738362404995044442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,13 +266,14 @@ MonoBehaviour:
   - {fileID: 1778429425776018198}
   waistSpeed: 2
   maxWaistAngle: 60
-  walkAnim: metarig|forward1
   idleAnim: metarig|baseline
   MoveAnimations:
-  - metarig|forward1
-  - metarig|right
-  - metarig|backward
-  - metarig|left
+  - Enemy Forward
+  - Enemy Right
+  - Enemy Backward
+  - Enemy Left
+  animationsLength: 0.8333333
+  crossFadeDuration: 0.4
 --- !u!1 &5451625371424833567
 GameObject:
   m_ObjectHideFlags: 0

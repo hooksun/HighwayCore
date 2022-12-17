@@ -32,13 +32,16 @@ public class EnemyTestAnim : MonoBehaviour
             //     anim.Play("metarig|forward1", .2f);
             // else
             //     StartCoroutine(JumpTest());
+            float buffer = moveDir.x;
+            moveDir.x = moveDir.z;
+            moveDir.z = -buffer;
             shootTime = shootShotgunTime;
             test++;
             toggle = !toggle;
         }
         shootTime -= Time.deltaTime;
 
-        moveDir = Vector3.RotateTowards(moveDir, Vector3.Cross(moveDir, Vector3.up), moveSpeed * Time.deltaTime, 0f);
+        //moveDir = Vector3.RotateTowards(moveDir, Vector3.Cross(moveDir, Vector3.up), moveSpeed * Time.deltaTime, 0f);
         lookDir = Vector3.RotateTowards(lookDir, Vector3.Cross(lookDir, Vector3.up), lookSpeed * Time.deltaTime, 0f);
         lookDir = Vector3.RotateTowards(lookDir, vertTarget, vertSpeed * Time.deltaTime, 0f);
         vertTime -= Time.deltaTime;
@@ -50,7 +53,7 @@ public class EnemyTestAnim : MonoBehaviour
 
         //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
         anim.SetLook(lookDir);
-        anim.SetMove(Vector3.zero);
+        anim.SetMove(moveDir);
     }
 
     IEnumerator JumpTest()
