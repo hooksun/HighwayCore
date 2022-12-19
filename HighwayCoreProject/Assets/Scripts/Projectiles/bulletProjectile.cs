@@ -32,7 +32,7 @@ public class bulletProjectile : MonoBehaviour, IPooledBullet
 
     void hit(){
         //collided = Physics.SphereCast(transform.position, .2f, transform.forward, out collideInfo, .2f);
-        collided = Physics.Raycast(transform.position, transform.forward, out collideInfo, .2f);
+        collided = Physics.Raycast(transform.position, transform.forward, out collideInfo, .4f);
         if(collided && collideInfo.transform.gameObject.layer == 7 ){
             Debug.Log("hit enemy");
             Enemy enemy = collideInfo.collider.gameObject.GetComponent<Enemy>();
