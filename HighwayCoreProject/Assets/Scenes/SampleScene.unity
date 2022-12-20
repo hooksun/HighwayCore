@@ -508,6 +508,10 @@ MonoBehaviour:
     Object: {fileID: 2074021377265111950, guid: 9230dd3ec9028b84a9550d26dcf5f632,
       type: 3}
     startAmount: 1
+  - pool: []
+    Object: {fileID: 5600810908732694857, guid: 3ec84393d30a15d4c882472bbd8db13b,
+      type: 3}
+    startAmount: 10
 --- !u!114 &932973449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -884,7 +888,7 @@ MonoBehaviour:
   projectilePool: {fileID: 932973451}
   itemSpawner: {fileID: 1472807259}
   EnemyTables:
-  - {fileID: 11400000, guid: 350e2babe0ac7e44395a5f25b313c8d9, type: 2}
+  - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
   Battles:
   - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
   maxItems: 6

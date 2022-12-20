@@ -100,7 +100,9 @@ public class EnemyPathfinding : EnemyBehaviour
             return;
         }
         
-        if(transformPosition.point == targetPoint.point && transformPosition.transform == targetPoint.transform)
+        Vector3 targetPos = targetPoint.point;
+        targetPos.y = transformPosition.point.y;
+        if(transformPosition.point == targetPos)
         {
             enemy.Animation.SetMove(Vector3.zero);
             if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)

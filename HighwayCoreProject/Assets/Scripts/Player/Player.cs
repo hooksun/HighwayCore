@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
         Damage.player = this;
         WeaponSwitch.player = this;
         Melee.player = this;
-        weaponAnim.player = this;
+        //weaponAnim.player = this;
     }
 
     void OnEnable() => ActivePlayer = this;
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
         Damage.Die();
         WeaponSwitch.Die();
         Melee.Die();
-        weaponAnim.Die();
+        //weaponAnim.Die();
     }
 }
 

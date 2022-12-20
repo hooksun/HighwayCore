@@ -30,12 +30,10 @@ public class VariablePool<T>
 
     public WeightedVar<T> GetRandomVar()
     {
-        if(totalWeight == 0f)
+        totalWeight = 0f;
+        foreach(WeightedVar<T> var in Pool)
         {
-            foreach(WeightedVar<T> var in Pool)
-            {
-                totalWeight += var.weight;
-            }
+            totalWeight += var.weight;
         }
 
         float random = Random.Range(0f, totalWeight);
