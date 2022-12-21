@@ -9,6 +9,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     public int magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
+    public AudioSource shootSound;
 
     [HideInInspector] public bool shoot, cantShoot, reloading;
     float fireTime, reloadTime;
@@ -72,6 +73,7 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
         }
         mag--;
         enemy.Animation.Play(shootAnimation);
+        shootSound.Play();
     }
 
     protected virtual void Reload()

@@ -112,7 +112,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             if(groundInfo.collider.Raycast(new Ray(groundInfo.point + groundInfo.normal * 0.1f + Vector3.up*0.001f, -groundInfo.normal), out normalCorrected, 0.11f))
                 groundInfo = normalCorrected;
             else
-                print("failed normal correction " + groundInfo.normal + " " + groundInfo.transform.gameObject.name);
+                groundInfo.normal = Vector3.up;
             ChangeGround(groundInfo.transform);
         }
     }
