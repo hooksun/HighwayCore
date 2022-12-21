@@ -159,9 +159,9 @@ public class GunScript : PlayerBehaviour
             indexSet = true;
         }
         //Debug.Log(prevSelectedWeapon);
-        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && ReadyToShoot()){
+        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){ // && ReadyToShoot()
             gunData.isReloading = true;
-            Invoke("ReloadingFinished", 1f);
+            Invoke("ReloadingFinished", gunData.reloadTime);
             
         }
     }

@@ -19,9 +19,9 @@ MonoBehaviour:
   currentAmmoInMag: 3
   magazineSize: 5
   maxAmmo: 25
-  ammoLeft: 3
+  ammoLeft: 18
   fireRate: 60
-  reloadTime: 1.5
+  reloadTime: 2.5
   isReloading: 0
   bulletSpread: 0
   bulletSpeed: 200
