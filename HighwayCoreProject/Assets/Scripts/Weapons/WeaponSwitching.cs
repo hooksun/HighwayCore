@@ -39,7 +39,7 @@ public class WeaponSwitching : PlayerBehaviour
             }
         }
         if(prevSelectedWeapon!=currentWeapon){
-            player.weaponAnim.Idle();
+            //player.weaponAnim.Idle();
             selectWeapon(currentWeapon);
             numOfSwitch++;
         }

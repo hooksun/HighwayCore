@@ -20,6 +20,8 @@ public class GunScript : PlayerBehaviour
     bool isScope = false;
     public bool fireInput, secondaryInput;
     public bool isReloading;
+    // public WeaponAnim anim;
+    // public GameObject curWeapon;
 
     
     // Start is called before the first frame update
@@ -27,6 +29,7 @@ public class GunScript : PlayerBehaviour
     {
         gunData.currentAmmoInMag = gunData.magazineSize;
         gunData.isReloading = false;
+        isShooting = false;
     }
 
     public void FireInput(InputAction.CallbackContext ctx)
@@ -52,6 +55,10 @@ public class GunScript : PlayerBehaviour
     // Update is called once per frame
     void Update()
     {
+        // curWeapon = transform.GetChild(weaponSwitching.currentWeapon).gameObject;
+        // anim = curWeapon.GetComponentInChildren<WeaponAnim>();
+        // anim.Reload();
+
         fireRate = 1f/(gunData.fireRate/60f);
         timeSinceLastShot += Time.deltaTime;
         timeSinceLastSwitch += Time.deltaTime;
@@ -59,6 +66,10 @@ public class GunScript : PlayerBehaviour
 
         if(fireInput){
             shooting();
+        }
+        if(!fireInput){
+            isShooting = false;
+            //Invoke("StoppedShooting", .5f);
         }
         if(secondaryInput){
             SecondaryFire();
@@ -82,6 +93,9 @@ public class GunScript : PlayerBehaviour
         isReloading = gunData.isReloading;
     }
 
+    void StoppedShooting(){
+        isShooting = false;
+    }
     void whatIsWeaponShoot(){
         if(gunData.name == "Shotgun"){
             ShotgunBullet();
@@ -109,6 +123,7 @@ public class GunScript : PlayerBehaviour
 
     void shooting(){
         if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
+            isShooting = true;
             whatIsWeaponShoot();
             timeSinceLastShot = 0f;
             gunData.currentAmmoInMag--;
