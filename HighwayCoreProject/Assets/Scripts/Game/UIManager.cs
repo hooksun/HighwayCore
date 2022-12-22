@@ -40,4 +40,9 @@ public class UIManager : MonoBehaviour
     {
 
     }
+
+    public static void SetJetpackAirJumpCost(float amount)
+    {
+        
+    }
 }

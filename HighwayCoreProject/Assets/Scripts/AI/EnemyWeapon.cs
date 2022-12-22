@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
+public class EnemyWeapon : EnemyBehaviour
 {
     public Transform firePoint;
     public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed;
@@ -68,8 +68,8 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
     {
         for(int i = 0; i < bulletsPerShot; i++)
         {
-            Projectile proj = enemy.manager.projectilePool.GetObject(bulletIndex, false);
-            proj.Initiate(enemy.Head.position, enemy.Head.rotation * Projectile.RandomSpread(bulletSpread), firePoint.position, bulletSpeed, hitMask, this);
+            Projectile proj = ProjectilePool.GetObject(bulletIndex, false);
+            proj.Initiate(enemy.Head.position, enemy.Head.rotation, firePoint.position, bulletSpeed, damage, bulletSpread, hitMask);
         }
         mag--;
         enemy.Animation.Play(shootAnimation);
@@ -92,15 +92,4 @@ public class EnemyWeapon : EnemyBehaviour, IProjectileSpawner
         cantShoot = false;
         reloading = false;
     }
-
-    public void OnTargetHit(RaycastHit hit)
-    {
-        IHurtBox hurtBox = hit.transform.GetComponent<IHurtBox>();
-        if(hurtBox != null)
-        {
-            hurtBox.TakeDamage(damage);
-        }
-    }
-    public void OnTargetNotFound(){}
-    public void OnReset(){}
 }

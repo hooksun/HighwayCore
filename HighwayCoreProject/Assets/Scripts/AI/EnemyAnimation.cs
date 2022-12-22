@@ -63,10 +63,24 @@ public class EnemyAnimation : EnemyBehaviour
         CalculateDirections();
 
         waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
+        float cos = Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle);
+        if(Vector3.Dot(waistDir, horizLook) < cos)
+        {
+            Vector3 ortho = Vector3.Cross(Vector3.up, horizLook);
+            if(Vector3.Dot(ortho, waistDir) < 0f)
+                ortho *= -1f;
+            
+            waistDir = horizLook * cos + ortho * Mathf.Sin(Mathf.Deg2Rad * maxWaistAngle);
+        }
         if(moveDirection == Vector3.zero && waistDir == waistDirection)
         {
             waistAnim = idleAnim;
             walkCycle = 0f;
+        }
+        if(moveDirection != Vector3.zero)
+        {
+            BestDirection(waistDir, moveDirection, out int i);
+            waistAnim = MoveAnimations[i];
         }
 
         if(!playing && waistAnim != currentAnim)
@@ -102,10 +116,7 @@ public class EnemyAnimation : EnemyBehaviour
             return;
         }
 
-        int i;
-        waistDirection = BestDirection(moveDirection, horizLook, out i);
-        BestDirection(waistDir, moveDirection, out i);
-        waistAnim = MoveAnimations[i];
+        waistDirection = BestDirection(moveDirection, horizLook, out int i);
     }
 
     Vector3 BestDirection(Vector3 from, Vector3 to, out int index)

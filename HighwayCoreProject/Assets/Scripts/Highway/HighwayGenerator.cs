@@ -5,7 +5,6 @@ using UnityEngine;
 public class HighwayGenerator : MonoBehaviour
 {
     public EnemyManager enemyManager;
-    public VehiclePool Pool;
     public HighwaySection[] Sections;
     public VariablePool<int> Vehicles;
     public Lane[] Lanes;
@@ -92,12 +91,12 @@ public class HighwayGenerator : MonoBehaviour
             {
                 if(veh.spawned || position < sectionPosition + veh.distance || lane.transform.GetSiblingIndex() != veh.lane)
                     continue;
-                newVehicle = Pool.GetObject(veh.vehicle);
+                newVehicle = VehiclePool.GetObject(veh.vehicle);
                 veh.spawned = true;
             }
         }
         if(newVehicle == null)
-            newVehicle = Pool.GetObject(currentSection.HighwayTable.GetRandomVehicle());
+            newVehicle = VehiclePool.GetObject(currentSection.HighwayTable.GetRandomVehicle());
         lane.Vehicles.Add(newVehicle);
         newVehicle.transform.parent = lane.transform;
 
@@ -119,8 +118,7 @@ public class HighwayGenerator : MonoBehaviour
     void RemoveVehicle(Lane lane, int index = 0)
     {
         Vehicle vehicle = lane.Vehicles[index];
-        vehicle.gameObject.SetActive(false);
-        vehicle.transform.parent = Pool.transform;
+        VehiclePool.Return(vehicle);
         lane.Vehicles.RemoveAt(index);
         if(index == lane.Vehicles.Count)
             lane.Vehicles[lane.Vehicles.Count - 1].speed = 0f;

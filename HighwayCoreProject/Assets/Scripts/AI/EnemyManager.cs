@@ -6,8 +6,6 @@ public class EnemyManager : MonoBehaviour
 {
     public Player player; // temp
     public HighwayGenerator Highway;
-    public EnemyPool enemyPool;
-    public ProjectilePool projectilePool;
     public ItemSpawner itemSpawner;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
@@ -86,7 +84,7 @@ public class EnemyManager : MonoBehaviour
                 if(dist < enemy.minDistance || dist > enemy.maxDistance)
                     continue;
 
-                Enemy nme = enemyPool.GetObject(enemy.enemyIndex);
+                Enemy nme = EnemyPool.GetObject(enemy.enemyIndex);
                 nme.manager = this;
                 nme.targetPlayer = player;
 

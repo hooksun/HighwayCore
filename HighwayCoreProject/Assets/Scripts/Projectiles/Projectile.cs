@@ -5,22 +5,21 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     Vector3 position, offset;
-    float speed, activeTime;
+    float speed, activeTime, damage;
     LayerMask hitMask;
-    IProjectileSpawner spawner;
 
     const float ActiveTime = 0.5f;
     const float approachRate = 3f;
 
-    public void Initiate(Vector3 startPosition, Quaternion rotation, Vector3 transformPosition, float sped, LayerMask layerMask, IProjectileSpawner spawnr)
+    public void Initiate(Vector3 startPosition, Quaternion rotation, Vector3 transformPosition, float sped, float dmg, float spread, LayerMask layerMask)
     {
         position = startPosition;
         offset = transformPosition - startPosition;
         speed = sped;
+        damage = dmg;
         hitMask = layerMask;
-        spawner = spawnr;
         transform.position = transformPosition;
-        transform.rotation = rotation;
+        transform.rotation = rotation * RandomSpread(spread);
         activeTime = ActiveTime;
         gameObject.SetActive(true);
     }
@@ -29,15 +28,18 @@ public class Projectile : MonoBehaviour
     {
         if(activeTime <= 0f)
         {
-            spawner.OnTargetNotFound();
             gameObject.SetActive(false);
             return;
         }
 
         RaycastHit hit;
-        if(Physics.Raycast(position, transform.forward, out hit, speed * Time.deltaTime, hitMask))
+        if(Physics.Raycast(position, transform.forward, out hit, speed * Time.deltaTime * 2f, hitMask))
         {
-            spawner.OnTargetHit(hit);
+            IHurtBox hurtBox = hit.transform.GetComponent<IHurtBox>();
+            if(hurtBox != null)
+            {
+                hurtBox.TakeDamage(damage);
+            }
             gameObject.SetActive(false);
             return;
         }

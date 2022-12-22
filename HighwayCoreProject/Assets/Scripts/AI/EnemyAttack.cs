@@ -37,6 +37,8 @@ public class EnemyAttack : EnemyBehaviour
     {
         if(enemy.aggro || (enemy.targetPlayer.position - transform.position).sqrMagnitude > AggroDistance * AggroDistance || !hasLOS || enemy.Weapon.cantShoot)
             return false;
+        if(!enemy.targetPlayer.LookingAt(transform.position))
+            return false;
         
         return enemy.SetAggro(true, false);
     }

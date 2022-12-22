@@ -18,11 +18,13 @@ public class Player : MonoBehaviour
 
     public static Player ActivePlayer;
     
-    public float TrailTime;
+    public float TrailTime, LookAtEnemyAngle;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
     [HideInInspector] public bool abilityCooldown, usingAbility, usingWeapon;
     public Vector3 position{get => transform.position + positionOffset;}
+
+    public bool LookingAt(Vector3 pos) => Vector3.Dot(Head.forward, (pos - Head.position).normalized) >= Mathf.Cos(Mathf.Deg2Rad*LookAtEnemyAngle);
 
     void Awake()
     {

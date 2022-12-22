@@ -43,6 +43,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     void Start()
     {
         current = Air;
+        UIManager.SetJetpackAirJumpCost(AirJumpCost / JetpackFuel);
     }
     
     void FixedUpdate()
@@ -384,10 +385,15 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             velocity -= velocity.normalized * JetpackDecel * Time.fixedDeltaTime;
             velocity.y = velY;
             currentFuel -= FuelCost * Time.fixedDeltaTime;
+            UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
             return;
         }
         
-        currentFuel = Mathf.MoveTowards(currentFuel, JetpackFuel, (isGrounded?GroundRefuelRate:RefuelRate) * Time.fixedDeltaTime);
+        if(currentFuel != JetpackFuel)
+        {
+            currentFuel = Mathf.MoveTowards(currentFuel, JetpackFuel, (isGrounded?GroundRefuelRate:RefuelRate) * Time.fixedDeltaTime);
+            UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
+        }
     }
 
     bool isJumping;
@@ -431,6 +437,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
             currentFuel -= AirJumpCost;
             SetCurrentState(AirJump);
+            UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
             return;
         }
         jumpCooldown = 0f;

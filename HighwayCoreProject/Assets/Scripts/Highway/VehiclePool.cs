@@ -6,10 +6,12 @@ public class VehiclePool : ObjectPool<Vehicle>{}
 
 public abstract class ObjectPool<T> : MonoBehaviour where T : Component
 {
+    static ObjectPool<T> instance;
     public Pool<T>[] ObjectPools;
 
-    void Awake()
+    protected virtual void Awake()
     {
+        instance = this;
         foreach(Pool<T> pool in ObjectPools)
         {
             for(int i = pool.pool.Count; i < pool.startAmount; i++)
@@ -21,7 +23,8 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
         }
     }
 
-    public T GetObject(int index = 0, bool autoActivate = true)
+    public static T GetObject(int index = 0, bool autoActivate = true) => instance.GetObj(index, autoActivate);
+    T GetObj(int index, bool autoActivate)
     {
         foreach(T tObj in ObjectPools[index].pool)
         {
@@ -36,6 +39,12 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
         ObjectPools[index].pool.Add(t);
         t.gameObject.SetActive(autoActivate);
         return t;
+    }
+
+    public static void Return(T obj)
+    {
+        obj.gameObject.SetActive(false);
+        obj.transform.parent = instance.transform;
     }
 }
 
