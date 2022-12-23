@@ -1,3 +1,3 @@
 using UnityEngine;
 
-public class AudioPool : ObjectPool<AudioSource>{}
+public class AudioPool : ObjectPool<AudioPlayer>{}

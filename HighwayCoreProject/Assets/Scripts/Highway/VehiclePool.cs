@@ -9,6 +9,8 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
     static ObjectPool<T> instance;
     public Pool<T>[] ObjectPools;
 
+    protected virtual bool Available(T obj) => !obj.gameObject.activeInHierarchy;
+
     protected virtual void Awake()
     {
         instance = this;
@@ -28,7 +30,7 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
     {
         foreach(T tObj in ObjectPools[index].pool)
         {
-            if(!tObj.gameObject.activeInHierarchy)
+            if(Available(tObj))
             {
                 tObj.gameObject.SetActive(autoActivate);
                 return tObj;

@@ -6,24 +6,54 @@ public class AudioPlayer : MonoBehaviour
 {
     static List<AudioPlayer> ActivePlayers = new List<AudioPlayer>();
 
-    public AudioClip clip;
-    public AudioType audioType;
+    public AudioSource Source;
 
-    AudioSource Source;
+    Transform requester;
     bool paused;
     
     void OnEnable()
     {
         ActivePlayers.Add(this);
         paused = false;
-        Source = AudioPool.GetObject((int)audioType);
-        Source.transform.parent = transform;
-        Source.transform.localPosition = Vector3.zero;
     }
     void OnDisable()
     {
         ActivePlayers.Remove(this);
-        AudioPool.Return(Source);
+    }
+
+    void Update()
+    {
+        if(requester == null || !requester.gameObject.activeInHierarchy)
+        {
+            Stop();
+            if(!Source.isPlaying)
+                gameObject.SetActive(false);
+            return;
+        }
+        transform.position = requester.position;
+    }
+
+    public void Setup(Transform req, bool loop, float pitch, AudioClip mainClip = null)
+    {
+        requester = req;
+        Source.loop = loop;
+        Source.pitch = pitch;
+        Source.clip = mainClip;
+    }
+
+    public void Play()
+    {
+        Source.Play();
+    }
+
+    public void PlayClip(AudioClip clip)
+    {
+        Source.PlayOneShot(clip);
+    }
+
+    public void Stop()
+    {
+        Source.loop = false;
     }
 
     public static void PauseAll(bool pause)
@@ -34,17 +64,7 @@ public class AudioPlayer : MonoBehaviour
         }
     }
 
-    public void Play()
-    {
-        Source.PlayOneShot(clip);
-    }
-
-    public void Stop()
-    {
-
-    }
-
-    void Pause(bool pause)
+    public void Pause(bool pause)
     {
         if(pause)
         {
@@ -62,5 +82,3 @@ public class AudioPlayer : MonoBehaviour
         }
     }
 }
-
-public enum AudioType{player, enemyGunshot, enemyFootsteps}

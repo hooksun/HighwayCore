@@ -25,4 +25,4 @@ MonoBehaviour:
   isReloading: 0
   bulletSpread: 0.015
   bulletSpeed: 150
-  switchSpeed: 0.5
+  switchSpeed: 0.4

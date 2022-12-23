@@ -22,7 +22,9 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         PauseUI.SetActive(true);
         isPaused = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
+
+        AudioPlayer.PauseAll(true);
     }
 
     public void Resume(){
@@ -30,9 +32,12 @@ public class PauseMenu : MonoBehaviour
         PauseUI.SetActive(false);
         isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        AudioPlayer.PauseAll(false);
     }
 
     public void QuitToMainMenu(){
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
 }

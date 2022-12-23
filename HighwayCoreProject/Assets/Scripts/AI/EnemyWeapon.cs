@@ -9,7 +9,7 @@ public class EnemyWeapon : EnemyBehaviour
     public int magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
-    public AudioSource shootSound;
+    public Audio shootSound;
 
     [HideInInspector] public bool shoot, cantShoot, reloading;
     float fireTime, reloadTime;
@@ -62,6 +62,7 @@ public class EnemyWeapon : EnemyBehaviour
         FireBullet();
 
         fireTime += 60f/fireRate;
+        mag--;
     }
 
     protected virtual void FireBullet()
@@ -71,7 +72,6 @@ public class EnemyWeapon : EnemyBehaviour
             Projectile proj = ProjectilePool.GetObject(bulletIndex, false);
             proj.Initiate(enemy.Head.position, enemy.Head.rotation, firePoint.position, bulletSpeed, damage, bulletSpread, hitMask);
         }
-        mag--;
         enemy.Animation.Play(shootAnimation);
         shootSound.Play();
     }

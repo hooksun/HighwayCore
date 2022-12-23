@@ -31,6 +31,11 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public static void SetCrosshairSpread(float amount)
+    {
+        
+    }
+
     public static void SetHitMarker(bool crit = false)
     {
 
