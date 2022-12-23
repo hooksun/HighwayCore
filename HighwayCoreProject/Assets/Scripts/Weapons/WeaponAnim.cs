@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class WeaponAnim : PlayerBehaviour
 {
-    [SerializeField] Animator anim;
+    public Animator anim;
     public GunScript gun;
     
 
     void Update()
     {
+        WhatIsGun();
         if(gun.isShooting)
             Shoot();
         else if(gun.isReloading){
@@ -17,6 +18,15 @@ public class WeaponAnim : PlayerBehaviour
         }
         else{
             Idle();
+        }
+    }
+
+    public void WhatIsGun(){
+        if(gun.gunData.name == "Sniper"){
+            anim.runtimeAnimatorController = Resources.Load("Sniper/Player_Animator_Sniper") as RuntimeAnimatorController;
+        }
+        else if(gun.gunData.name == "AR"){
+            anim.runtimeAnimatorController = Resources.Load("AR/PlayerAnimator_AR") as RuntimeAnimatorController;
         }
     }
     
