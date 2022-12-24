@@ -12,15 +12,15 @@ public class AudioVaried : Audio
 
     void Update()
     {
-        if(!loop || !playing)
-            return;
-        
-        if(time <= 0f)
+        if(loop && playing && time <= 0f)
         {
             Play();
             return;
         }
-        time -= Time.deltaTime;
+        if(time < 0f)
+            time = 0f;
+        if(time > 0f)
+            time -= Time.deltaTime;
     }
 
     protected override void OnEnable()
@@ -32,10 +32,12 @@ public class AudioVaried : Audio
 
     public override void Play()
     {
-        player.PlayClip(clips.GetRandomVar());
+        if(time > 0f)
+            return;
+        player.PlayClip(clips.GetRandomVar(), pitch);
+        time += clipTime;
         if(loop)
         {
-            time = (time < 0f? time + clipTime : clipTime);
             playing = true;
         }
     }
@@ -43,6 +45,5 @@ public class AudioVaried : Audio
     public override void Stop()
     {
         playing = false;
-        time = 0f;
     }
 }

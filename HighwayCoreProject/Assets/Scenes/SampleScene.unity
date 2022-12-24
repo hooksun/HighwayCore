@@ -1846,8 +1846,6 @@ MonoBehaviour:
   player: {fileID: 0}
   anim: {fileID: 118632668}
   gun: {fileID: 530518715582177611}
-  sniperAnim: {fileID: 703573215}
-  ARAnim: {fileID: 245323485}
 --- !u!114 &118632670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2995,7 +2993,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1431077804
 GameObject:
@@ -3899,6 +3897,7 @@ GameObject:
   - component: {fileID: 530518716359227962}
   - component: {fileID: 8454592958896111171}
   - component: {fileID: 8183863650042476053}
+  - component: {fileID: 8454592958896111174}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -4006,6 +4005,9 @@ MonoBehaviour:
     decel: 0
     maxSpeed: 10
     coyote: 0
+    hasFootsteps: 1
+    footstepCooldown: 0.4
+    footstepPitch: 1
     cooldown: 0
   Air:
     speed: 10
@@ -4013,6 +4015,9 @@ MonoBehaviour:
     decel: 0
     maxSpeed: 0
     coyote: 7
+    hasFootsteps: 0
+    footstepCooldown: 0
+    footstepPitch: 0
     cooldown: 0
   JumpHeight: 1.5
   JumpYPosMulti: 0.5
@@ -4025,7 +4030,11 @@ MonoBehaviour:
     decel: 0
     maxSpeed: 0
     coyote: 5
+    hasFootsteps: 0
+    footstepCooldown: 0
+    footstepPitch: 0
     cooldown: 0
+  FootstepsAudio: {fileID: 8454592958896111174}
   JetpackSpeed: 4
   JetpackForce: 5
   JetpackDecel: 10
@@ -4040,6 +4049,9 @@ MonoBehaviour:
     decel: 0
     maxSpeed: 0
     coyote: 1
+    hasFootsteps: 0
+    footstepCooldown: 0
+    footstepPitch: 0
     cooldown: 0
   GrappleObj: {fileID: 7030582162473291520}
   GrappleSpeed: 20
@@ -4056,6 +4068,9 @@ MonoBehaviour:
     decel: 15
     maxSpeed: 0
     coyote: 7
+    hasFootsteps: 1
+    footstepCooldown: 0.3
+    footstepPitch: 1.2
     cooldown: 0
   Vault:
     speed: 5
@@ -4063,6 +4078,9 @@ MonoBehaviour:
     decel: 15
     maxSpeed: 10
     coyote: 7
+    hasFootsteps: 1
+    footstepCooldown: 0.5
+    footstepPitch: 0.8
     cooldown: 0
   WallRunTiltAngle: 6
   WallCheckDist: 0.6
@@ -4083,10 +4101,10 @@ MonoBehaviour:
   HasGrapple: 1
   GroundMask:
     serializedVersion: 2
-    m_Bits: 264
+    m_Bits: 8
   HardGroundMask:
     serializedVersion: 2
-    m_Bits: 264
+    m_Bits: 8
   isGrounded: 0
   currentFuel: 0
 --- !u!114 &530518716359227961
@@ -5984,6 +6002,30 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 77b5b3d8c3ce71b47b44a4bd9301694d, type: 2}
   healthPointTxt: {fileID: 1217877353}
   isFallen: 0
+--- !u!114 &8454592958896111174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530518716359227905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54069c55c602cc4997123e9259471ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  audioType: 0
+  pitch: 1
+  loop: 0
+  autoPlay: 0
+  clips:
+    Pool:
+    - weight: 2
+      variable: {fileID: 8300000, guid: 4a2fdb06f54bce840a01c75e9d7d3596, type: 3}
+    - weight: 1
+      variable: {fileID: 8300000, guid: 2b495e839533d0742a40ce161eef6064, type: 3}
+  clipTime: 0.4
 --- !u!1 &8454592958960371384
 GameObject:
   m_ObjectHideFlags: 0

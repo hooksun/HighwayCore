@@ -46,8 +46,10 @@ public class AudioPlayer : MonoBehaviour
         Source.Play();
     }
 
-    public void PlayClip(AudioClip clip)
+    public void PlayClip(AudioClip clip, float pitch = -1f)
     {
+        if(pitch > 0f)
+            Source.pitch = pitch;
         Source.PlayOneShot(clip);
     }
 

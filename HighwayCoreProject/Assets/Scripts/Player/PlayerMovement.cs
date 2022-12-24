@@ -10,6 +10,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public MoveState Walk, Air;
     public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
     public MoveState AirJump;
+    public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
     public MoveState Grapple;
     public GrappleProjectile GrappleObj;
@@ -82,7 +83,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         jumpCooldown = Mathf.Max(jumpCooldown - Time.fixedDeltaTime, 0f);
         
-        rb.velocity = velocity + groundVel;
+        rb.velocity = velocity + groundVel + (isGrounded?normalVel:Vector3.zero);
     }
 
     void GroundCheck()
@@ -135,6 +136,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     void Move()
     {
         Vector3 horizVel = new Vector3(velocity.x, 0f, velocity.z);
+
+        if(current.hasFootsteps && direction != Vector2.zero)
+            FootstepsAudio.Play();
         
         if(isGrounded)
         {
@@ -174,8 +178,14 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         current.cooldown = 0;
         current = newState;
         current.cooldown = current.coyote;
+        if(current.hasFootsteps)
+        {
+            FootstepsAudio.clipTime = current.footstepCooldown;
+            FootstepsAudio.pitch = current.footstepPitch;
+        }
     }
 
+    Vector3 normalVel;
     bool doGravity = true;
     void DoGravity()
     {
@@ -188,13 +198,14 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             return;
         }
         velocity.y = 0f;
+        normalVel = Vector3.zero;
         if((velocity - Vector3.up * velocity.y).sqrMagnitude > 0 && groundInfo.normal.y > Mathf.Cos(Mathf.Deg2Rad * MaxSlope))
         {
             float newVel = ((velocity.x * groundInfo.normal.x) + (velocity.z * groundInfo.normal.z)) / -groundInfo.normal.y;
             if(newVel < 0)
-                velocity.y = newVel;
+                normalVel.y = newVel;
             else
-                velocity -= newVel * (groundInfo.normal - Vector3.up * groundInfo.normal.y);
+                normalVel = -newVel * (groundInfo.normal - Vector3.up * groundInfo.normal.y);
             
             velocity.y -= FallGravity * Time.fixedDeltaTime;
         }
@@ -468,6 +479,8 @@ public class MoveState
 {
     public float speed, accel, decel, maxSpeed;
     public int coyote;
+    public bool hasFootsteps;
+    public float footstepCooldown, footstepPitch;
     [HideInInspector] public int cooldown;
 }
 

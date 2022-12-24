@@ -10,9 +10,17 @@ public class Audio : MonoBehaviour
     public bool loop, autoPlay;
 
     protected AudioPlayer player;
+    bool started;
 
+    void Start()
+    {
+        started = true;
+        OnEnable();
+    }
     protected virtual void OnEnable()
     {
+        if(!started)
+            return;
         player = AudioPool.GetObject((int)audioType);
         player.Setup(transform, loop, pitch, clip);
         if(autoPlay)
