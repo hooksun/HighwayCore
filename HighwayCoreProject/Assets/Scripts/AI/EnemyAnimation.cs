@@ -22,24 +22,29 @@ public class EnemyAnimation : EnemyBehaviour
         SetMove(Vector3.zero);
         waistDirection = horizLook;
         waistDir = waistDirection;
+        currentAnim = "";
         Reset();
     }
 
-    public void Play(string anim, float fadeTime = 0f)
+    public void Play(string anim, int layer, float fadeTime = 0f)
     {
+        if(layer != 0)
+        {
+            animator.CrossFadeInFixedTime(anim, fadeTime, layer);
+            return;
+        }
         playing = true;
         if(anim == currentAnim)
             return;
-        animator.CrossFadeInFixedTime(anim, fadeTime);
+        animator.CrossFadeInFixedTime(anim, fadeTime, layer);
         currentAnim = anim;
     }
 
-    public void PlayIdle(float fadeTime = -1f) => Play(idleAnim, (fadeTime<0?crossFadeDuration:fadeTime));
+    public void PlayIdle(float fadeTime = -1f) => Play(idleAnim, 0, (fadeTime<0?crossFadeDuration:fadeTime));
 
-    public void Reset(float fadeTime = 0f)
+    public void Reset()
     {
         playing = false;
-        currentAnim = "";
         walkCycle = 0f;
     }
 

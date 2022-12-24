@@ -72,7 +72,7 @@ public class EnemyWeapon : EnemyBehaviour
             Projectile proj = ProjectilePool.GetObject(bulletIndex, false);
             proj.Initiate(enemy.Head.position, enemy.Head.rotation, firePoint.position, bulletSpeed, damage, bulletSpread, hitMask);
         }
-        enemy.Animation.Play(shootAnimation);
+        enemy.Animation.Play(shootAnimation, 1);
         shootSound.Play();
     }
 
@@ -82,7 +82,7 @@ public class EnemyWeapon : EnemyBehaviour
         {
             reloading = true;
             reloadTime = reloadSpeed;
-            enemy.Animation.Play(reloadAnimation);
+            enemy.Animation.Play(reloadAnimation, 1);
         }
 
         if(!cantShoot || reloadTime > 0)

@@ -21,10 +21,39 @@ public class EnemyTestAnim : MonoBehaviour
         anim.enemy = enemy;
         anim.Activate();
         shootTime = shootShotgunTime;
+        anim.SetMove(Vector3.forward);
+        StartCoroutine(JumpTest());
     }
 
     bool toggle;
     void Update()
+    {
+        LookRotate();
+
+        //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
+        anim.SetLook(lookDir);
+        //anim.SetMove(moveDir);
+    }
+
+    void MoveRotate()
+    {
+        moveDir = Vector3.RotateTowards(moveDir, Vector3.Cross(moveDir, Vector3.up), moveSpeed * Time.deltaTime, 0f);
+    }
+    void LookRotate()
+    {
+        lookDir = Vector3.RotateTowards(lookDir, Vector3.Cross(lookDir, Vector3.up), lookSpeed * Time.deltaTime, 0f);
+    }
+    void VertRotate()
+    {
+        lookDir = Vector3.RotateTowards(lookDir, vertTarget, vertSpeed * Time.deltaTime, 0f);
+        vertTime -= Time.deltaTime;
+        if(vertTime <= 0)
+        {
+            vertTime = vertSwitchTime;
+            vertTarget.y *= -1f;
+        }
+    }
+    void Shoot()
     {
         if(shootTime <= 0f)
         {
@@ -40,26 +69,26 @@ public class EnemyTestAnim : MonoBehaviour
             toggle = !toggle;
         }
         shootTime -= Time.deltaTime;
-
-        //moveDir = Vector3.RotateTowards(moveDir, Vector3.Cross(moveDir, Vector3.up), moveSpeed * Time.deltaTime, 0f);
-        lookDir = Vector3.RotateTowards(lookDir, Vector3.Cross(lookDir, Vector3.up), lookSpeed * Time.deltaTime, 0f);
-        lookDir = Vector3.RotateTowards(lookDir, vertTarget, vertSpeed * Time.deltaTime, 0f);
-        vertTime -= Time.deltaTime;
-        if(vertTime <= 0)
-        {
-            vertTime = vertSwitchTime;
-            vertTarget.y *= -1f;
-        }
-
-        //enemy.Head.rotation = Quaternion.LookRotation(lookDir, transform.up);
-        anim.SetLook(lookDir);
-        anim.SetMove(moveDir);
     }
 
     IEnumerator JumpTest()
     {
-        anim.Play("metarig|Jump", 0.2f);
+        yield return new WaitForSeconds(3f);
+        anim.SetMove(new Vector3(3f, 0f, 1f).normalized);
+        yield return new WaitForSeconds(3f);
+        anim.SetMove(Vector3.zero);
+        yield return null;
+        anim.Play("metarig|Jump", 0, 0.2f);
         yield return new WaitForSeconds(0.4f);
-        anim.Play("Enemy Midair", 0.2f);
+        anim.Play("Enemy Midair", 0, 0.2f);
+        yield return new WaitForSeconds(2f);
+        anim.PlayIdle(0.2f);
+        yield return new WaitForSeconds(0.2f);
+        anim.Reset();
+        yield return null;
+        anim.SetMove(new Vector3(3f, 0f, 1f).normalized);
+        yield return new WaitForSeconds(3f);
+        anim.SetMove(Vector3.zero);
+        //StartCoroutine(JumpTest());
     }
 }

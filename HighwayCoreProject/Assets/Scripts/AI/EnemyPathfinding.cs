@@ -91,7 +91,7 @@ public class EnemyPathfinding : EnemyBehaviour
             if(jumpDelay <= 0)
             {
                 isGrounded = false;
-                enemy.Animation.Play(JumpAnimation, JumpFadeTime);
+                enemy.Animation.Play(JumpAnimation, 0, JumpFadeTime);
                 if(longJump)
                 {
                     tilt = (Vector3.up + (jumpPoint.worldPoint - transform.position).normalized * LongJumpTilt).normalized;
@@ -250,7 +250,7 @@ public class EnemyPathfinding : EnemyBehaviour
         {
             jumpDelay = LongJumpDelay;
             longJump = true;
-            enemy.Animation.Play(LongJumpAnimation, JumpFadeTime);
+            enemy.Animation.Play(LongJumpAnimation, 0, JumpFadeTime);
         }
     }
 
@@ -288,7 +288,7 @@ public class EnemyPathfinding : EnemyBehaviour
         tilt = Vector3.up;
         targetPoint.transform = null;
 
-        enemy.Animation.Reset(JumpFadeTime);
+        enemy.Animation.Reset();
     }
 
     protected float jumpTime;

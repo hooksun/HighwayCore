@@ -1432,6 +1432,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3004079171948779019, guid: 5d50d56e3e739f848a67d977eb6143b3,
         type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3004079171948779019, guid: 5d50d56e3e739f848a67d977eb6143b3,
+        type: 3}
       propertyPath: m_UpdateWhenOffscreen
       value: 1
       objectReference: {fileID: 0}
@@ -2657,15 +2662,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObjectPools:
   - pool: []
-    Object: {fileID: 6340516119556271655, guid: f289aa9f17b8d474ba886e6f2f8c3ebe,
+    Object: {fileID: -6168145781544575004, guid: f289aa9f17b8d474ba886e6f2f8c3ebe,
       type: 3}
     startAmount: 5
   - pool: []
-    Object: {fileID: 6306882456142565786, guid: a9638d8b093062e44a24147f5c09d017,
+    Object: {fileID: -5217281086615540474, guid: 3797aa0f630a6074d9c8f7c6d5474e38,
       type: 3}
     startAmount: 5
   - pool: []
-    Object: {fileID: 3512611140508833430, guid: c2f6891ef8311314286ad6039e366ba6,
+    Object: {fileID: -5217281086615540474, guid: c2f6891ef8311314286ad6039e366ba6,
+      type: 3}
+    startAmount: 5
+  - pool: []
+    Object: {fileID: 3860353628763831111, guid: a9638d8b093062e44a24147f5c09d017,
       type: 3}
     startAmount: 5
 --- !u!1 &1083762642
@@ -3263,6 +3272,8 @@ MonoBehaviour:
       variable: 1
     - weight: 1
       variable: 2
+    - weight: 1
+      variable: 3
   MinVelocity: {x: -5, y: 5, z: -5}
   MaxVelocity: {x: 5, y: 8, z: 5}
 --- !u!1 &1796259686
@@ -4089,7 +4100,7 @@ MonoBehaviour:
   VaultDist: 1.8
   WallCheckPoint: {x: 0, y: 0.5, z: 0}
   WallJumpForce: {x: 4, y: 8, z: 2}
-  VaultJumpForce: {x: 0, y: 10, z: -9}
+  VaultJumpForce: {x: 0, y: 8, z: -7}
   VaultStart: {x: 0, y: 1, z: 0.6}
   WallRunCooldown: 5
   GroundCheckCooldown: 5

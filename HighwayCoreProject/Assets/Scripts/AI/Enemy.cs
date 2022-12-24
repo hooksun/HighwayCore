@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour
         Weapon.enemy = this;
         Animation.enemy = this;
         stunned = false;
+        aggro = false;
+        Head.localRotation = Quaternion.identity;
         Attack.Activate();
         Pathfinding.Activate();
         Health.Activate();

@@ -25,24 +25,7 @@ public class Item : MonoBehaviour
 
     void Update()
     {
-        Vector3 difference = Player.ActivePlayer.position - transform.position;
-        if(!lockOn && !onCooldown && Player.ActivePlayer != null && difference.sqrMagnitude <= lockOnRadius * lockOnRadius)
-        {
-            lockOn = true;
-        }
-
-        if(lockOn && Player.ActivePlayer != null)
-        {
-            if(difference.sqrMagnitude <= caughtRadius * caughtRadius)
-            {
-                //Player.ActivePlayer.GiveItem(this);
-                print("caught item");
-                gameObject.SetActive(false);
-                return;
-            }
-            velocity = Vector3.MoveTowards(velocity, difference.normalized * lockOnSpeed, lockOnAccel * Time.deltaTime);
-        }
-        else
+        if(!Move())
             velocity += Vector3.down * gravity * Time.deltaTime;
         
         transform.position += velocity * Time. deltaTime;
@@ -51,4 +34,31 @@ public class Item : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    bool Move()
+    {
+        if(Player.ActivePlayer == null)
+            return false;
+
+        Vector3 difference = Player.ActivePlayer.position - transform.position;
+        if(!lockOn && !onCooldown && difference.sqrMagnitude <= lockOnRadius * lockOnRadius)
+        {
+            lockOn = true;
+        }
+
+        if(lockOn)
+        {
+            velocity = Vector3.MoveTowards(velocity, difference.normalized * lockOnSpeed, lockOnAccel * Time.deltaTime);
+            if(difference.sqrMagnitude <= caughtRadius * caughtRadius)
+            {
+                AddToPlayer();
+                print("caught item");
+                gameObject.SetActive(false);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected virtual void AddToPlayer(){}
 }
