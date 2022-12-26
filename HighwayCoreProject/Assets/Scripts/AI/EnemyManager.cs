@@ -9,7 +9,6 @@ public class EnemyManager : MonoBehaviour
     public ItemSpawner itemSpawner;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
-    public int maxItems, minItems;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
@@ -73,6 +72,11 @@ public class EnemyManager : MonoBehaviour
                 return;
 
             EnemyType enemy = currentTable.GetRandomEnemy();
+            if(ActiveCost + enemy.enemyCost > currentTable.ActiveCost)
+            {
+                spawned += currentTable.FailCost;
+                continue;
+            }
             int[] seq = Util.RandomSequence(Spawners.Count);
             bool success = false;
             for(int j = 0; j < seq.Length; j++)
@@ -89,6 +93,7 @@ public class EnemyManager : MonoBehaviour
                 nme.targetPlayer = player;
 
                 spawner.SpawnEnemy(nme);
+                nme.Cost = enemy.enemyCost;
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
                 TotalCost += nme.Cost;
@@ -117,12 +122,12 @@ public class EnemyManager : MonoBehaviour
 
     void AggroEnemies()
     {
-        if(AggroCost > currentTable.AggroCost || ActiveEnemies.Count == 0)
+        if(AggroCost >= currentTable.AggroCost || ActiveEnemies.Count == 0)
             return;
         int[] seq = Util.RandomSequence(ActiveEnemies.Count);
         for(int i = 0; i < ActiveEnemies.Count; i++)
         {
-            if(ActiveEnemies[seq[i]].TrySetAggro() && AggroCost > currentTable.AggroCost)
+            if(AggroCost + ActiveEnemies[seq[i]].Cost <= currentTable.AggroCost && ActiveEnemies[seq[i]].TrySetAggro())
                 return;
         }
     }
@@ -157,24 +162,20 @@ public class EnemyManager : MonoBehaviour
 
     public void RequestDie(Enemy enemy)
     {
-        if(enemy.stunned)
-        {
-            itemSpawner.SpawnItems(Random.Range(minItems, maxItems), enemy.transform.position);
-        }
-        
-        if(enemy.aggro)
-        {
-            enemy.aggro = false;
-            UpdateAggro(enemy);
-        }
+        UpdateAggro(enemy, false);
         ActiveEnemies.Remove(enemy);
         ActiveCost -= enemy.Cost;
     }
 
-    public bool UpdateAggro(Enemy enemy, bool prioritize = false)
+    public bool UpdateAggro(Enemy enemy, bool newAggro, bool prioritize = false)
     {
-        AggroCost += enemy.Cost * (enemy.aggro?1f:-1f);
-        if(!enemy.aggro)
+        if(enemy.aggro == newAggro)
+            return false;
+
+        AggroCost += enemy.Cost * (newAggro?1f:-1f);
+
+        enemy.aggro = newAggro;
+        if(!newAggro)
             return true;
         
         if(AggroCost > currentTable.AggroCost)
@@ -182,14 +183,16 @@ public class EnemyManager : MonoBehaviour
             if(!prioritize)
             {
                 AggroCost -= enemy.Cost;
+                enemy.aggro = !newAggro;
                 return false;
             }
 
+            int[] seq = Util.RandomSequence(ActiveEnemies.Count);
             for(int i = 0; i < ActiveEnemies.Count; i++)
             {
-                if(ActiveEnemies[i].aggro && ActiveEnemies[i] != enemy)
+                if(ActiveEnemies[seq[i]].aggro && ActiveEnemies[seq[i]] != enemy)
                 {
-                    if(ActiveEnemies[i].SetAggro(false))
+                    if(ActiveEnemies[seq[i]].SetAggro(false))
                         return true;
                 }
             }
@@ -260,5 +263,5 @@ public class EnemyManager : MonoBehaviour
 public struct EnemyType
 {
     public int enemyIndex;
-    public float minDistance, maxDistance;
+    public float enemyCost, minDistance, maxDistance;
 }

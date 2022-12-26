@@ -12,7 +12,7 @@ public class AudioVaried : Audio
 
     void Update()
     {
-        if(loop && playing && time <= 0f)
+        if(playing && time <= 0f)
         {
             Play();
             return;
@@ -23,11 +23,11 @@ public class AudioVaried : Audio
             time -= Time.deltaTime;
     }
 
-    protected override void OnEnable()
+    protected override void Activate()
     {
         time = 0f;
         playing = false;
-        base.OnEnable();
+        base.Activate();
     }
 
     public override void Play()

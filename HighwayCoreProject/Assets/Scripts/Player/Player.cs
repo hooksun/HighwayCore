@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour
     public WeaponSwitching WeaponSwitch;
     public PlayerMelee Melee;
     public WeaponAnim weaponAnim;
+    public PlayerInput input;
 
     public static Player ActivePlayer;
     
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
         WeaponSwitch.player = this;
         Melee.player = this;
         //weaponAnim.player = this;
+        EnableInput(true);
     }
 
     void OnEnable() => ActivePlayer = this;
@@ -64,6 +67,21 @@ public class Player : MonoBehaviour
         WeaponSwitch.Die();
         Melee.Die();
         //weaponAnim.Die();
+    }
+
+    public void EnableInput(bool yes)
+    {
+        if(!yes)
+        {
+            input.enabled = false;
+            return;
+        }
+        StartCoroutine(EnableDelay());
+    }
+    IEnumerator EnableDelay()
+    {
+        yield return null;
+        input.enabled = true;
     }
 }
 

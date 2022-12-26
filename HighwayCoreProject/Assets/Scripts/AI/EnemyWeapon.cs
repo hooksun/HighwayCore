@@ -5,15 +5,15 @@ using UnityEngine;
 public class EnemyWeapon : EnemyBehaviour
 {
     public Transform firePoint;
-    public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed;
-    public int magSize, bulletsPerShot, bulletIndex;
+    public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed, burstCooldown;
+    public int burstAmount, magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
     public Audio shootSound;
 
     [HideInInspector] public bool shoot, cantShoot, reloading;
     float fireTime, reloadTime;
-    int mag;
+    int mag, burst;
 
     public override void Activate()
     {
@@ -23,6 +23,7 @@ public class EnemyWeapon : EnemyBehaviour
         fireTime = 0f;
         reloadTime = 0f;
         mag = magSize;
+        burst = 0;
     }
 
     public override void Stun(Vector3 knockback)
@@ -54,8 +55,14 @@ public class EnemyWeapon : EnemyBehaviour
         
         if(mag <= 0)
         {
-            cantShoot = true;
-            shoot = false;
+            InitReload();
+            return;
+        }
+
+        if(burst >= burstAmount)
+        {
+            fireTime += burstCooldown;
+            burst = 0;
             return;
         }
 
@@ -63,6 +70,7 @@ public class EnemyWeapon : EnemyBehaviour
 
         fireTime += 60f/fireRate;
         mag--;
+        burst++;
     }
 
     protected virtual void FireBullet()
@@ -74,6 +82,14 @@ public class EnemyWeapon : EnemyBehaviour
         }
         enemy.Animation.Play(shootAnimation, 1);
         shootSound.Play();
+    }
+
+    public virtual void InitReload()
+    {
+        if(mag == magSize)
+            return;
+        cantShoot = true;
+        shoot = false;
     }
 
     protected virtual void Reload()
@@ -91,5 +107,6 @@ public class EnemyWeapon : EnemyBehaviour
         mag = magSize;
         cantShoot = false;
         reloading = false;
+        burst = 0;
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    public ItemPool ItemPool;
     public VariablePool<int> Items;
     public Vector3 MinVelocity, MaxVelocity;
 

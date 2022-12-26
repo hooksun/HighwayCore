@@ -58,8 +58,8 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        Health.TakeDamage(amount);
         Attack.TakeDamage(amount);
+        Health.TakeDamage(amount);
     }
 
     public void Stun(Vector3 knockback)
@@ -70,6 +70,7 @@ public class Enemy : MonoBehaviour
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);
         Weapon.Stun(knockback);
+        Animation.Stun(knockback);
 
         stunTime = StunTime;
         stunned = true;
@@ -77,13 +78,8 @@ public class Enemy : MonoBehaviour
 
     public bool SetAggro(bool yes, bool prioritize = true)
     {
-        if(yes == aggro)
+        if(!manager.UpdateAggro(this, yes, prioritize))
             return false;
-        
-        if(!manager.UpdateAggro(this, prioritize))
-            return false;
-        
-        aggro = yes;
         
         Attack.SetAggro(yes);
         return true;

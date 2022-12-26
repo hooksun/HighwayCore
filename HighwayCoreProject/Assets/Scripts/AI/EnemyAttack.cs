@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAttack : EnemyBehaviour
 {
-    public float Lead, ForceLookSpeed, MaxAttackDistance, MaxAttackAngle, AggroDistance, MinVerticalAngle, MaxVerticalAngle;
+    public float Lead, ForceLookSpeed, MaxAttackDistance, MaxAttackAngle, AggroDistance, LoseAggroDistance, MinVerticalAngle, MaxVerticalAngle;
     public EnemyState Aggro, Passive;
     public LayerMask ObstacleMask;
 
@@ -47,9 +47,21 @@ public class EnemyAttack : EnemyBehaviour
     {
         hasLOS = !Physics.Linecast(enemy.Head.position, enemy.targetPlayer.position, ObstacleMask);
 
+        DeAggro();
         FindLook();
         ShootWeapon();
         LookAtTarget();
+    }
+
+    protected virtual void DeAggro()
+    {
+        if(!enemy.aggro)
+            return;
+        if((GetPlayerPosition() - enemy.Head.position).sqrMagnitude > LoseAggroDistance * LoseAggroDistance)
+        {
+            enemy.SetAggro(false);
+            enemy.Weapon.InitReload();
+        }
     }
 
     protected virtual void FindLook()

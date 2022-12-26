@@ -7,7 +7,8 @@ public class EnemyAnimation : EnemyBehaviour
     public Animator animator;
     public Transform[] spine;
     public float waistSpeed, maxWaistAngle;
-    public string idleAnim;
+    public string idleAnim, torsoStunAnim, feetStunAnim;
+    public float stunFadeTime;
     public string[] MoveAnimations;
     public float animationsLength, crossFadeDuration;
 
@@ -23,6 +24,13 @@ public class EnemyAnimation : EnemyBehaviour
         waistDirection = horizLook;
         waistDir = waistDirection;
         currentAnim = "";
+        Reset();
+    }
+
+    public override void Stun(Vector3 knockback)
+    {
+        Play(torsoStunAnim, 1, stunFadeTime);
+        Play(feetStunAnim, 0, stunFadeTime);
         Reset();
     }
 
@@ -65,35 +73,28 @@ public class EnemyAnimation : EnemyBehaviour
 
     void Update()
     {
-        CalculateDirections();
-
-        waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
-        float cos = Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle);
-        if(Vector3.Dot(waistDir, horizLook) < cos)
+        if(!enemy.stunned)
         {
-            Vector3 ortho = Vector3.Cross(Vector3.up, horizLook);
-            if(Vector3.Dot(ortho, waistDir) < 0f)
-                ortho *= -1f;
+            CalculateDirections();
             
-            waistDir = horizLook * cos + ortho * Mathf.Sin(Mathf.Deg2Rad * maxWaistAngle);
-        }
-        if(moveDirection == Vector3.zero && waistDir == waistDirection)
-        {
-            waistAnim = idleAnim;
-            walkCycle = 0f;
-        }
-        if(moveDirection != Vector3.zero)
-        {
-            BestDirection(waistDir, moveDirection, out int i);
-            waistAnim = MoveAnimations[i];
-        }
+            if(moveDirection == Vector3.zero && waistDir == waistDirection)
+            {
+                waistAnim = idleAnim;
+                walkCycle = 0f;
+            }
+            if(moveDirection != Vector3.zero)
+            {
+                BestDirection(waistDir, moveDirection, out int i);
+                waistAnim = MoveAnimations[i];
+            }
 
-        if(!playing && waistAnim != currentAnim)
-        {
-            currentAnim = waistAnim;
-            animator.CrossFadeInFixedTime(waistAnim, crossFadeDuration, -1, walkCycle);
+            if(!playing && waistAnim != currentAnim)
+            {
+                currentAnim = waistAnim;
+                animator.CrossFadeInFixedTime(waistAnim, crossFadeDuration, -1, walkCycle);
+            }
+            walkCycle = (walkCycle + Time.deltaTime) % animationsLength;
         }
-        walkCycle = (walkCycle + Time.deltaTime) % animationsLength;
 
         animator.Update(Time.deltaTime);
         float step = 1f/(spine.Length - 1);
@@ -122,6 +123,17 @@ public class EnemyAnimation : EnemyBehaviour
         }
 
         waistDirection = BestDirection(moveDirection, horizLook, out int i);
+
+        waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
+        float cos = Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle);
+        if(Vector3.Dot(waistDir, horizLook) < cos)
+        {
+            Vector3 ortho = Vector3.Cross(Vector3.up, horizLook);
+            if(Vector3.Dot(ortho, waistDir) < 0f)
+                ortho *= -1f;
+            
+            waistDir = horizLook * cos + ortho * Mathf.Sin(Mathf.Deg2Rad * maxWaistAngle);
+        }
     }
 
     Vector3 BestDirection(Vector3 from, Vector3 to, out int index)

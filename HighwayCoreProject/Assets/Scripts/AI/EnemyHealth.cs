@@ -5,7 +5,8 @@ using UnityEngine;
 public class EnemyHealth : EnemyBehaviour
 {
     public float MaxHealth;
-    public float Health;//tadinya gk public
+    public int minItems, maxItems;
+    float Health;
 
     public override void Activate()
     {
@@ -25,7 +26,12 @@ public class EnemyHealth : EnemyBehaviour
     {
         if(enemy.stunned)
         {
-            //drop items
+            DropItems();
         }
+    }
+
+    public void DropItems()
+    {
+        enemy.manager.itemSpawner.SpawnItems(Random.Range(minItems, maxItems), transform.position);
     }
 }

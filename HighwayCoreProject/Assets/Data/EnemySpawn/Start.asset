@@ -14,9 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPool:
     Pool:
+    - weight: 3
+      variable:
+        enemyIndex: 3
+        enemyCost: 5
+        minDistance: -20
+        maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 0
+        enemyCost: 8
         minDistance: -20
         maxDistance: 50
   ActiveCost: 20

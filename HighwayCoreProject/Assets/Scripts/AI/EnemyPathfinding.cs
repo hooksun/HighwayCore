@@ -275,6 +275,7 @@ public class EnemyPathfinding : EnemyBehaviour
         isGrounded = true;
         if(groundInfo.transform.gameObject.layer == 8)
         {
+            enemy.Health.DropItems();
             transformPosition.transform = null;
             return;
         }

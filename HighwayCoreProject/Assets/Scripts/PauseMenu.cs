@@ -25,6 +25,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
 
         AudioPlayer.PauseAll(true);
+        Player.ActivePlayer.EnableInput(false);
     }
 
     public void Resume(){
@@ -34,6 +35,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         AudioPlayer.PauseAll(false);
+        Player.ActivePlayer.EnableInput(true);
     }
 
     public void QuitToMainMenu(){

@@ -41,6 +41,11 @@ public class UIManager : MonoBehaviour
 
     }
 
+    public static void SetDamageDirection(Vector2 direction)
+    {
+        
+    }
+
     public static void SetJetpackFuel(float amount)
     {
 

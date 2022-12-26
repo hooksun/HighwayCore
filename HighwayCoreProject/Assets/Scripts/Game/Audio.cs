@@ -15,12 +15,15 @@ public class Audio : MonoBehaviour
     void Start()
     {
         started = true;
-        OnEnable();
+        Activate();
     }
-    protected virtual void OnEnable()
+    void OnEnable()
     {
-        if(!started)
-            return;
+        if(started)
+            Activate();
+    }
+    protected virtual void Activate()
+    {
         player = AudioPool.GetObject((int)audioType);
         player.Setup(transform, loop, pitch, clip);
         if(autoPlay)
@@ -29,7 +32,7 @@ public class Audio : MonoBehaviour
 
     public virtual void Play()
     {
-        player.PlayClip(clip);
+        player.PlayClip(clip, pitch);
     }
     
     public virtual void Stop()

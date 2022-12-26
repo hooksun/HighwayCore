@@ -17,6 +17,7 @@ MonoBehaviour:
     - weight: 1
       variable:
         enemyIndex: 0
+        enemyCost: 8
         minDistance: -20
         maxDistance: 50
   ActiveCost: 40

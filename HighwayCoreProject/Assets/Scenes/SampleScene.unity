@@ -2648,6 +2648,9 @@ MonoBehaviour:
   - pool: []
     Object: {fileID: 259255105076096126, guid: 4392e16c552e5814488a05f1be72048a, type: 3}
     startAmount: 10
+  - pool: []
+    Object: {fileID: 259255105076096126, guid: 225a66b5be1c5dd4d8321a95e3c63cef, type: 3}
+    startAmount: 10
 --- !u!114 &932973450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3231,23 +3234,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
   Battles:
   - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
-  maxItems: 6
-  minItems: 4
   Enemies:
     Pool:
     - weight: 1
       variable:
         enemyIndex: 0
+        enemyCost: 0
         minDistance: -50
         maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 1
+        enemyCost: 0
         minDistance: -50
         maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 2
+        enemyCost: 0
         minDistance: -50
         maxDistance: 50
   ActiveEnemies: []
@@ -3263,7 +3267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1ce1e2133d8114db72bf93f3315451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemPool: {fileID: 932973450}
   Items:
     Pool:
     - weight: 1
@@ -4160,7 +4163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 530518716359227905}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -5388,6 +5391,7 @@ MonoBehaviour:
   WeaponSwitch: {fileID: 8454592958891627762}
   Melee: {fileID: 6697333563691823059}
   weaponAnim: {fileID: 0}
+  input: {fileID: 530518716359227963}
   TrailTime: 0.5
   LookAtEnemyAngle: 100
   positionOffset: {x: 0, y: 0.5, z: 0}

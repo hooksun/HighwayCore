@@ -17,16 +17,25 @@ MonoBehaviour:
     - weight: 1
       variable:
         enemyIndex: 0
+        enemyCost: 8
         minDistance: -20
         maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 1
+        enemyCost: 7
         minDistance: -20
         maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 2
+        enemyCost: 10
+        minDistance: -20
+        maxDistance: 50
+    - weight: 1
+      variable:
+        enemyIndex: 4
+        enemyCost: 5
         minDistance: -20
         maxDistance: 50
   ActiveCost: 50
