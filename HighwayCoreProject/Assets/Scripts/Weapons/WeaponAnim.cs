@@ -18,6 +18,10 @@ public class WeaponAnim : PlayerBehaviour
         else if(gun.isReloading){
             Reload();
         }
+        //timeSinceLastSwitch > gunData.switchSpeed
+        else if (gun.timeSinceLastSwitch < gun.gunData.switchSpeed){
+            Equip();
+        }
         else{
             Idle();
         }
@@ -45,7 +49,11 @@ public class WeaponAnim : PlayerBehaviour
         //anim.SetBool("shoot", true);
         anim.SetFloat("Blend", 1f);
     }
+    public void Equip(){
+        anim.SetBool("Ready", false);
+    }
     public void Idle(){
+        anim.SetBool("Ready", true);
         anim.SetBool("reload",false);
         anim.SetFloat("Blend", 0f);
     }
