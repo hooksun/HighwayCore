@@ -23,6 +23,6 @@ MonoBehaviour:
   fireRate: 600
   reloadTime: 1.5
   isReloading: 0
-  bulletSpread: 0.015
+  bulletSpread: 0.01
   bulletSpeed: 150
   switchSpeed: 0.4

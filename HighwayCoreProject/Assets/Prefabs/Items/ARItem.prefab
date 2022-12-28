@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9495a89a13fcdde4badfd8eb4bb2be3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCooldown: 0.5
+  startCooldown: 0.3
   gravity: 20
   lockOnRadius: 5
   lockOnAccel: 50

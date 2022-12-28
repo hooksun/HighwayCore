@@ -29,7 +29,7 @@ public class EnemyAnimation : EnemyBehaviour
 
     public override void Stun(Vector3 knockback)
     {
-        Play(torsoStunAnim, 1, stunFadeTime);
+        //Play(torsoStunAnim, 1, stunFadeTime);
         Play(feetStunAnim, 0, stunFadeTime);
         Reset();
     }
@@ -115,14 +115,13 @@ public class EnemyAnimation : EnemyBehaviour
     void CalculateDirections()
     {
         waistAnim = MoveAnimations[0];
-        if(moveDirection == Vector3.zero)
+        if(moveDirection != Vector3.zero)
         {
-            if(Vector3.Dot(waistDirection, horizLook) < Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle))
-                waistDirection = horizLook;
-            return;
+            waistDirection = BestDirection(moveDirection, horizLook, out int i);
         }
-
-        waistDirection = BestDirection(moveDirection, horizLook, out int i);
+        else if(Vector3.Dot(waistDirection, horizLook) < Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle))
+            waistDirection = horizLook;
+            
 
         waistDir = Vector3.RotateTowards(waistDir, waistDirection, waistSpeed * Time.deltaTime, 1f);
         float cos = Mathf.Cos(Mathf.Deg2Rad * maxWaistAngle);

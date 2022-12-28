@@ -20,6 +20,7 @@ public class HighwayGenerator : MonoBehaviour
     void Start()
     {
         GenerateInitialHighway();
+        GenerateForPlayer();
     }
 
     void GenerateInitialHighway()
@@ -34,24 +35,41 @@ public class HighwayGenerator : MonoBehaviour
         }
     }
 
+    void GenerateForPlayer()
+    {
+        int i = Lanes.Length/2;
+        float pos = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].position + Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].length;
+        while(pos < player.position.z)
+        {
+            pos = AddVehicle(Lanes[i], pos);
+        }
+        Vehicle playerVehicle = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1];
+        player.position = playerVehicle.ClosestPlatform(player.position).RandomPoint().worldPoint + Vector3.up;
+    }
+
     void Update()
     {
         SimulateHighway();
+    }
+
+    void GenerateHighway(Lane lane)
+    {
+        Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
+        if(lastVehicle.position - player.position.z < PlayerGenerateDist)
+        {
+            AddVehicle(lane, lastVehicle.position + lastVehicle.length);
+        }
+        if(player.position.z - lane.Vehicles[0].position > PlayerGenerateDist)
+        {
+            RemoveVehicle(lane, 0);
+        }
     }
 
     void SimulateHighway()
     {
         foreach(Lane lane in Lanes)
         {
-            Vehicle lastVehicle = lane.Vehicles[lane.Vehicles.Count - 1];
-            if(lastVehicle.position - player.position.z < PlayerGenerateDist)
-            {
-                AddVehicle(lane, lastVehicle.position + lastVehicle.length);
-            }
-            if(player.position.z - lane.Vehicles[0].position > PlayerGenerateDist)
-            {
-                RemoveVehicle(lane, 0);
-            }
+            GenerateHighway(lane);
             
             for(int i = lane.Vehicles.Count - 2; i >= 0; i--)
             {

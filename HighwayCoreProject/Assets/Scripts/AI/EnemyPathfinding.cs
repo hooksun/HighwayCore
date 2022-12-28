@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class EnemyPathfinding : EnemyBehaviour
 {
-    public float DesiredDistance, MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance;
+    public float MaxHeight, WalkSpeed, JumpHeight, JumpGravity, FallGravity, JumpDistance, MaxJumpDistance;
     public string JumpAnimation, LongJumpAnimation;
     public float JumpFadeTime, JumpDelay, LongJumpDelay, LongJumpTilt, TiltSpeed, TiltRecovery;
     public float groundDist, groundStunResistance, groundCheckCooldown, velocityStunMulti, idleTime;
     public int maxBacknForth = 1;
     public Vector3 transformOffset;
     public LayerMask GroundMask;
+    public Audio footstepAudio;
 
     public PlatformAddress currentPlatform;
     public TransformPoint transformPosition;
@@ -76,8 +77,6 @@ public class EnemyPathfinding : EnemyBehaviour
     {
         if(idleing || enemy.stunned)
             return;
-        if((transform.position - enemy.targetPlayer.position).sqrMagnitude < DesiredDistance * DesiredDistance)
-            return;
         
         if(targetPoint.transform == null)
         {
@@ -117,6 +116,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
         //movetowards logic
         enemy.Animation.SetMove((targetPoint.point - transformPosition.point).normalized);
+        footstepAudio.Play();
         transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
     }
 

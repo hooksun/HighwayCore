@@ -379,7 +379,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  DesiredDistance: 0
   MaxHeight: 1.5
   WalkSpeed: 7
   JumpHeight: 1
@@ -405,6 +404,7 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 264
+  footstepAudio: {fileID: 3080306361348637279}
 --- !u!114 &500471132682767721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,7 +439,7 @@ MonoBehaviour:
   fireRate: 100
   reloadSpeed: 3
   bulletSpread: 0.05
-  bulletSpeed: 150
+  bulletSpeed: 100
   burstCooldown: 3
   burstAmount: 3
   magSize: 8
@@ -518,8 +518,8 @@ MonoBehaviour:
   clip: {fileID: 0}
   audioType: 2
   pitch: 1.14
-  loop: 1
-  autoPlay: 1
+  loop: 0
+  autoPlay: 0
   clips:
     Pool:
     - weight: 2

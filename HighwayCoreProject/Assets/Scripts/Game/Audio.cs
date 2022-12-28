@@ -6,6 +6,7 @@ public class Audio : MonoBehaviour
 {
     public AudioClip clip;
     public AudioType audioType;
+    public float volume = 1f;
     public float pitch = 1f;
     public bool loop, autoPlay;
 
@@ -32,7 +33,7 @@ public class Audio : MonoBehaviour
 
     public virtual void Play()
     {
-        player.PlayClip(clip, pitch);
+        player.PlayClip(clip, volume, pitch);
     }
     
     public virtual void Stop()

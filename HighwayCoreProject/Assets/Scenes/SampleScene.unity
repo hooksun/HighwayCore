@@ -4018,7 +4018,8 @@ MonoBehaviour:
     accel: 80
     decel: 0
     maxSpeed: 10
-    coyote: 0
+    coyoteTime: 0
+    updateVelocity: 0
     hasFootsteps: 1
     footstepCooldown: 0.4
     footstepPitch: 1
@@ -4028,7 +4029,8 @@ MonoBehaviour:
     accel: 25
     decel: 0
     maxSpeed: 0
-    coyote: 7
+    coyoteTime: 0.1
+    updateVelocity: 0
     hasFootsteps: 0
     footstepCooldown: 0
     footstepPitch: 0
@@ -4043,7 +4045,8 @@ MonoBehaviour:
     accel: 100
     decel: 0
     maxSpeed: 0
-    coyote: 5
+    coyoteTime: 0
+    updateVelocity: 0
     hasFootsteps: 0
     footstepCooldown: 0
     footstepPitch: 0
@@ -4062,7 +4065,8 @@ MonoBehaviour:
     accel: 40
     decel: 0
     maxSpeed: 0
-    coyote: 1
+    coyoteTime: 0.001
+    updateVelocity: 1
     hasFootsteps: 0
     footstepCooldown: 0
     footstepPitch: 0
@@ -4081,7 +4085,8 @@ MonoBehaviour:
     accel: 20
     decel: 15
     maxSpeed: 0
-    coyote: 7
+    coyoteTime: 0.1
+    updateVelocity: 0
     hasFootsteps: 1
     footstepCooldown: 0.3
     footstepPitch: 1.2
@@ -4091,7 +4096,8 @@ MonoBehaviour:
     accel: 25
     decel: 15
     maxSpeed: 10
-    coyote: 7
+    coyoteTime: 0.1
+    updateVelocity: 1
     hasFootsteps: 1
     footstepCooldown: 0.5
     footstepPitch: 0.8
@@ -4105,9 +4111,9 @@ MonoBehaviour:
   WallJumpForce: {x: 4, y: 8, z: 2}
   VaultJumpForce: {x: 0, y: 8, z: -7}
   VaultStart: {x: 0, y: 1, z: 0.6}
-  WallRunCooldown: 5
-  GroundCheckCooldown: 5
-  GroundCheckDist: 1.1
+  WallRunCooldown: 0.1
+  GroundCheckCooldown: 0.1
+  GroundCheckDist: 1.2
   GroundCheckRadius: 0.48
   MaxSlope: 50
   GroundCenter: -0.5
@@ -4119,6 +4125,9 @@ MonoBehaviour:
   HardGroundMask:
     serializedVersion: 2
     m_Bits: 8
+  RoadMask:
+    serializedVersion: 2
+    m_Bits: 256
   isGrounded: 0
   currentFuel: 0
 --- !u!114 &530518716359227961
@@ -6031,6 +6040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clip: {fileID: 0}
   audioType: 0
+  volume: 1
   pitch: 1
   loop: 0
   autoPlay: 0

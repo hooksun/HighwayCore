@@ -34,7 +34,7 @@ public class AudioVaried : Audio
     {
         if(time > 0f)
             return;
-        player.PlayClip(clips.GetRandomVar(), pitch);
+        player.PlayClip(clips.GetRandomVar(), volume, pitch);
         time += clipTime;
         if(loop)
         {

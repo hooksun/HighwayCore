@@ -18,10 +18,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public MoveState WallRun, Vault;
     public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
-    public int WallRunCooldown, GroundCheckCooldown;
+    public float WallRunCooldown, GroundCheckCooldown;
     public float GroundCheckDist, GroundCheckRadius, MaxSlope, GroundCenter;
     public bool HasJetpack, HasGrapple;
-    public LayerMask GroundMask, HardGroundMask;
+    public LayerMask GroundMask, HardGroundMask, RoadMask;
 
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public RaycastHit groundInfo;
@@ -29,7 +29,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     Vector2 direction;
     Vector3 directionWorld;
     Vector3 velocity;
-    int groundCheckCooldown;
+    float groundCheckCooldown;
 
     Vector3 groundVel;
     IMovingGround currentGround;
@@ -56,7 +56,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Vector3 newVel = rb.velocity - groundVel;
             if(newVel.y <= 0f)
                 velocity.y = newVel.y;
-            if(current != Air || direction == Vector2.zero)
+            if(current.updateVelocity || direction == Vector2.zero)
                 velocity = newVel;
         }
 
@@ -82,15 +82,23 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Jetpack();
 
         jumpCooldown = Mathf.Max(jumpCooldown - Time.fixedDeltaTime, 0f);
+
+        if(current == Air && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
+        {
+            velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
+            //player.Status.TakeRoadDamage();
+            velocity.z = -20f;//temp
+            ChangeGround(hit.transform);
+        }
         
         rb.velocity = velocity + groundVel + (isGrounded?normalVel:Vector3.zero);
     }
 
     void GroundCheck()
     {
-        if(groundCheckCooldown > 0)
+        if(groundCheckCooldown > 0f)
         {
-            groundCheckCooldown--;
+            groundCheckCooldown -= Time.fixedDeltaTime;
             return;
         }
         if(!doGravity)
@@ -166,18 +174,18 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
         velocity = targetVel + Vector3.up * velocity.y;
         
-        if(current.cooldown > 0)
+        if(current.cooldown > 0f)
         {
-            current.cooldown--;
+            current.cooldown -= Time.fixedDeltaTime;
             return;
         }
         current = Air;
     }
     void SetCurrentState(MoveState newState)
     {
-        current.cooldown = 0;
+        current.cooldown = 0f;
         current = newState;
-        current.cooldown = current.coyote;
+        current.cooldown = current.coyoteTime;
         if(current.hasFootsteps)
         {
             FootstepsAudio.clipTime = current.footstepCooldown;
@@ -326,7 +334,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     
     int vaultDelay;
     Vector3 vaultDir;
-    bool isVaulting{get => Vault.cooldown > 0;}
+    bool isVaulting{get => Vault.cooldown > 0f;}
     void Vaulting()
     {
         if(!isGrounded && !player.usingAbility && direction.sqrMagnitude > 0 && (velocity.y <= VaultSpeed))
@@ -350,14 +358,14 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     }
 
     bool isWallRunning;
-    int wallRunCooldown;
+    float wallRunCooldown;
     Vector3 wallDir;
     void WallRunning()
     {
         isWallRunning = false;
-        if(wallRunCooldown > 0)
+        if(wallRunCooldown > 0f)
         {
-            wallRunCooldown--;
+            wallRunCooldown -= Time.fixedDeltaTime;
             return;
         }
         
@@ -382,7 +390,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
 
         player.Aim.RotateHead(Vector3.zero);
-        if(WallRun.cooldown == 0)
+        if(WallRun.cooldown <= 0f)
             wallDir = Vector3.zero;
     }
 
@@ -422,25 +430,25 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             StopGrapple();
             return;
         }
-        if(Air.cooldown > 0)
+        if(Air.cooldown > 0f)
         {
             AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
-            Air.cooldown = 0;
+            Air.cooldown = 0f;
             return;
         }
-        if(Vault.cooldown > 0)
+        if(Vault.cooldown > 0f)
         {
             AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, 0f);
-            Vault.cooldown = 0;
+            Vault.cooldown = 0f;
             return;
         }
-        if(WallRun.cooldown > 0)
+        if(WallRun.cooldown > 0f)
         {
             Vector3 jumpForce = WallJumpForce;
-            jumpForce.x = 0;
+            jumpForce.x = 0f;
             AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, 0f);
             wallRunCooldown = WallRunCooldown;
-            WallRun.cooldown = 0;
+            WallRun.cooldown = 0f;
             return;
         }
         if(HasJetpack && currentFuel >= AirJumpCost)
@@ -468,7 +476,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(isGrounded)
         {
             groundCheckCooldown = GroundCheckCooldown;
-            Air.cooldown = 0;
+            Air.cooldown = 0f;
             isGrounded = false;
         }
     }
@@ -477,11 +485,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 [System.Serializable]
 public class MoveState
 {
-    public float speed, accel, decel, maxSpeed;
-    public int coyote;
-    public bool hasFootsteps;
+    public float speed, accel, decel, maxSpeed, coyoteTime;
+    public bool updateVelocity, hasFootsteps;
     public float footstepCooldown, footstepPitch;
-    [HideInInspector] public int cooldown;
+    [HideInInspector] public float cooldown;
 }
 
 public interface IMovingGround

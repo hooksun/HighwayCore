@@ -43,7 +43,7 @@ public class AudioSequence : Audio
         if(time > 0f)
             return;
 
-        player.PlayClip(sequence[index].clip, pitch);
+        player.PlayClip(sequence[index].clip, volume, pitch);
         time += sequence[index].time;
         index++;
         if(index >= sequence.Length)
