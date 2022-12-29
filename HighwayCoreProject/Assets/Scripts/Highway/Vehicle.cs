@@ -53,3 +53,54 @@ public class Platform
     public float height;
     public Vector2 BoundsStart, BoundsEnd;
 }
+
+public struct PlatformAddress
+{
+    public Lane lane;
+    public Vehicle vehicle;
+    public int platformIndex;
+
+    public PlatformAddress(Lane _lane, Vehicle veh, int platI)
+    {
+        lane = _lane;
+        vehicle = veh;
+        platformIndex = platI;
+    }
+
+    public int laneIndex{get => lane.transform.GetSiblingIndex();}
+    public int vehicleIndex{get => vehicle.transform.GetSiblingIndex();}
+    public Platform platform{get => vehicle.Platforms[platformIndex];}
+    public bool enabled{get => lane != null && vehicle != null && vehicle.gameObject.activeInHierarchy;}
+
+    public TransformPoint ClosestPointTo(Vector3 point)
+    {
+        point += vehicle.transformOffset - vehicle.transform.position;
+        point.x = Mathf.Clamp(point.x, platform.BoundsStart.x, platform.BoundsEnd.x);
+        point.z = Mathf.Clamp(point.z, platform.BoundsStart.y, platform.BoundsEnd.y);
+        point -= vehicle.transformOffset;
+        point.y = platform.height - vehicle.transformOffset.y;
+        return new TransformPoint(vehicle.transform, point);
+    }
+
+    public TransformPoint CenterPoint()
+    {
+        Vector3 point = Vector3.zero;
+        point.x = (platform.BoundsStart.x + platform.BoundsEnd.x) * .5f;
+        point.z = (platform.BoundsStart.y + platform.BoundsEnd.y) * .5f;
+        point -= vehicle.transformOffset;
+        point.y = platform.height - vehicle.transformOffset.y;
+        return new TransformPoint(vehicle.transform, point);
+    }
+
+    public TransformPoint RandomPoint()
+    {
+        Vector3 point = Vector3.zero;
+        point.x = Random.Range(platform.BoundsStart.x, platform.BoundsEnd.x);
+        point.z = Random.Range(platform.BoundsStart.y, platform.BoundsEnd.y);
+        point -= vehicle.transformOffset;
+        point.y = platform.height - vehicle.transformOffset.y;
+        return new TransformPoint(vehicle.transform, point);
+    }
+
+    public float DistanceFrom(Vector3 point) => vehicle.DistanceToPlatform(point, platformIndex);
+}

@@ -37,14 +37,18 @@ public class HighwayGenerator : MonoBehaviour
 
     void GenerateForPlayer()
     {
-        int i = Lanes.Length/2;
-        float pos = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].position + Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].length;
-        while(pos < player.position.z)
+        int i;
+        for(i = 0; i < Lanes.Length; i++)
         {
-            pos = AddVehicle(Lanes[i], pos);
+            float pos = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].position + Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1].length;
+            while(pos < player.position.z)
+            {
+                pos = AddVehicle(Lanes[i], pos);
+            }
         }
+        i = Lanes.Length/2;
         Vehicle playerVehicle = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1];
-        player.position = playerVehicle.ClosestPlatform(player.position).RandomPoint().worldPoint + Vector3.up;
+        player.position = playerVehicle.ClosestPlatform(player.position).CenterPoint().worldPoint + Vector3.up;
     }
 
     void Update()
@@ -90,6 +94,12 @@ public class HighwayGenerator : MonoBehaviour
                 vehicle.UpdateTransform();
             }
         }
+    }
+
+    float AddNewVehicle(Lane lane)
+    {
+        float pos = lane.Vehicles[lane.Vehicles.Count - 1].position + lane.Vehicles[lane.Vehicles.Count - 1].length;
+        return AddVehicle(lane, pos);
     }
 
     float AddVehicle(Lane lane, float position)

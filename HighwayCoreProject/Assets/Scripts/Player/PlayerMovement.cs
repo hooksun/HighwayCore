@@ -83,7 +83,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         jumpCooldown = Mathf.Max(jumpCooldown - Time.fixedDeltaTime, 0f);
 
-        if(current == Air && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
+        if(current == Air && velocity.y <= 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
         {
             velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
             //player.Status.TakeRoadDamage();

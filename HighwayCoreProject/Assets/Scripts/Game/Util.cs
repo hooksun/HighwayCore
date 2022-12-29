@@ -62,3 +62,17 @@ public class WeightedVar<T>
 
     public static implicit operator T(WeightedVar<T> a) => a.variable;
 }
+
+public struct TransformPoint
+{
+    public Transform transform;
+    public Vector3 point;
+
+    public TransformPoint(Transform _transform, Vector3 _point)
+    {
+        transform = _transform;
+        point = _point;
+    }
+
+    public Vector3 worldPoint => (transform == null?point:transform.position + point);
+}

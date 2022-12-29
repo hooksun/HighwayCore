@@ -6314,8 +6314,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 108125a919b02234b83a5b15341833e7, type: 3}
-  audioType: 1
-  volume: 1
+  audioType: 0
+  volume: 0.8
   pitch: 1
   loop: 0
   autoPlay: 0
