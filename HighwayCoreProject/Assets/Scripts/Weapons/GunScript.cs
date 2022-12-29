@@ -20,6 +20,7 @@ public class GunScript : PlayerBehaviour
     bool isScope = false;
     public bool fireInput, secondaryInput;
     public bool isReloading;
+    public Audio ShootSound;
     // public WeaponAnim anim;
     // public GameObject curWeapon;
 
@@ -98,9 +99,12 @@ public class GunScript : PlayerBehaviour
     }
     void whatIsWeaponShoot(){
         if(gunData.name == "Shotgun"){
+            ShootSound.clip = GameObject.Find("ShotgunAudio").GetComponent<AudioSource>().clip;
             ShotgunBullet();
         }
         if(gunData.name == "AR" || gunData.name == "Pistol"){
+            AudioSource audio = GameObject.Find("ARAudio").GetComponent<AudioSource>();
+            ShootSound.clip = audio.clip;
             ARBullet();
         }
         if(gunData.name == "Sniper"){
@@ -137,15 +141,18 @@ public class GunScript : PlayerBehaviour
     // }
 
     void ARBullet(){
+        ShootSound.Play();
         BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
     void ShotgunBullet(){
+        ShootSound.Play();
         for(int i=0;i<8;i++){
             BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
         }
     }
 
     void SniperBullet(){
+        ShootSound.Play();
         BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
     }
 
