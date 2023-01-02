@@ -69,7 +69,6 @@ public class UIManager : MonoBehaviour
         
     }
 
-    float jetpackFuel;
     public static void SetJetpackFuel(float amount)
     {
         instance.JetpackFuel.SetValue(amount);

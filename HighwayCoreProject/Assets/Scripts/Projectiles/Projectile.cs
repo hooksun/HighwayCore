@@ -39,6 +39,7 @@ public class Projectile : MonoBehaviour
             if(hurtBox != null)
             {
                 hurtBox.TakeDamage(damage);
+                UIManager.SetDamageDirection(new Vector2(-transform.forward.x, -transform.forward.z).normalized);//temp
             }
             gameObject.SetActive(false);
             return;
