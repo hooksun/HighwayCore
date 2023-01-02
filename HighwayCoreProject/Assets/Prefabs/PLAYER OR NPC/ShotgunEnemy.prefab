@@ -350,7 +350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   Lead: 0.5
-  ForceLookSpeed: 0
+  ForceLookSpeed: 8
   MaxAttackDistance: 15
   MaxAttackAngle: 20
   AggroDistance: 20
@@ -500,6 +500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 7c3faab6573702d4cb9525793704c6af, type: 3}
   audioType: 1
+  volume: 1
   pitch: 1
   loop: 0
   autoPlay: 0
@@ -517,6 +518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clip: {fileID: 0}
   audioType: 2
+  volume: 1
   pitch: 1.14
   loop: 0
   autoPlay: 0

@@ -45,7 +45,6 @@ public class Enemy : MonoBehaviour
         Weapon.Die();
         Animation.Die();
 
-        print("ded");
         manager.RequestDie(this);
         gameObject.SetActive(false);
     }
@@ -98,6 +97,11 @@ public class Enemy : MonoBehaviour
             if(stunTime <= 0)
             {
                 stunned = false;
+                Attack.StopStun();
+                Pathfinding.StopStun();
+                Health.StopStun();
+                Weapon.StopStun();
+                Animation.StopStun();
             }
         }
     }
@@ -111,4 +115,5 @@ public abstract class EnemyBehaviour : MonoBehaviour
     public virtual void Die(){}
     public virtual void TakeDamage(float amount){}
     public virtual void Stun(Vector3 knockback){}
+    public virtual void StopStun(){}
 }

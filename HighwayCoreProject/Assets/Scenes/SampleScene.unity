@@ -3633,9 +3633,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3562033783521528902, guid: ea5e20aff22595b408bc703ee0d09c2b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3562033783521528902, guid: ea5e20aff22595b408bc703ee0d09c2b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3562033783521528902, guid: ea5e20aff22595b408bc703ee0d09c2b,
+        type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3729167708714341524, guid: ea5e20aff22595b408bc703ee0d09c2b,
         type: 3}
       propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6179749292066333501, guid: ea5e20aff22595b408bc703ee0d09c2b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6179749292066333501, guid: ea5e20aff22595b408bc703ee0d09c2b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8745556182761146937, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -3922,6 +3947,7 @@ MonoBehaviour:
   JumpGravity: 20
   FallGravity: 30
   JumpCooldown: 0.2
+  RoadDamage: 15
   AirJump:
     speed: 10
     accel: 100
@@ -5022,7 +5048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!120 &5983912197994531797
 LineRenderer:
   m_ObjectHideFlags: 0

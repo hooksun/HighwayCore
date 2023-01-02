@@ -1411,7 +1411,7 @@ MonoBehaviour:
   ObjectiveText: {fileID: 604578929578982470}
   HealthBar:
     slider: {fileID: 197274160654611918}
-    speed: 100
+    speed: 150
   JetpackFuel:
     slider: {fileID: 6305287457936702291}
     speed: 5
@@ -1984,7 +1984,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

@@ -8,7 +8,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public Rigidbody rb;
     
     public MoveState Walk, Air;
-    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown;
+    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage;
     public MoveState AirJump;
     public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
@@ -100,7 +100,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(current == Air && velocity.y <= 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
         {
             velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
-            //player.Status.TakeRoadDamage();
+            player.Status.TakeDamage(RoadDamage);
             velocity.z = -20f;//temp
             ChangeGround(hit.transform);
         }
@@ -268,7 +268,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             StopGrapple();
             return;
         }
-        if((transform.position - grapplePoint.worldPoint).sqrMagnitude <= GrappleRetractRange * GrappleRetractRange)
+        if((player.position - grapplePoint.worldPoint).sqrMagnitude <= GrappleRetractRange * GrappleRetractRange)
         {
             grappleDelay -= Time.fixedDeltaTime;
         }
@@ -276,7 +276,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         ChangeGround(grapplePoint.transform);
 
         SetCurrentState(Grapple);
-        Vector3 grappleDir = grapplePoint.worldPoint - transform.position;
+        Vector3 grappleDir = grapplePoint.worldPoint - player.position;
         float newSqrDist = grappleDir.sqrMagnitude;
         grappleDir.Normalize();
         directionWorld -= grappleDir * Mathf.Min(0f, Vector3.Dot(directionWorld, grappleDir));

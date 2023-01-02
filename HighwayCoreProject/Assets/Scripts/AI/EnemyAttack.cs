@@ -27,6 +27,11 @@ public class EnemyAttack : EnemyBehaviour
     {
         enemy.SetAggro(true);
     }
+    public override void Stun(Vector3 knockback)
+    {
+        ForceLookAtPoint(Player.ActivePlayer.position);
+    }
+    public override void StopStun() => overrideLook = false;
 
     public virtual void SetAggro(bool yes)
     {
@@ -103,9 +108,6 @@ public class EnemyAttack : EnemyBehaviour
     }
     protected virtual void LookAtTarget()
     {
-        if(enemy.stunned)
-            return;
-
         currentDirection = Vector3.RotateTowards(currentDirection, targetDirection, lookAtSpeed * Time.deltaTime, 0f);
         enemy.Head.rotation = Quaternion.LookRotation(currentDirection, transform.up);
         enemy.Animation.SetLook(currentDirection);
@@ -133,17 +135,18 @@ public class EnemyAttack : EnemyBehaviour
         return closer[Random.Range(0, closer.Count)];
     }
 
-    public void ForceLookAt(Vector3 point, bool force = true, float speed = 0f)
+    public void ForceLook(Vector3 direction, float speed = 0f)
     {
-        overrideLook = force;
-        if(!force)
-            return;
-
-        targetDirection = point - enemy.Head.position;
+        overrideLook = true;
+        targetDirection = direction;
         if(speed <= 0)
             speed = ForceLookSpeed;
         lookAtSpeed = speed;
     }
+
+    public void ForceLookAtPoint(Vector3 point, float speed = 0f) => ForceLook(point - enemy.Head.position, speed);
+
+    public void StopForceLook() => overrideLook = false;
 }
 
 [System.Serializable]
