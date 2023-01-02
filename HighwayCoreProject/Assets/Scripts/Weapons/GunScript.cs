@@ -81,8 +81,11 @@ public class GunScript : PlayerBehaviour
 
         player.Aim.ScopeIn(isScope);
 
-        ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
-        ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
+        //ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
+        //ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
+        UIManager.SetAmmo(gunData.currentAmmoInMag);
+        UIManager.SetReserve(gunData.ammoLeft);
+        UIManager.SetCrosshairSpread(gunData.bulletSpread);
 
         if(gunData.isReloading || isScope){
             player.usingWeapon = true;

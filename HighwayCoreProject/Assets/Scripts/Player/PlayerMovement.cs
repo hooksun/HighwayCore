@@ -44,7 +44,21 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     void Start()
     {
         current = Air;
+        GiveJetpack();
+        GiveGrapple();
+    }
+
+    public void GiveJetpack()
+    {
+        HasJetpack = true;
+        currentFuel = JetpackFuel;
+        UIManager.SetJetpackFuel(1f);
         UIManager.SetJetpackAirJumpCost(AirJumpCost / JetpackFuel);
+
+    }
+    public void GiveGrapple()
+    {
+        HasGrapple = true;
     }
     
     void FixedUpdate()

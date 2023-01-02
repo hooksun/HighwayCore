@@ -22,7 +22,8 @@ public class PlayerStatus : PlayerBehaviour
         PlayerHealthCondition();
     }
     void PlayerHealthCondition(){
-        healthPointTxt.SetText("HP : " + health);
+        //healthPointTxt.SetText("HP : " + health);
+        UIManager.SetHealth(health);
         if(health <=0){
             player.Die();
         }
