@@ -6,11 +6,14 @@ using UnityEngine.InputSystem;
 public class PlayerAim : PlayerBehaviour
 {
     public Camera MainCam, WeaponCam;
-    public float sensitivity, HeadRotateSpeed;
+    public float HeadRotateSpeed;
     public float scopeMulti, fovTime;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
-    float fov, weaponFov, currFov, currWeaponFov, currMulti, fovSpeed, weaponFovSpeed;
+    float weaponFov, fovRange, fovTarget, fovSpeed;
+
+    float sensitivity{get => player.Settings.settings.sensitivity;}
+    float fov{get => player.Settings.settings.fov;}
 
     public void AimInput(InputAction.CallbackContext ctx)
     {
@@ -24,16 +27,13 @@ public class PlayerAim : PlayerBehaviour
         direction.x = Mathf.Clamp(direction.x, -90f, 90f);
     }
 
-    void OnEnable()
+    void Start()
     {
         hideCursor();
-        fov = MainCam.fieldOfView;
-        weaponFov = WeaponCam.fieldOfView;
-        currFov = fov;
-        currWeaponFov = weaponFov;
-        currMulti = 1f;
-        fovSpeed = fov * (1 - scopeMulti) / fovTime;
-        weaponFovSpeed = weaponFov * (1 - scopeMulti) / fovTime;
+        weaponFov = fov;
+        fovSpeed = 1f / fovTime;
+        fovTarget = 0f;
+        fovRange = fovTarget;
     }
 
     void OnDisable()
@@ -53,10 +53,9 @@ public class PlayerAim : PlayerBehaviour
             player.Head.Rotate(headRotateOffset);
         }
 
-        currFov = Mathf.MoveTowards(currFov, fov * currMulti, fovSpeed * Time.deltaTime);
-        currWeaponFov = Mathf.MoveTowards(currWeaponFov, weaponFov * currMulti, weaponFovSpeed * Time.deltaTime);
-        MainCam.fieldOfView = currFov;
-        WeaponCam.fieldOfView = currWeaponFov;
+        fovRange = Mathf.MoveTowards(fovRange, fovTarget, fovSpeed * Time.deltaTime);
+        MainCam.fieldOfView = Mathf.Lerp(fov, fov * scopeMulti, fovRange);
+        WeaponCam.fieldOfView = Mathf.Lerp(weaponFov, weaponFov * scopeMulti, fovRange);
     }
 
     public void RotateHead(Vector3 offset)
@@ -64,11 +63,13 @@ public class PlayerAim : PlayerBehaviour
         headTargetOffset = offset;
     }
 
-    public void ScopeIn(bool scope)
+    public void ScopeIn(bool scope, float time = 0f)
     {
-        currMulti = (scope?scopeMulti:1f);
-        fovSpeed = fov * (1 - scopeMulti) / fovTime;
-        weaponFovSpeed = weaponFov * (1 - scopeMulti) / fovTime;
+        if(time <= 0f)
+            time = fovTime;
+
+        fovTarget = (scope?1f:0f);
+        fovSpeed = 1f / time;
     }
     
     //public void ChangeWeaponFov(float newFov) => weaponFov = newFov;

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    public PlayerSettings Settings;
     public PlayerMovement Movement;
     public PlayerAim Aim;
     public PlayerStatus Status;

@@ -4053,7 +4053,6 @@ MonoBehaviour:
   player: {fileID: 0}
   MainCam: {fileID: 530518717446665875}
   WeaponCam: {fileID: 7131788854825130852}
-  sensitivity: 25
   HeadRotateSpeed: 45
   scopeMulti: 0.5
   fovTime: 0.25
@@ -5297,6 +5296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0edb433b0f9de14eb1c3622f3d00bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Settings: {fileID: 11400000, guid: b4b2383d74860524d8e0028dddde1d92, type: 2}
   Movement: {fileID: 530518716359227960}
   Aim: {fileID: 530518716359227961}
   Status: {fileID: 8454592958896111171}

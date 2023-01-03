@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     public static void SetHealth(float amount)
     {
         instance.HealthBar.SetValue(amount);
-        instance.HealthText.text = amount.ToString();
+        instance.HealthText.text = ((int)amount).ToString();
     }
 
     public static void SetAmmo(int amount)
