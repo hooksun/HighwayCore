@@ -43,18 +43,27 @@ public class WeaponAnim : PlayerBehaviour
     }
     
     public void Reload(){
+        anim.SetBool("Ready", true);
         anim.SetBool("reload", true);
+        anim.SetFloat("Blend", 0f);
+        anim.SetBool("idle", false);
     }
     public void Shoot(){
-        //anim.SetBool("shoot", true);
+        anim.SetBool("Ready", true);
+        anim.SetBool("reload", false);
         anim.SetFloat("Blend", 1f);
+        anim.SetBool("idle", false);
     }
     public void Equip(){
         anim.SetBool("Ready", false);
+        anim.SetBool("reload", false);
+        anim.SetFloat("Blend", 0f);
+        anim.SetBool("idle", false);
     }
     public void Idle(){
         anim.SetBool("Ready", true);
         anim.SetBool("reload",false);
         anim.SetFloat("Blend", 0f);
+        anim.SetBool("idle", true);
     }
 }
