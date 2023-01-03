@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        Settings.Load();
+
         Aim.player = this;
         Movement.player = this;
         Status.player = this;
