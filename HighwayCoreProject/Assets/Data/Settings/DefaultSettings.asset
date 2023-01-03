@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b10d910190f2314a94178adab27558e, type: 3}
   m_Name: DefaultSettings
   m_EditorClassIdentifier: 
-  sensitivity: 25
-  fov: 70
+  settings:
+    sensitivity: 25
+    fov: 70
+  serialize: 0

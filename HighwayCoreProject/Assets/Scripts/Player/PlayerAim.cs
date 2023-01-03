@@ -30,7 +30,7 @@ public class PlayerAim : PlayerBehaviour
     void Start()
     {
         hideCursor();
-        weaponFov = fov;
+        weaponFov = WeaponCam.fieldOfView;
         fovSpeed = 1f / fovTime;
         fovTarget = 0f;
         fovRange = fovTarget;
