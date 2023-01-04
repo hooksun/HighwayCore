@@ -97,9 +97,6 @@ public class GunScript : PlayerBehaviour
         isReloading = gunData.isReloading;
     }
 
-    void StoppedShooting(){
-        isShooting = false;
-    }
     void whatIsWeaponShoot(){
         if(gunData.name == "Shotgun"){
             ShootSound.clip = GameObject.Find("ShotgunAudio").GetComponent<AudioSource>().clip;
@@ -163,7 +160,7 @@ public class GunScript : PlayerBehaviour
     int prevNumOfswitch;
     void Reloading(){
         bool indexSet = false;
-        if(!indexSet){
+        if(!indexSet){  
             prevSelectedWeapon = weaponSwitching.currentWeapon;
             prevNumOfswitch = weaponSwitching.numOfSwitch;
             indexSet = true;
@@ -171,6 +168,7 @@ public class GunScript : PlayerBehaviour
         //Debug.Log(prevSelectedWeapon);
         if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){ // && ReadyToShoot()
             gunData.isReloading = true;
+            isShooting = false;
             Invoke("ReloadingFinished", gunData.reloadTime);
             
         }

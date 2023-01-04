@@ -1,8 +1,14 @@
 fileFormatVersion: 2
-guid: 21c5b30fa1605814b85b64b52dea8d77
+guid: 79cf1ccf43112744582aeaebfe5edac8
 ModelImporter:
   serializedVersion: 21202
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 641136364113939877
+    second: reload
+  - first:
+      74: -1631546600439298249
+    second: Armature|reload
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -76,7 +82,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
