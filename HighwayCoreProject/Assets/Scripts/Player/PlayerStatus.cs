@@ -8,7 +8,9 @@ public class PlayerStatus : PlayerBehaviour
     float health;
     public PlayerData playerData;
     public TextMeshProUGUI healthPointTxt;
+    public GameObject deathMenu;
     public bool isFallen = false;
+    float animationAnimLength = 4f;
 
     
     void Start()
@@ -37,5 +39,17 @@ public class PlayerStatus : PlayerBehaviour
     public override void Die()
     {
         //ded
+        Invoke("ShowDeathMenu", 2f);
+    }
+
+    public void ShowDeathMenu(){
+        deathMenu.SetActive(true);
+        showCursor();
+        Time.timeScale = 0f;
+    }
+
+    void showCursor(){
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
     }
 }

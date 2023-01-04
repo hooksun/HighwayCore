@@ -32,14 +32,19 @@ public class bulletProjectile : MonoBehaviour, IPooledBullet
 
     void hit(){
         //collided = Physics.SphereCast(transform.position, .2f, transform.forward, out collideInfo, .2f);
-        collided = Physics.Raycast(transform.position, transform.forward, out collideInfo, .4f);
+        collided = Physics.Raycast(transform.position, transform.forward, out collideInfo, 1f);
         if(collided && collideInfo.transform.gameObject.layer == 7 ){
-            Debug.Log("hit enemy");
+            //Debug.Log("hit enemy");
             UIManager.SetHitMarker();
             Enemy enemy = collideInfo.collider.gameObject.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
+            BulletPool.Instance.SpawnFromPool("blood", collideInfo.point, transform.rotation);
+
             gameObject.SetActive(false);
-            
+        }
+
+        if(collided && collideInfo.transform.gameObject.layer == 3 || collided && collideInfo.transform.gameObject.layer == 8){
+            BulletPool.Instance.SpawnFromPool("blood", collideInfo.point, transform.rotation);
         }
     }
     
