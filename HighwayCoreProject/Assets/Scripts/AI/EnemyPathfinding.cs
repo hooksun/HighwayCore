@@ -21,7 +21,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected PlatformAddress targetPlatform, lastPlatform;
     protected TransformPoint targetPoint, jumpPoint;
-    protected Vector3 airVelocity, tilt;
+    protected Vector3 airVelocity, groundVel, tilt;
     protected RaycastHit groundInfo;
     protected float jumpDelay;
     protected bool isGrounded = true;
@@ -40,6 +40,13 @@ public class EnemyPathfinding : EnemyBehaviour
         targetPlatform.lane = null;
         lastPlatform.lane = null;
         FindNewPath();
+    }
+
+    public override void Die()
+    {
+        //EnemyRagdoll ragdoll = Instantiate(RagdollPool.instance.ObjectPools[0].Object.gameObject).GetComponent<EnemyRagdoll>();
+        EnemyRagdoll ragdoll = RagdollPool.GetObject();
+        ragdoll.Init(enemy.Animation.spine[0], (isGrounded?groundVel:airVelocity));
     }
 
     protected virtual void Update()
@@ -103,6 +110,7 @@ public class EnemyPathfinding : EnemyBehaviour
         targetPos.y = transformPosition.point.y;
         if(transformPosition.point == targetPos && transformPosition.transform == targetPoint.transform)
         {
+            groundVel = Vector3.zero;
             enemy.Animation.SetMove(Vector3.zero);
             if(targetPlatform.lane == null || targetPlatform.platform == currentPlatform.platform || jumpPoint.transform == null)
             {
@@ -115,7 +123,9 @@ public class EnemyPathfinding : EnemyBehaviour
         }
 
         //movetowards logic
-        enemy.Animation.SetMove((targetPoint.point - transformPosition.point).normalized);
+        groundVel = (targetPoint.point - transformPosition.point).normalized;
+        enemy.Animation.SetMove(groundVel);
+        groundVel *= WalkSpeed;
         footstepAudio.Play();
         transformPosition.point = Vector3.MoveTowards(transformPosition.point, targetPoint.point, WalkSpeed * Time.deltaTime);
     }
@@ -160,6 +170,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
     public override void Stun(Vector3 knockback)
     {
+        groundVel = Vector3.zero;
         if(isGrounded)
         {
             knockback *= 1f - groundStunResistance;
