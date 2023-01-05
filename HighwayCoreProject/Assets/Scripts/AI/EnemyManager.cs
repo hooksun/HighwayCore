@@ -6,13 +6,12 @@ public class EnemyManager : MonoBehaviour
 {
     public Player player; // temp
     public HighwayGenerator Highway;
-    public ItemSpawner itemSpawner;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
-    public List<Enemy> ActiveEnemies = new List<Enemy>();
+    [HideInInspector] public List<Enemy> ActiveEnemies = new List<Enemy>();
 
     EnemySpawnTable currentTable;
     EnemyBattle currentBattle;

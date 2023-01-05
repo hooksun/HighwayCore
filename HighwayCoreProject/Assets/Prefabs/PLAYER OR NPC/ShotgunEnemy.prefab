@@ -325,7 +325,7 @@ MonoBehaviour:
   Head: {fileID: 2579986990338431861}
   transformOffset: {x: 0, y: 1, z: 0}
   Cost: 8
-  StunTime: 0.4
+  StunTime: 0.6
   StunResistance: 0
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
@@ -419,8 +419,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   MaxHealth: 100
-  minItems: 4
-  maxItems: 6
+  normalDrops:
+    minItems: 1
+    maxItems: 3
+    items:
+      Pool:
+      - weight: 1
+        variable: 0
+      - weight: 1
+        variable: 2
+  stunnedDrops:
+    minItems: 4
+    maxItems: 6
+    items:
+      Pool:
+      - weight: 1
+        variable: 0
+      - weight: 1
+        variable: 1
+      - weight: 1
+        variable: 2
+      - weight: 1
+        variable: 3
+  MinVelocity: {x: -5, y: 5, z: -5}
+  MaxVelocity: {x: 5, y: 8, z: 5}
+  currentDrop:
+    minItems: 0
+    maxItems: 0
+    items:
+      Pool: []
 --- !u!114 &7175017660930352230
 MonoBehaviour:
   m_ObjectHideFlags: 0

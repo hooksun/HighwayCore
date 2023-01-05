@@ -16,6 +16,7 @@ public class PlayerStatus : PlayerBehaviour
     void Start()
     {
         health = playerData.maxHealth;
+        UIManager.SetHealth(health);
     }
 
     // Update is called once per frame

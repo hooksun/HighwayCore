@@ -3187,7 +3187,6 @@ GameObject:
   - component: {fileID: 1472807253}
   - component: {fileID: 1472807257}
   - component: {fileID: 1472807258}
-  - component: {fileID: 1472807259}
   m_Layer: 8
   m_Name: Road
   m_TagString: Untagged
@@ -3338,7 +3337,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 6978505401090044159}
   Highway: {fileID: 1472807257}
-  itemSpawner: {fileID: 1472807259}
   EnemyTables:
   - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
   Battles:
@@ -3364,30 +3362,6 @@ MonoBehaviour:
         minDistance: -50
         maxDistance: 50
   ActiveEnemies: []
---- !u!114 &1472807259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1472807252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d1ce1e2133d8114db72bf93f3315451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Items:
-    Pool:
-    - weight: 1
-      variable: 0
-    - weight: 1
-      variable: 1
-    - weight: 1
-      variable: 2
-    - weight: 1
-      variable: 3
-  MinVelocity: {x: -5, y: 5, z: -5}
-  MaxVelocity: {x: 5, y: 8, z: 5}
 --- !u!1 &1490900399
 GameObject:
   m_ObjectHideFlags: 0
