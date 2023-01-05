@@ -25,15 +25,16 @@ public class PlayerStatus : PlayerBehaviour
     }
     void PlayerHealthCondition(){
         //healthPointTxt.SetText("HP : " + health);
-        UIManager.SetHealth(health);
-        if(health <=0){
-            player.Die();
-        }
         
     }
 
     public void TakeDamage(float damage){
         health-=damage;
+        UIManager.SetHealth(health);
+        if(health <=0){
+            health = 0f;
+            player.Die();
+        }
     }
 
     public override void Die()
@@ -49,7 +50,7 @@ public class PlayerStatus : PlayerBehaviour
     }
 
     void showCursor(){
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 }

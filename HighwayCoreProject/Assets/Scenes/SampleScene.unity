@@ -5222,7 +5222,7 @@ MonoBehaviour:
     decel: 15
     maxSpeed: 10
     coyoteTime: 0.1
-    updateVelocity: 1
+    updateVelocity: 0
     hasFootsteps: 1
     footstepCooldown: 0.5
     footstepPitch: 0.8
@@ -6526,7 +6526,7 @@ MonoBehaviour:
   Melee: {fileID: 6697333563691823059}
   weaponAnim: {fileID: 0}
   input: {fileID: 530518716359227963}
-  TrailTime: 0.5
+  TrailTime: 0.8
   LookAtEnemyAngle: 100
   positionOffset: {x: 0, y: 0.5, z: 0}
   trailPosition: {x: 0, y: 0, z: 0}

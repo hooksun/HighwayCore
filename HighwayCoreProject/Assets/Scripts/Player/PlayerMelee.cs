@@ -55,7 +55,6 @@ public class PlayerMelee : PlayerBehaviour
             foreach(Collider hit in hits)
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
-                print(enemy.transform.name);
                 enemy.Stun(player.Head.forward * knockback);
                 enemy.TakeDamage(damage);
             }

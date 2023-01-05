@@ -116,4 +116,4 @@ MonoBehaviour:
   lockOnAccel: 50
   lockOnSpeed: 20
   caughtRadius: 0.6
-  HealAmount: 10
+  HealAmount: 20

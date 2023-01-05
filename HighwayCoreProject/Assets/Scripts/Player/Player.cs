@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHurtBox
 {
     public PlayerSettings Settings;
     public PlayerMovement Movement;
@@ -59,8 +59,15 @@ public class Player : MonoBehaviour
         trailPosition = pos;
     }
 
+    public bool crit{get => false;}
+    public void TakeDamage(float amount)
+    {
+        Status.TakeDamage(amount);
+    }
+
     public void Die()
     {
+        EnableInput(false);
         Aim.Die();
         Movement.Die();
         Status.Die();

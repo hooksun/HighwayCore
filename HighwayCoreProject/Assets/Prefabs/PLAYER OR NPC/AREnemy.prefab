@@ -511,7 +511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  MaxHealth: 50
+  MaxHealth: 100
   minItems: 4
   maxItems: 6
 --- !u!114 &7175017660930352230
@@ -528,13 +528,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   firePoint: {fileID: 2005548150718123099}
-  damage: 0
+  damage: 5
   fireRate: 600
   reloadSpeed: 3
   bulletSpread: 0.02
   bulletSpeed: 100
   burstCooldown: 1
-  burstAmount: 8
+  burstAmount: 6
   magSize: 30
   bulletsPerShot: 1
   bulletIndex: 0

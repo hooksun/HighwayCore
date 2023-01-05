@@ -35,7 +35,6 @@ public class bulletProjectile : MonoBehaviour, IPooledBullet
         collided = Physics.Raycast(transform.position, transform.forward, out collideInfo, 1f);
         if(collided && collideInfo.transform.gameObject.layer == 7 ){
             //Debug.Log("hit enemy");
-            UIManager.SetHitMarker();
             Enemy enemy = collideInfo.collider.gameObject.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
             BulletPool.Instance.SpawnFromPool("blood", collideInfo.point, transform.rotation);

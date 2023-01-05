@@ -57,6 +57,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        UIManager.SetHitMarker();
         Attack.TakeDamage(amount);
         Health.TakeDamage(amount);
     }
