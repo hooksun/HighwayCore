@@ -534,8 +534,6 @@ MonoBehaviour:
         variable: 2
       - weight: 1
         variable: 3
-  MinVelocity: {x: -5, y: 5, z: -5}
-  MaxVelocity: {x: 5, y: 8, z: 5}
   currentDrop:
     minItems: 0
     maxItems: 0
@@ -1373,7 +1371,7 @@ Transform:
   - {fileID: 892433083927212627}
   - {fileID: 7105362258803678609}
   m_Father: {fileID: 8389951691354170986}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 86.74}
 --- !u!95 &5245471812772681589
 Animator:
@@ -1766,7 +1764,7 @@ Transform:
   - {fileID: 7897139918275831540}
   - {fileID: 2005548150718123099}
   m_Father: {fileID: 8389951691354170986}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -85.55, y: 180, z: -3.91}
 --- !u!1 &2682564736924617887
 GameObject:
@@ -2760,8 +2758,8 @@ Transform:
   m_LocalScale: {x: 0.9999994, y: 1, z: 1.0000002}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2173976410381487375}
   - {fileID: 3350057157498430763}
+  - {fileID: 2173976410381487375}
   - {fileID: 8806250605837878072}
   - {fileID: 1474004123095927081}
   m_Father: {fileID: 9153858381188724071}

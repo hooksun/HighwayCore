@@ -2841,6 +2841,10 @@ MonoBehaviour:
     Object: {fileID: 4456059759506914052, guid: 1d110f0c5930a894092797dbdce75b74,
       type: 3}
     startAmount: 1
+  - pool: []
+    Object: {fileID: 4456059759506914052, guid: aa7c172f2b8e1d748b5415f7891ef041,
+      type: 3}
+    startAmount: 1
 --- !u!1 &1161197052 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 222678030834681415, guid: ea5e20aff22595b408bc703ee0d09c2b,

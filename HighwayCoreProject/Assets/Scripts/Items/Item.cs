@@ -35,7 +35,7 @@ public class Item : MonoBehaviour
         
         transform.position += velocity * Time. deltaTime;
         rb.velocity = velocity;
-        if(transform.position.y < -100f)
+        if(transform.position.y < -10f)
         {
             gameObject.SetActive(false);
         }

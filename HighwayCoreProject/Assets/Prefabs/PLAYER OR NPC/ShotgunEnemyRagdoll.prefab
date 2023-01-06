@@ -384,7 +384,7 @@ GameObject:
   - component: {fileID: 259255105076096122}
   - component: {fileID: 4456059759506914052}
   m_Layer: 10
-  m_Name: AREnemyRagdollTest
+  m_Name: ShotgunEnemyRagdoll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1299,7 +1299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2173976410381487375
 Transform:
   m_ObjectHideFlags: 0
@@ -1761,7 +1761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3350057157498430763
 Transform:
   m_ObjectHideFlags: 0

@@ -327,6 +327,7 @@ MonoBehaviour:
   Cost: 8
   StunTime: 0.6
   StunResistance: 0
+  RagdollIndex: 1
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
   Health: {fileID: 500471132682767721}
@@ -441,8 +442,6 @@ MonoBehaviour:
         variable: 2
       - weight: 1
         variable: 3
-  MinVelocity: {x: -5, y: 5, z: -5}
-  MaxVelocity: {x: 5, y: 8, z: 5}
   currentDrop:
     minItems: 0
     maxItems: 0

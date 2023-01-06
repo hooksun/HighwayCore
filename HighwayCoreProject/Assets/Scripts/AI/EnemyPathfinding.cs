@@ -44,8 +44,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
     public override void Die()
     {
-        //EnemyRagdoll ragdoll = Instantiate(RagdollPool.instance.ObjectPools[0].Object.gameObject).GetComponent<EnemyRagdoll>();
-        EnemyRagdoll ragdoll = RagdollPool.GetObject();
+        EnemyRagdoll ragdoll = RagdollPool.GetObject(enemy.RagdollIndex);
         ragdoll.Init(enemy.Animation.spine[0], (isGrounded?groundVel:airVelocity));
     }
 

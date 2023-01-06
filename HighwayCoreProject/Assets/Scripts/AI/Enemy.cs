@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public Transform Head;
     public Vector3 transformOffset;
     public float Cost, StunTime, StunResistance;
+    public int RagdollIndex;
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;
