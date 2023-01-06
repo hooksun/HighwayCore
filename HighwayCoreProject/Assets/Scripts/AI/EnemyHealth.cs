@@ -6,7 +6,6 @@ public class EnemyHealth : EnemyBehaviour
 {
     public float MaxHealth;
     public ItemDrop normalDrops, stunnedDrops;
-    public Vector3 MinVelocity, MaxVelocity;
     float Health;
 
     [HideInInspector] public ItemDrop currentDrop;
@@ -51,11 +50,7 @@ public class EnemyHealth : EnemyBehaviour
         for(int i = 0; i < random; i++)
         {
             Item item = ItemPool.GetObject(drop.items.GetRandomVar());
-            Vector3 velocity = Vector3.zero;
-            velocity.x = Random.Range(MinVelocity.x, MaxVelocity.x);
-            velocity.y = Random.Range(MinVelocity.y, MaxVelocity.y);
-            velocity.z = Random.Range(MinVelocity.z, MaxVelocity.z);
-            item.Spawn(transform.position, velocity);
+            item.Spawn(transform.position, Vector3.up * Random.Range(0f, 360f));
         }
     }
 }
