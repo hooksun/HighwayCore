@@ -10,6 +10,7 @@ public class AmmoItem : Item
     protected override void AddToPlayer()
     {
         //Player.ActivePlayer.__.AddAmmo(ammoAmount, ammoType);
+        Player.ActivePlayer.WeaponSwitch.AddAmmo(ammoAmount, ammoType);
     }
 }
 
