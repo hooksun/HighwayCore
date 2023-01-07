@@ -8,14 +8,17 @@ public class Item : MonoBehaviour
     public Collider coll;
     public Vector2 minVelcoty, maxVelocity;
     public float startCooldown, gravity, lockOnRadius, lockOnAccel, lockOnSpeed, caughtRadius;
+    public float upTime = 20f;
 
     Vector3 velocity;
+    float time;
     bool onCooldown, lockOn;
 
     public void Spawn(Vector3 position, Vector3 rotation)
     {
         transform.position = position;
         rb.velocity = Quaternion.Euler(rotation) * new Vector3(0f, Random.Range(minVelcoty.y, maxVelocity.y), Random.Range(minVelcoty.x, maxVelocity.x));
+        time = 0f;
         coll.enabled = true;
         lockOn = false;
         StartCoroutine(StartCooldown());
@@ -33,12 +36,15 @@ public class Item : MonoBehaviour
             return;
 
         velocity = rb.velocity;
+        time += Time.fixedDeltaTime;
         if(!Move())
             velocity += Vector3.down * gravity * Time.fixedDeltaTime;
         
         rb.velocity = velocity;
-        if(transform.position.y < -10f)
+        if(transform.position.y < -10f || time > upTime)
         {
+            if(lockOn)
+                AddToPlayer();
             gameObject.SetActive(false);
         }
     }

@@ -8,7 +8,7 @@ public class HighwayBarrier : MonoBehaviour
 
     void Update()
     {
-        if(Player.ActivePlayer != null)
+        if(Player.ActivePlayer != null && Time.deltaTime > 0f)
         {
             transform.position = new Vector3(0f, 0f, Mathf.Max(Player.ActivePlayer.position.z - distanceFromPlayer, transform.position.z));
             float newAlpha = Mathf.MoveTowards(alpha, ((Player.ActivePlayer.position.z - transform.position.z) > visibleDistance?0f:1f), fadeSpeed * Time.deltaTime);
@@ -16,6 +16,7 @@ public class HighwayBarrier : MonoBehaviour
             {
                 alpha = newAlpha;
                 meshRenderer.material.SetFloat("_Alpha_multiplier", alpha);
+                meshRenderer.enabled = alpha > 0f;
             }
         }
     }
