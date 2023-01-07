@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if(stunned)
+        if(stunned && Time.deltaTime > 0f)
         {
             stunTime -= Time.deltaTime;
             if(stunTime <= 0)

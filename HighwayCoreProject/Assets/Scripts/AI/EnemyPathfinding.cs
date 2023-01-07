@@ -50,6 +50,9 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected virtual void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         Tilt();
         if(isGrounded)
         {

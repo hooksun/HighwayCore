@@ -29,6 +29,9 @@ public class EnemyManager : MonoBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         SpawnUpdate();
         AggroUpdate();
     }

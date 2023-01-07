@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         foreach(UIClass ui in UIClasses)
             ui.Update(Time.deltaTime);
     }

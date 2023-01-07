@@ -63,6 +63,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     
     void FixedUpdate()
     {
+        if(Time.fixedDeltaTime == 0f)
+            return;
+
         GroundCheck();
 
         if(!isGrounded)
@@ -245,7 +248,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrappling)
         {
             if(player.usingAbility || player.abilityCooldown || player.usingWeapon)
+            {
+                GrappleObj.Retract();
                 return;
+            }
             grappledEnemy = null;
             player.abilityCooldown = true;
             GrappleObj.Fire(player.Head.forward, player.Head.position, this);

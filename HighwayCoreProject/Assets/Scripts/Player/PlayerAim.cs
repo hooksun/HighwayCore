@@ -44,6 +44,13 @@ public class PlayerAim : PlayerBehaviour
 
     void Update()
     {
+        fovRange = Mathf.MoveTowards(fovRange, fovTarget, fovSpeed * Time.deltaTime);
+        MainCam.fieldOfView = Mathf.Lerp(fov, fov * scopeMulti, fovRange);
+        WeaponCam.fieldOfView = Mathf.Lerp(weaponFov, weaponFov * scopeMulti, fovRange);
+
+        if(Time.deltaTime == 0f)
+            return;
+        
         transform.rotation = Quaternion.Euler(Vector3.up * direction.y);
         player.Head.localRotation = Quaternion.Euler(Vector3.right * direction.x);
 
@@ -52,10 +59,6 @@ public class PlayerAim : PlayerBehaviour
         {
             player.Head.Rotate(headRotateOffset);
         }
-
-        fovRange = Mathf.MoveTowards(fovRange, fovTarget, fovSpeed * Time.deltaTime);
-        MainCam.fieldOfView = Mathf.Lerp(fov, fov * scopeMulti, fovRange);
-        WeaponCam.fieldOfView = Mathf.Lerp(weaponFov, weaponFov * scopeMulti, fovRange);
     }
 
     public void RotateHead(Vector3 offset)

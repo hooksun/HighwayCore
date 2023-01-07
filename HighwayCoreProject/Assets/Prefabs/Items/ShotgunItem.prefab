@@ -114,12 +114,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 310226874097276795}
   coll: {fileID: 1872697862523211799}
-  minVelcoty: {x: 3, y: 3}
-  maxVelocity: {x: 5, y: 5}
+  minVelcoty: {x: 5, y: 5}
+  maxVelocity: {x: 8, y: 8}
   startCooldown: 0.3
   gravity: 20
   lockOnRadius: 5
-  lockOnAccel: 50
+  lockOnAccel: 70
   lockOnSpeed: 20
   caughtRadius: 0.6
   ammoAmount: 5

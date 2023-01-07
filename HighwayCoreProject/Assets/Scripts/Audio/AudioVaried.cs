@@ -12,6 +12,9 @@ public class AudioVaried : Audio
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         if(playing && time <= 0f)
         {
             Play();

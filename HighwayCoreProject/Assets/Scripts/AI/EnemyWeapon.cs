@@ -36,6 +36,9 @@ public class EnemyWeapon : EnemyBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         Shoot();
         Reload();
 

@@ -78,6 +78,9 @@ public class EnemyAnimation : EnemyBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         CalculateDirections();
         if(!enemy.stunned)
         {

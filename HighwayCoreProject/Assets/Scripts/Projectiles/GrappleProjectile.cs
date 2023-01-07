@@ -46,6 +46,9 @@ public class GrappleProjectile : MonoBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+        
         Simulate();
         lRenderer.SetPosition(0, transform.position);
         lRenderer.SetPosition(1, grapplePos);

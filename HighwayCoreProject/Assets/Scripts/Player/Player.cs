@@ -50,6 +50,9 @@ public class Player : MonoBehaviour, IHurtBox
     
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+        
         StartCoroutine(Trail(position));
     }
 

@@ -26,6 +26,9 @@ public class Projectile : MonoBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         if(activeTime <= 0f)
         {
             gameObject.SetActive(false);

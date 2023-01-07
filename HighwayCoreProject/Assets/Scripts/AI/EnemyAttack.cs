@@ -50,6 +50,9 @@ public class EnemyAttack : EnemyBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         hasLOS = !Physics.Linecast(enemy.Head.position, enemy.targetPlayer.position, ObstacleMask);
 
         DeAggro();

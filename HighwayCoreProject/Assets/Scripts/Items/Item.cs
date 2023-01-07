@@ -27,13 +27,15 @@ public class Item : MonoBehaviour
         onCooldown = false;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        if(Time.fixedDeltaTime == 0f)
+            return;
+
         velocity = rb.velocity;
         if(!Move())
-            velocity += Vector3.down * gravity * Time.deltaTime;
+            velocity += Vector3.down * gravity * Time.fixedDeltaTime;
         
-        transform.position += velocity * Time. deltaTime;
         rb.velocity = velocity;
         if(transform.position.y < -10f)
         {
@@ -55,7 +57,7 @@ public class Item : MonoBehaviour
 
         if(lockOn)
         {
-            velocity = Vector3.MoveTowards(velocity, difference.normalized * lockOnSpeed, lockOnAccel * Time.deltaTime);
+            velocity = Vector3.MoveTowards(velocity, difference.normalized * lockOnSpeed, lockOnAccel * Time.fixedDeltaTime);
             if(difference.sqrMagnitude <= caughtRadius * caughtRadius)
             {
                 AddToPlayer();

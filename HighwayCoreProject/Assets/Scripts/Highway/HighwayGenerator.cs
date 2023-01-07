@@ -53,6 +53,9 @@ public class HighwayGenerator : MonoBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         SimulateHighway();
     }
 
