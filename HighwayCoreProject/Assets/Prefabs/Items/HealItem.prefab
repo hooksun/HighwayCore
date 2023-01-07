@@ -114,8 +114,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: -8850811138040332444}
   coll: {fileID: 4788836921063138980}
-  minVelcoty: {x: 5, y: 5}
-  maxVelocity: {x: 8, y: 8}
+  minVelcoty: {x: 4, y: 5}
+  maxVelocity: {x: 6, y: 8}
   startCooldown: 0.3
   gravity: 20
   lockOnRadius: 5
