@@ -11,6 +11,7 @@ public class PlayerMelee : PlayerBehaviour
     public LayerMask EnemyMask;
 
     bool onCooldown;
+    public bool isPunching ;
     
     public void Input(InputAction.CallbackContext ctx)
     {
@@ -40,7 +41,9 @@ public class PlayerMelee : PlayerBehaviour
     
     public virtual void Activate()
     {
-        player.animator.Play("Player Melee test", 0, 0);
+        //player.animator.Play("Player Melee test", 0, 0);
+        isPunching = true;
+
         StartCoroutine(Melee());
         StartCoroutine(Cooldown());
         StartCoroutine(GlobalCooldown());
@@ -59,5 +62,6 @@ public class PlayerMelee : PlayerBehaviour
                 enemy.TakeDamage(damage);
             }
         }
+        isPunching = false;
     }
 }
