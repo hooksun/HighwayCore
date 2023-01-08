@@ -420,6 +420,7 @@ MonoBehaviour:
   Cost: 5
   StunTime: 0.6
   StunResistance: 0
+  RagdollIndex: 0
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
   Health: {fileID: 500471132682767721}
@@ -513,8 +514,8 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 100
   normalDrops:
-    minItems: 1
-    maxItems: 3
+    minItems: 3
+    maxItems: 4
     items:
       Pool:
       - weight: 1
@@ -522,8 +523,8 @@ MonoBehaviour:
       - weight: 1
         variable: 1
   stunnedDrops:
-    minItems: 4
-    maxItems: 6
+    minItems: 6
+    maxItems: 8
     items:
       Pool:
       - weight: 1

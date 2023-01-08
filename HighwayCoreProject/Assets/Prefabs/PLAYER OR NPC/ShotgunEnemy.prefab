@@ -421,8 +421,8 @@ MonoBehaviour:
   enemy: {fileID: 0}
   MaxHealth: 100
   normalDrops:
-    minItems: 1
-    maxItems: 3
+    minItems: 3
+    maxItems: 4
     items:
       Pool:
       - weight: 1
@@ -430,8 +430,8 @@ MonoBehaviour:
       - weight: 1
         variable: 2
   stunnedDrops:
-    minItems: 4
-    maxItems: 6
+    minItems: 6
+    maxItems: 8
     items:
       Pool:
       - weight: 1

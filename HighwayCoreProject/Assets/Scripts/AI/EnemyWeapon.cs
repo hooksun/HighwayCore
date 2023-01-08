@@ -12,7 +12,7 @@ public class EnemyWeapon : EnemyBehaviour
     public Audio shootSound;
 
     [HideInInspector] public bool shoot, cantShoot, reloading;
-    float fireTime, reloadTime;
+    float fireTime, burstTime, reloadTime;
     int mag, burst;
 
     public override void Activate()
@@ -21,6 +21,7 @@ public class EnemyWeapon : EnemyBehaviour
         cantShoot = false;
         reloading = false;
         fireTime = 0f;
+        burstTime = 0f;
         reloadTime = 0f;
         mag = magSize;
         burst = 0;
@@ -47,12 +48,19 @@ public class EnemyWeapon : EnemyBehaviour
 
         if(fireTime > 0)
             fireTime -= Time.deltaTime;
+        if(burstTime > 0)
+            burstTime -= Time.deltaTime;
         if(reloadTime > 0)
             reloadTime -= Time.deltaTime;
     }
 
     protected virtual void Shoot()
     {
+        if(burstTime <= 0f)
+        {
+            burst = 0;
+        }
+
         if(!shoot || fireTime > 0 || cantShoot)
             return;
         
@@ -63,14 +71,11 @@ public class EnemyWeapon : EnemyBehaviour
         }
 
         if(burst >= burstAmount)
-        {
-            fireTime += burstCooldown;
-            burst = 0;
             return;
-        }
 
         FireBullet();
 
+        burstTime = burstCooldown;
         fireTime += 60f/fireRate;
         mag--;
         burst++;

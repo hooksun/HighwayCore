@@ -16,7 +16,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public GrappleProjectile GrappleObj;
     public float GrappleSpeed, GrappleAccel, GrappleDecel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
     public MoveState WallRun, Vault;
-    public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist;
+    public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultBreakAngle;
     public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
     public float WallRunCooldown, GroundCheckCooldown;
     public float GroundCheckDist, GroundCheckRadius, MaxSlope, GroundCenter;
@@ -73,7 +73,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Vector3 newVel = rb.velocity - groundVel;
             if(newVel.y <= 0f)
                 velocity.y = newVel.y;
-            if(current.updateVelocity || direction == Vector2.zero)
+            if(current.updateVelocity || overrideVel || direction == Vector2.zero)
                 velocity = newVel;
         }
 
@@ -82,6 +82,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         forceBuffer = Vector3.zero;
         posBuffer = 1f;
         negBuffer = 1f;
+        overrideVel = false;
 
         directionWorld = transform.rotation * new Vector3(direction.x, 0f, direction.y);
         
@@ -352,29 +353,32 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         StartCoroutine(GlobalCooldown(GlobalGrappleCooldown));
     }
     
-    int vaultDelay;
     Vector3 vaultDir;
     bool isVaulting{get => Vault.cooldown > 0f;}
     void Vaulting()
     {
-        if(!isGrounded && !player.usingAbility && direction.sqrMagnitude > 0 && (velocity.y <= VaultSpeed))
+        if(!isGrounded && !player.usingAbility && velocity.y <= VaultSpeed && direction.sqrMagnitude > 0)
         {
-            Vector3 origin = transform.position + Quaternion.LookRotation(directionWorld) * VaultStart;
+            if(vaultDir == Vector3.zero || Vector3.Dot(vaultDir, directionWorld) < Mathf.Cos(Mathf.Deg2Rad * VaultBreakAngle))
+                vaultDir = directionWorld;
+
+            Vector3 origin = transform.position + Quaternion.LookRotation(vaultDir) * VaultStart;
 
             RaycastHit hit;
-            if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f ||
-            Physics.Raycast(transform.position + Vector3.up * VaultStart.y, directionWorld, out hit, VaultStart.z, HardGroundMask))
+            if((Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f) ||
+            Physics.Raycast(transform.position + Vector3.up * VaultStart.y, vaultDir, out hit, VaultStart.z, HardGroundMask))
             {
                 ChangeGround(hit.transform);
                 SetCurrentState(Vault);
-                vaultDir = directionWorld;
             }
         }
         
         if(isVaulting)
         {
             velocity.y = Mathf.Max(VaultSpeed, velocity.y);
+            return;
         }
+        vaultDir = Vector3.zero;
     }
 
     bool isWallRunning;
@@ -452,13 +456,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
         if(Air.cooldown > 0f)
         {
-            AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
+            AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), false, JumpYPosMulti);
             Air.cooldown = 0f;
             return;
         }
         if(Vault.cooldown > 0f)
         {
-            AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, 0f);
+            AddForce(Quaternion.LookRotation(vaultDir) * VaultJumpForce, true);
             Vault.cooldown = 0f;
             return;
         }
@@ -466,14 +470,14 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         {
             Vector3 jumpForce = WallJumpForce;
             jumpForce.x = 0f;
-            AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, 0f);
+            AddForce(transform.rotation * jumpForce + -wallDir * WallJumpForce.x, false);
             wallRunCooldown = WallRunCooldown;
             WallRun.cooldown = 0f;
             return;
         }
         if(HasJetpack && currentFuel >= AirJumpCost)
         {
-            AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), JumpYPosMulti);
+            AddForce(Vector3.up * Mathf.Sqrt(2f * JumpGravity * JumpHeight), true, JumpYPosMulti);
             currentFuel -= AirJumpCost;
             SetCurrentState(AirJump);
             UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
@@ -485,11 +489,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     Vector3 forceBuffer;
     float posBuffer = 1f;
     float negBuffer = 1f;
-    public void AddForce(Vector3 force, float yPosMulti = 1f, float yNegMulti = 0f)
+    bool overrideVel;
+    public void AddForce(Vector3 force, bool useRb = false, float yPosMulti = 0f, float yNegMulti = 0f)
     {
         forceBuffer += force;
         posBuffer *= yPosMulti;
         negBuffer *= yNegMulti;
+        overrideVel = useRb;
         //Vector3 vel = rb.velocity;
         //vel.y *= (vel.y > 0?yPosMulti:yNegMulti);
         //rb.velocity = vel + force;

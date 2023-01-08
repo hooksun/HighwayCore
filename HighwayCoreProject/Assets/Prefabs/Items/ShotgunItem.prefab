@@ -122,7 +122,8 @@ MonoBehaviour:
   lockOnAccel: 70
   lockOnSpeed: 20
   caughtRadius: 0.6
-  ammoAmount: 5
+  upTime: 20
+  ammoAmount: 3
   ammoType: 1
 --- !u!54 &310226874097276795
 Rigidbody:

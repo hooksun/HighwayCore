@@ -5325,6 +5325,7 @@ MonoBehaviour:
   MinWallRunYSpeed: 3
   VaultSpeed: 3.5
   VaultDist: 1.8
+  VaultBreakAngle: 90
   WallCheckPoint: {x: 0, y: 0.5, z: 0}
   WallJumpForce: {x: 4, y: 8, z: 2}
   VaultJumpForce: {x: 0, y: 8, z: -7}

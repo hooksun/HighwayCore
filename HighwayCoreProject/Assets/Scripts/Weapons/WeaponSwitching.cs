@@ -95,16 +95,16 @@ public class WeaponSwitching : PlayerBehaviour
     public void AddAmmo(int ammount, AmmoType ammoType){
         switch(ammoType){
             case AmmoType.pistol:
-                shotgun.ammoLeft+=ammount;
+                pistol.ammoLeft = Mathf.Clamp(pistol.ammoLeft+ammount, 0, pistol.maxAmmo);
                 break;
             case AmmoType.ar:
-                rifle.ammoLeft+=ammount;
+                rifle.ammoLeft = Mathf.Clamp(rifle.ammoLeft+ammount, 0, rifle.maxAmmo);
                 break;
             case AmmoType.sniper:
-                sniper.ammoLeft+=ammount;
+                sniper.ammoLeft = Mathf.Clamp(sniper.ammoLeft+ammount, 0, sniper.maxAmmo);
                 break;
             case AmmoType.shotgun:
-                shotgun.ammoLeft+=ammount;
+                shotgun.ammoLeft = Mathf.Clamp(shotgun.ammoLeft+ammount, 0, shotgun.maxAmmo);
                 break;
         }
     }

@@ -30,10 +30,12 @@ public class PlayerStatus : PlayerBehaviour
     }
 
     public void TakeDamage(float damage){
+        if(health == 0f)
+            return;
         health-=damage;
+        health = Mathf.Clamp(health, 0f, playerData.maxHealth);
         UIManager.SetHealth(health);
-        if(health <=0){
-            health = 0f;
+        if(health ==0){
             player.Die();
         }
     }
