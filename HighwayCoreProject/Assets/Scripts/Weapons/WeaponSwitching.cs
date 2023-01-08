@@ -14,10 +14,8 @@ public class WeaponSwitching : PlayerBehaviour
     int prevSelectedWeapon;
     public int numOfSwitch;
 
-
     void Start()
     {
-
         numOfSwitch = 0;
         findWeapon();
         currentWeapon = 0;
@@ -28,7 +26,6 @@ public class WeaponSwitching : PlayerBehaviour
         pistol.ammoLeft = pistol.maxAmmo;
         sniper.ammoLeft = sniper.maxAmmo;
     }
-
 
     void Update()
     {
@@ -92,6 +89,23 @@ public class WeaponSwitching : PlayerBehaviour
             gunScript.gunData = sniper;
             gunScript.gunData.isReloading = false;
             gunScript.timeSinceLastSwitch = 0f;
+        }
+    }
+
+    public void AddAmmo(int ammount, AmmoType ammoType){
+        switch(ammoType){
+            case AmmoType.pistol:
+                shotgun.ammoLeft+=ammount;
+                break;
+            case AmmoType.ar:
+                rifle.ammoLeft+=ammount;
+                break;
+            case AmmoType.sniper:
+                sniper.ammoLeft+=ammount;
+                break;
+            case AmmoType.shotgun:
+                shotgun.ammoLeft+=ammount;
+                break;
         }
     }
 
