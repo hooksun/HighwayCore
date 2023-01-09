@@ -7,12 +7,16 @@ public class WeaponAnim : PlayerBehaviour
     public Animator anim;
     public GunScript gun;
     RuntimeAnimatorController runTimeAnim;
+    public PlayerMelee melee;
 
+    bool punch = false;
     
 
     void Update()
     {
+        punch = melee.isPunching;
         WhatIsGun();
+        anim.SetBool("punching", punch);
         if(gun.isShooting && gun.gunData.currentAmmoInMag > 0)
             Shoot();
         else if(gun.isReloading){
@@ -65,5 +69,8 @@ public class WeaponAnim : PlayerBehaviour
         anim.SetBool("reload",false);
         anim.SetFloat("Blend", 0f);
         anim.SetBool("idle", true);
+    }
+    public void Punch(){
+        anim.SetBool("punching", true);
     }
 }

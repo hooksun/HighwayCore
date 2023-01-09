@@ -1857,6 +1857,7 @@ MonoBehaviour:
   player: {fileID: 0}
   anim: {fileID: 118632668}
   gun: {fileID: 530518715582177611}
+  melee: {fileID: 6697333563691823059}
 --- !u!114 &118632670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6538,6 +6539,7 @@ MonoBehaviour:
   EnemyMask:
     serializedVersion: 2
     m_Bits: 128
+  isPunching: 0
 --- !u!4 &6732726221933324229
 Transform:
   m_ObjectHideFlags: 0
