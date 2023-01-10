@@ -8,6 +8,9 @@ public class EnemyManager : MonoBehaviour
     public HighwayGenerator Highway;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
+    public float barrierDistance;
+    public Barrier forwardBarrier;
+    public HighwayBarrier backBarrier;
 
     public VariablePool<EnemyType> Enemies;
     public List<IEnemySpawner> Spawners = new List<IEnemySpawner>();
@@ -16,9 +19,9 @@ public class EnemyManager : MonoBehaviour
     EnemySpawnTable currentTable;
     EnemyBattle currentBattle;
     EnemyWave currentWave;
-    float TotalCost, ActiveCost, AggroCost, StartCost;
+    float TotalCost, ActiveCost, AggroCost, StartCost, battlePos;
     int iTable, iBattle, iWave;
-    bool battling;
+    bool battling, battleReady;
 
     void Start()
     {
@@ -34,6 +37,12 @@ public class EnemyManager : MonoBehaviour
 
         SpawnUpdate();
         AggroUpdate();
+
+        if(battleReady && player.position.z > battlePos)
+        {
+            battleReady = false;
+            StartBattle();
+        }
     }
     
     float spawnTime;
@@ -134,8 +143,19 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
+    public void NewBattle(float position)
+    {
+        battleReady = true;
+        battlePos = position;
+    }
+
     public void StartBattle()
     {
+        player.freezeScore = true;
+        player.score = battlePos;
+        forwardBarrier.transform.position = Vector3.forward * (battlePos + barrierDistance);
+        forwardBarrier.Fade(true);
+        backBarrier.visible = true;
         battling = true;
         currentBattle = Battles[iBattle];
         currentTable = currentBattle.SpawnTable;
@@ -146,7 +166,10 @@ public class EnemyManager : MonoBehaviour
     void StartWave()
     {
         if(iWave >= currentBattle.Waves.Length)
+        {
             EndBattle();
+            return;
+        }
 
         currentWave = currentBattle.Waves[iWave];
         StartCost = currentWave.StartCost;
@@ -156,10 +179,17 @@ public class EnemyManager : MonoBehaviour
 
     void EndBattle()
     {
-        iBattle++;
-        iTable++;
-        currentTable = EnemyTables[iTable];
+        if(iBattle+1 < Battles.Length)
+            iBattle++;
+        if(iTable+1 < EnemyTables.Length)
+        {
+            iTable++;
+            currentTable = EnemyTables[iTable];
+        }
         battling = false;
+        forwardBarrier.Fade(false);
+        backBarrier.visible = false;
+        player.freezeScore = false;
     }
 
     public void RequestDie(Enemy enemy)

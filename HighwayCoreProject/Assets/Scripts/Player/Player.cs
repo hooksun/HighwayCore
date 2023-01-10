@@ -24,7 +24,8 @@ public class Player : MonoBehaviour, IHurtBox
     public float TrailTime, LookAtEnemyAngle;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
-    [HideInInspector] public bool abilityCooldown, usingAbility, usingWeapon;
+    [HideInInspector] public float score;
+    [HideInInspector] public bool abilityCooldown, usingAbility, usingWeapon, freezeScore;
     public Vector3 position{get => transform.position + positionOffset;}
 
     public bool LookingAt(Vector3 pos) => Vector3.Dot(Head.forward, (pos - Head.position).normalized) >= Mathf.Cos(Mathf.Deg2Rad*LookAtEnemyAngle);
@@ -54,6 +55,8 @@ public class Player : MonoBehaviour, IHurtBox
             return;
         
         StartCoroutine(Trail(position));
+        if(!freezeScore)
+            score = Mathf.Max(transform.position.z, score);
     }
 
     IEnumerator Trail(Vector3 pos)

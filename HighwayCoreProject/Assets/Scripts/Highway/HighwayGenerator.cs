@@ -6,6 +6,7 @@ public class HighwayGenerator : MonoBehaviour
 {
     public EnemyManager enemyManager;
     public HighwaySection[] Sections;
+    public HighwaySection[] SectionsLoop;
     public VariablePool<int> Vehicles;
     public Lane[] Lanes;
     public float StartPosition, minGap, maxGap, accelRange, minGapTime, maxGapTime, gapDistance;
@@ -13,7 +14,7 @@ public class HighwayGenerator : MonoBehaviour
     public Transform player; // temp
     public float PlayerGenerateDist;
 
-    HighwaySection currentSection{get => Sections[sectionIndex];}
+    HighwaySection currentSection{get => (hasLooped?SectionsLoop[sectionIndex]:Sections[sectionIndex]);}
     int sectionIndex;
     float sectionPosition, nextSectionPosition;
 
@@ -47,6 +48,7 @@ public class HighwayGenerator : MonoBehaviour
             }
         }
         i = Lanes.Length/2;
+        AddNewVehicle(Lanes[i]);
         Vehicle playerVehicle = Lanes[i].Vehicles[Lanes[i].Vehicles.Count - 1];
         player.position = playerVehicle.ClosestPlatform(player.position).CenterPoint().worldPoint + Vector3.up;
     }
@@ -105,14 +107,25 @@ public class HighwayGenerator : MonoBehaviour
         return AddVehicle(lane, pos);
     }
 
+    bool hasLooped;
     float AddVehicle(Lane lane, float position)
     {
         if(position >= nextSectionPosition)
         {
-            sectionIndex = Mathf.Min(sectionIndex + 1, Sections.Length - 1);
+            sectionIndex++;
+            if(hasLooped)
+                sectionIndex %= SectionsLoop.Length;
+            else if(sectionIndex >= Sections.Length)
+            {
+                hasLooped = true;
+                sectionIndex = 0;
+            }
+            
             currentSection.HighwayTable.Reset();
             sectionPosition = nextSectionPosition;
             nextSectionPosition += currentSection.distance;
+            if(currentSection.battle)
+                enemyManager.NewBattle(sectionPosition + currentSection.battleCenter);
         }
         
         Vehicle newVehicle = null;
@@ -165,6 +178,8 @@ public class HighwayGenerator : MonoBehaviour
 public struct HighwaySection
 {
     public float distance;
+    public bool battle;
+    public float battleCenter;
     public HighwaySpawnTable HighwayTable;
 
 }
