@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 5738362404995044442}
   - component: {fileID: -3942760434517409393}
   - component: {fileID: 3080306361348637279}
+  - component: {fileID: 4123808876501616511}
   m_Layer: 7
   m_Name: ShotgunEnemy
   m_TagString: Untagged
@@ -477,6 +478,7 @@ MonoBehaviour:
   shootAnimation: metarig|shoot_shotgun
   reloadAnimation: metarig|reload1
   shootSound: {fileID: -3942760434517409393}
+  reloadSound: {fileID: 4123808876501616511}
   shoot: 0
   cantShoot: 0
   reloading: 0
@@ -555,6 +557,30 @@ MonoBehaviour:
     - weight: 1
       variable: {fileID: 8300000, guid: 2b495e839533d0742a40ce161eef6064, type: 3}
   clipTime: 0.4
+--- !u!114 &4123808876501616511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259255105076096127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37764e1db4705ec4da65622500a4b1e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 0}
+  audioType: 2
+  volume: 1
+  pitch: 0.9
+  loop: 0
+  autoPlay: 0
+  delay: 0
+  sequence:
+  - clip: {fileID: 8300000, guid: 92ee7e0dd3faf8542adb98d21893421e, type: 3}
+    time: 1.5
+  - clip: {fileID: 8300000, guid: e47cb3b087611f74cbde2c0ecd975404, type: 3}
+    time: 0
 --- !u!1 &278892131357542642
 GameObject:
   m_ObjectHideFlags: 0

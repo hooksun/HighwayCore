@@ -9,7 +9,7 @@ public class EnemyWeapon : EnemyBehaviour
     public int burstAmount, magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
-    public Audio shootSound;
+    public Audio shootSound, reloadSound;
 
     [HideInInspector] public bool shoot, cantShoot, reloading;
     float fireTime, burstTime, reloadTime;
@@ -33,11 +33,12 @@ public class EnemyWeapon : EnemyBehaviour
             return;
         reloadTime = reloadSpeed;
         reloading = false;
+        reloadSound.Stop();
     }
 
     void Update()
     {
-        if(Time.deltaTime == 0f)
+        if(Time.deltaTime == 0f || enemy.stunned)
             return;
 
         Shoot();
@@ -61,14 +62,15 @@ public class EnemyWeapon : EnemyBehaviour
             burst = 0;
         }
 
-        if(!shoot || fireTime > 0 || cantShoot)
-            return;
-        
         if(mag <= 0)
         {
             InitReload();
             return;
         }
+
+        if(!shoot || fireTime > 0 || cantShoot)
+            return;
+        
 
         if(burst >= burstAmount)
             return;
@@ -107,6 +109,7 @@ public class EnemyWeapon : EnemyBehaviour
             reloading = true;
             reloadTime = reloadSpeed;
             enemy.Animation.Play(reloadAnimation, 1);
+            reloadSound.Play();
         }
 
         if(!cantShoot || reloadTime > 0)

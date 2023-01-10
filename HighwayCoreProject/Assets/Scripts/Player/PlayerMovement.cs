@@ -365,7 +365,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             Vector3 origin = transform.position + Quaternion.LookRotation(vaultDir) * VaultStart;
 
             RaycastHit hit;
-            if((Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) && hit.normal.y > 0.7f) ||
+            if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) ||
             Physics.Raycast(transform.position + Vector3.up * VaultStart.y, vaultDir, out hit, VaultStart.z, HardGroundMask))
             {
                 ChangeGround(hit.transform);

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AudioSequence : Audio
 {
+    public float delay;
     public AudioTime[] sequence;
 
     float time;
@@ -38,7 +39,8 @@ public class AudioSequence : Audio
     public override void Play()
     {
         playing = true;
-        //index = 0;
+        index = 0;
+        time = delay;
         PlaySequence();
     }
     void PlaySequence()
@@ -52,10 +54,8 @@ public class AudioSequence : Audio
         if(index >= sequence.Length)
         {
             index = 0;
-            if(!loop)
-            {
-                playing = false;
-            }
+            playing = loop;
+            time += delay;
         }
     }
 
@@ -65,6 +65,7 @@ public class AudioSequence : Audio
     }
 }
 
+[System.Serializable]
 public struct AudioTime
 {
     public AudioClip clip;

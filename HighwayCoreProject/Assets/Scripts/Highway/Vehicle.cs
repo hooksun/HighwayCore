@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Vehicle : MonoBehaviour, IMovingGround
 {
-    public float position;
-    public float length, speed, accel, targetGap, gapTime;
+    public float length;
+    [HideInInspector] public float position, speed, accel, targetGap, gapTime;
     public Vector3 transformOffset;
     public Platform[] Platforms;
     public virtual bool isSpawner{get => false;}

@@ -24,4 +24,6 @@ MonoBehaviour:
       variable: 3
     - weight: 1
       variable: 5
+    - weight: 1
+      variable: 6
   SpawnVehicles: []
