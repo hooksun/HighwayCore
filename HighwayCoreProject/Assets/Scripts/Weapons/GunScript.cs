@@ -169,9 +169,14 @@ public class GunScript : PlayerBehaviour
         if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){ // && ReadyToShoot()
             gunData.isReloading = true;
             isShooting = false;
+
             Invoke("ReloadingFinished", gunData.reloadTime);
             
         }
+    }
+    
+    void PlaySound(AudioClip clip, float time){
+        
     }
     void ReloadingFinished(){ //This is where the ammo refill
         if(prevSelectedWeapon == weaponSwitching.currentWeapon && weaponSwitching.numOfSwitch == prevNumOfswitch){
