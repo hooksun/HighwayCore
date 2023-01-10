@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Left
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Arms FPS
+    m_Weight: 0
+  - m_Path: Human FPS
+    m_Weight: 0
+  - m_Path: Human FPS/RootBone
+    m_Weight: 0
+  - m_Path: Human FPS/RootBone/IK Arm Pole.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/IK Arm Pole.L/IK Arm Pole.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/IK Arm Pole.R
+    m_Weight: 0
+  - m_Path: Human FPS/RootBone/IK Arm Pole.R/IK Arm Pole.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/IK Arm Targer.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/IK Arm Targer.L/IK Arm Targer.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/IK Arm Targer.R
+    m_Weight: 0
+  - m_Path: Human FPS/RootBone/IK Arm Targer.R/IK Arm Targer.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Index001.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Index001.L/Index002.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Index001.L/Index002.L/Index003.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Index001.L/Index002.L/Index003.L/Index003.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Middle001.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Middle001.L/Middle002.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Middle001.L/Middle002.L/Middle003.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Middle001.L/Middle002.L/Middle003.L/Middle003.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Pinky001.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Pinky001.L/Pinky002.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Pinky001.L/Pinky002.L/Pinky003.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Pinky001.L/Pinky002.L/Pinky003.L/Pinky003.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Ring001.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Ring001.L/Ring002.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Ring001.L/Ring002.L/Ring003.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Ring001.L/Ring002.L/Ring003.L/Ring003.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Thumb001.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Thumb001.L/Thumb002.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Thumb001.L/Thumb002.L/Thumb003.L
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.L/LowerArm.L/Palm.L/Thumb001.L/Thumb002.L/Thumb003.L/Thumb003.L_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R
+    m_Weight: 0
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Index001.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Index001.R/Index002.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Index001.R/Index002.R/Index003.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Index001.R/Index002.R/Index003.R/Index003.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Middle001.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Middle001.R/Middle002.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Middle001.R/Middle002.R/Middle003.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Middle001.R/Middle002.R/Middle003.R/Middle003.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Pinky001.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Pinky001.R/Pinky002.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Pinky001.R/Pinky002.R/Pinky003.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Pinky001.R/Pinky002.R/Pinky003.R/Pinky003.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Ring001.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Ring001.R/Ring002.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Ring001.R/Ring002.R/Ring003.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Ring001.R/Ring002.R/Ring003.R/Ring003.R_end
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Thumb001.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Thumb001.R/Thumb002.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Thumb001.R/Thumb002.R/Thumb003.R
+    m_Weight: 1
+  - m_Path: Human FPS/RootBone/UpperArm.R/LowerArm.R/Palm.R/Thumb001.R/Thumb002.R/Thumb003.R/Thumb003.R_end
+    m_Weight: 1

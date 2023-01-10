@@ -209,7 +209,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5d50d56e3e739f848a67d977eb6143b3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.29
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5d50d56e3e739f848a67d977eb6143b3,
         type: 3}
@@ -3601,7 +3601,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyManager: {fileID: 1472807258}
-  battleManager: {fileID: 0}
   Sections:
   - distance: 200
     battle: 0
