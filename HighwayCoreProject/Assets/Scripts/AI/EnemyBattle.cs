@@ -12,5 +12,5 @@ public class EnemyBattle : ScriptableObject
 [System.Serializable]
 public struct EnemyWave
 {
-    public float TotalCost, StartCost;
+    public float TotalCost, EndCost;
 }

@@ -16,19 +16,15 @@ MonoBehaviour:
   name: Sniper
   damage: 50
   maxDistance: 400
-  currentAmmoInMag: 5
+  currentAmmoInMag: 4
   magazineSize: 5
   maxAmmo: 25
-  ammoLeft: 25
-  fireRate: 120
+  ammoLeft: 24
+  fireRate: 60
   reloadTime: 2.5
   isReloading: 0
   bulletSpread: 0
   bulletSpeed: 200
-  switchSpeed: 1
-  magRelease: {fileID: 8300000, guid: 92ee7e0dd3faf8542adb98d21893421e, type: 3}
-  magInsert: {fileID: 8300000, guid: e47cb3b087611f74cbde2c0ecd975404, type: 3}
-  lever: {fileID: 8300000, guid: 92c84561fe07f0341a34100fed999812, type: 3}
-  magReleaseTime: 1
-  magInsertTime: 2
-  leverTime: 3
+  switchSpeed: 0.5
+  reloadDelay: 0
+  reloadSequence: []

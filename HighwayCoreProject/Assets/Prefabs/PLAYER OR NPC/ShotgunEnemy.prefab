@@ -512,7 +512,7 @@ MonoBehaviour:
   - Enemy Right
   - Enemy Backward
   - Enemy Left
-  animationsLength: 0.8333333
+  animationsLength: 0.625
   crossFadeDuration: 0.4
 --- !u!114 &-3942760434517409393
 MonoBehaviour:

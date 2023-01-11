@@ -18,13 +18,13 @@ MonoBehaviour:
       variable:
         enemyIndex: 3
         enemyCost: 5
-        minDistance: -20
+        minDistance: 0
         maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 0
         enemyCost: 8
-        minDistance: -20
+        minDistance: 0
         maxDistance: 50
   ActiveCost: 18
   AggroCost: 10

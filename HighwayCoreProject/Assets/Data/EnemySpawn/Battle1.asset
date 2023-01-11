@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac6999cc3f46eea44bfd463c519bf10d, type: 3}
-  m_Name: Objective1
+  m_Name: Battle1
   m_EditorClassIdentifier: 
   EnemyPool:
     Pool:
@@ -18,13 +18,19 @@ MonoBehaviour:
       variable:
         enemyIndex: 0
         enemyCost: 8
+        minDistance: -40
+        maxDistance: 40
+    - weight: 1
+      variable:
+        enemyIndex: 3
+        enemyCost: 5
         minDistance: -20
         maxDistance: 50
-  ActiveCost: 40
-  AggroCost: 30
+  ActiveCost: 25
+  AggroCost: 14
   SpawnCost: 15
-  FailCost: 3
-  StartInterval: 5
-  SpawnIntervalMin: 10
-  SpawnIntervalMax: 15
+  FailCost: 1
+  StartInterval: 0
+  SpawnIntervalMin: 4
+  SpawnIntervalMax: 6
   AggroInterval: 2

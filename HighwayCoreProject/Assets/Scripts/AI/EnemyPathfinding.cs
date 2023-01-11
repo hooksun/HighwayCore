@@ -201,7 +201,7 @@ public class EnemyPathfinding : EnemyBehaviour
         idleing = true;
         yield return new WaitForSeconds(idleTime);
         idleing = false;
-        backnForth = 0;
+        backnForth--;
         targetPoint.transform = null;
     }
 
@@ -298,7 +298,7 @@ public class EnemyPathfinding : EnemyBehaviour
         }
         
         lastPlatform = currentPlatform;
-        currentPlatform = (isJumping?targetPlatform:groundInfo.transform.GetComponent<Vehicle>().ClosestPlatform(transform.position));
+        currentPlatform = groundInfo.transform.GetComponent<Vehicle>().ClosestPlatform(transform.position);
         transformPosition.transform = groundInfo.transform;
         transformPosition.point = transform.position - transformOffset - transformPosition.transform.position;
         isJumping = false;

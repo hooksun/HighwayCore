@@ -19,7 +19,7 @@ public class EnemyManager : MonoBehaviour
     EnemySpawnTable currentTable;
     EnemyBattle currentBattle;
     EnemyWave currentWave;
-    float TotalCost, ActiveCost, AggroCost, StartCost, battlePos;
+    float TotalCost, ActiveCost, AggroCost, battlePos;
     int iTable, iBattle, iWave;
     bool battling, battleReady;
 
@@ -54,22 +54,11 @@ public class EnemyManager : MonoBehaviour
             return;
         }
 
-        if(battling && StartCost >= 0f && ActiveCost > StartCost)
-        {
-            spawnTime = currentTable.StartInterval;
+        if(battling && TotalCost >= currentWave.TotalCost)
             return;
-        }
         
         spawnTime = Random.Range(currentTable.SpawnIntervalMin, currentTable.SpawnIntervalMax);
-        //StartCost = currentTable.MinCost;
         SpawnEnemies(currentTable.SpawnCost);
-        if(!battling)
-            return;
-
-        if(StartCost >= 0f)
-            aggroTime = 0f;
-        
-        StartCost = -1f;
     }
 
     void SpawnEnemies(float cost)
@@ -90,8 +79,10 @@ public class EnemyManager : MonoBehaviour
             bool success = false;
             for(int j = 0; j < seq.Length; j++)
             {
-                IEnemySpawner spawner = Spawners[seq[j]];
-                if(!spawner.canSpawn)
+                SpawnerVehicle spawner = (SpawnerVehicle)Spawners[seq[j]];
+                if(!spawner.canSpawn || spawner.position < backBarrier.transform.position.z)
+                    continue;
+                if(forwardBarrier.gameObject.activeInHierarchy && spawner.position + spawner.length > forwardBarrier.transform.position.z)
                     continue;
                 float dist = spawner.DistanceFrom(player.position);
                 if(dist < enemy.minDistance || dist > enemy.maxDistance)
@@ -105,6 +96,7 @@ public class EnemyManager : MonoBehaviour
                 nme.Cost = enemy.enemyCost;
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
+                TotalCost += nme.Cost;
                 spawned += nme.Cost;
                 nme.Activate();
                 success = true;
@@ -169,7 +161,6 @@ public class EnemyManager : MonoBehaviour
         }
 
         currentWave = currentBattle.Waves[iWave];
-        StartCost = currentWave.StartCost;
         TotalCost = 0f;
         iWave++;
     }
@@ -179,10 +170,9 @@ public class EnemyManager : MonoBehaviour
         if(iBattle+1 < Battles.Length)
             iBattle++;
         if(iTable+1 < EnemyTables.Length)
-        {
             iTable++;
-            currentTable = EnemyTables[iTable];
-        }
+        currentTable = EnemyTables[iTable];
+        spawnTime = currentTable.StartInterval;
         battling = false;
         forwardBarrier.Fade(false);
         backBarrier.visible = false;
@@ -194,8 +184,7 @@ public class EnemyManager : MonoBehaviour
         UpdateAggro(enemy, false);
         ActiveEnemies.Remove(enemy);
         ActiveCost -= enemy.Cost;
-        TotalCost += enemy.Cost;
-        if(battling && TotalCost >= currentWave.TotalCost)
+        if(battling && TotalCost >= currentWave.TotalCost && ActiveCost <= currentWave.EndCost)
             StartWave();
     }
 
