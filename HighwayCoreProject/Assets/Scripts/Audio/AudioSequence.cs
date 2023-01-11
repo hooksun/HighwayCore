@@ -19,6 +19,15 @@ public class AudioSequence : Audio
         base.Activate();
     }
 
+    public void SetSequence(AudioTime[] newSequence, float newDelay = 0f)
+    {
+        if(newSequence != null)
+        {
+            sequence = newSequence;
+            delay = newDelay;
+        }
+    }
+
     void Update()
     {
         if(Time.deltaTime == 0f)

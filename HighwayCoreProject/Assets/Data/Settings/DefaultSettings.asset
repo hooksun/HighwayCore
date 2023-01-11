@@ -15,4 +15,5 @@ MonoBehaviour:
   settings:
     sensitivity: 25
     fov: 70
+    volume: 1
   serialize: 0

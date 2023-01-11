@@ -21,7 +21,7 @@ public class Player : MonoBehaviour, IHurtBox
 
     public static Player ActivePlayer;
     
-    public float TrailTime, LookAtEnemyAngle;
+    public float TrailTime, LookAtEnemyAngle, DamageResistance;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
     [HideInInspector] public float score;
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour, IHurtBox
     public bool crit{get => false;}
     public void TakeDamage(float amount)
     {
-        Status.TakeDamage(amount);
+        Status.TakeDamage(amount * (1 - DamageResistance));
     }
 
     public void Die()

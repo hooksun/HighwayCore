@@ -12,6 +12,11 @@ public class SpawnerVehicle : Vehicle, IEnemySpawner
 
     public PlatformAddress address;
 
+    void OnEnable()
+    {
+        onCooldown = false;
+    }
+
     public void SpawnEnemy(Enemy enemy)
     {
         Platform plat = Platforms[spawnPlatform];

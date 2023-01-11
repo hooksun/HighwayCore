@@ -7,6 +7,7 @@ public class AudioPlayer : MonoBehaviour
     static List<AudioPlayer> ActivePlayers = new List<AudioPlayer>();
 
     public AudioSource Source;
+    public float volume;
 
     Transform requester;
     bool paused;
@@ -23,6 +24,7 @@ public class AudioPlayer : MonoBehaviour
 
     void Update()
     {
+        Source.volume = volume * Player.ActivePlayer.Settings.settings.volume;
         if(requester == null || !requester.gameObject.activeInHierarchy)
         {
             Stop();
@@ -50,7 +52,7 @@ public class AudioPlayer : MonoBehaviour
     {
         if(pitch > 0f)
             Source.pitch = pitch;
-        Source.PlayOneShot(clip, volume);
+        Source.PlayOneShot(clip, volume * Player.ActivePlayer.Settings.settings.volume);
     }
 
     public void Stop()

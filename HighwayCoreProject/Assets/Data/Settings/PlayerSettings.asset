@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   settings:
-    sensitivity: 25
+    sensitivity: 20
     fov: 70
+    volume: 0.68
   serialize: 1

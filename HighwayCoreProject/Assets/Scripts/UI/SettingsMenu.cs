@@ -7,15 +7,17 @@ using TMPro;
 public class SettingsMenu : MonoBehaviour
 {
     public PlayerSettings Default, Settings;
-    public SliderSetting sensitivity, fov;
+    public SliderSetting sensitivity, fov, volume;
 
     void OnEnable()
     {
         Settings.Load();
         sensitivity.ValueChange(Settings.settings.sensitivity);
         fov.ValueChange(Settings.settings.fov);
+        volume.ValueChange(Settings.settings.volume);
         sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
         fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
+        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
     }
     
     public void SensitivitySliderChange()
@@ -56,6 +58,25 @@ public class SettingsMenu : MonoBehaviour
         fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
     }
 
+    public void VolumeSliderChange()
+    {
+        volume.SliderChange();
+        Settings.settings.volume = volume.value;
+        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+    }
+    public void VolumeFieldChange()
+    {
+        volume.FieldChange();
+        Settings.settings.volume = volume.value;
+        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+    }
+    public void VolumeReset()
+    {
+        volume.ValueChange(Default.settings.volume);
+        Settings.settings.volume = volume.value;
+        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+    }
+
     void OnDisable()
     {
         Settings.Save();
@@ -71,21 +92,24 @@ public class SettingsMenu : MonoBehaviour
 
         public void ValueChange(float amount)
         {
+            amount -= amount % 0.01f;
             slider.value = amount;
-            field.text = value.ToString("0.00");
+            field.text = value.ToString();
         }
         public void SliderChange()
         {
-            field.text = value.ToString("0.00");
+            slider.value -= value % 0.01f;
+            field.text = value.ToString();
         }
         public void FieldChange()
         {
             float val;
             if(float.TryParse(field.text, out val))
             {
+                val -= val % 0.01f;
                 slider.value = Mathf.Clamp(val, slider.minValue, slider.maxValue);
             }
-            field.text = value.ToString("0.00");
+            field.text = value.ToString();
         }
     }
 }

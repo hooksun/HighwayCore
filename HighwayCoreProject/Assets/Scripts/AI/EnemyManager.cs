@@ -70,8 +70,6 @@ public class EnemyManager : MonoBehaviour
             aggroTime = 0f;
         
         StartCost = -1f;
-        if(TotalCost >= currentWave.TotalCost)
-            StartWave();
     }
 
     void SpawnEnemies(float cost)
@@ -107,7 +105,6 @@ public class EnemyManager : MonoBehaviour
                 nme.Cost = enemy.enemyCost;
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
-                TotalCost += nme.Cost;
                 spawned += nme.Cost;
                 nme.Activate();
                 success = true;
@@ -197,6 +194,9 @@ public class EnemyManager : MonoBehaviour
         UpdateAggro(enemy, false);
         ActiveEnemies.Remove(enemy);
         ActiveCost -= enemy.Cost;
+        TotalCost += enemy.Cost;
+        if(battling && TotalCost >= currentWave.TotalCost)
+            StartWave();
     }
 
     public bool UpdateAggro(Enemy enemy, bool newAggro, bool prioritize = false)

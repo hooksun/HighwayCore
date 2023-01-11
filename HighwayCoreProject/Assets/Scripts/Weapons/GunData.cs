@@ -21,12 +21,7 @@ public class GunData : ScriptableObject
     public float bulletSpread;
     public float bulletSpeed;
     public float switchSpeed;
-    public AudioClip magRelease;
-    public AudioClip magInsert;
-    public AudioClip lever;
-
-    public float magReleaseTime;
-    public float magInsertTime;
-    public float leverTime;
+    public float reloadDelay;
+    public AudioTime[] reloadSequence;
 
 }

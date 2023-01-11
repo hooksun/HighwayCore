@@ -6837,6 +6837,7 @@ MonoBehaviour:
   input: {fileID: 530518716359227963}
   TrailTime: 0.8
   LookAtEnemyAngle: 100
+  DamageResistance: 1
   positionOffset: {x: 0, y: 0.5, z: 0}
   trailPosition: {x: 0, y: 0, z: 0}
   score: 0

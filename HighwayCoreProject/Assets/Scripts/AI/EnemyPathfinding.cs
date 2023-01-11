@@ -32,6 +32,9 @@ public class EnemyPathfinding : EnemyBehaviour
     {
         transform.position = transformPosition.worldPoint + transformOffset;
         transform.rotation = Quaternion.LookRotation(Vector3.forward);
+        tilt = Vector3.up;
+        targetPoint.transform = null;
+        jumpPoint.transform = null;
         isGrounded = true;
         isJumping = false;
         groundCooldown = false;
@@ -65,7 +68,7 @@ public class EnemyPathfinding : EnemyBehaviour
         }
         if(!isGrounded)
         {
-            if(transform.position.y < -100f || Player.ActivePlayer.position.z - transform.position.z > 160f)
+            if(transform.position.y < -10f || Player.ActivePlayer.position.z - transform.position.z > 160f)
             {
                 enemy.Die();
                 return;
@@ -198,6 +201,7 @@ public class EnemyPathfinding : EnemyBehaviour
         idleing = true;
         yield return new WaitForSeconds(idleTime);
         idleing = false;
+        backnForth = 0;
         targetPoint.transform = null;
     }
 
