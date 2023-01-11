@@ -26,3 +26,9 @@ MonoBehaviour:
   bulletSpread: 0.01
   bulletSpeed: 150
   switchSpeed: 1
+  magRelease: {fileID: 8300000, guid: 92ee7e0dd3faf8542adb98d21893421e, type: 3}
+  magInsert: {fileID: 8300000, guid: e47cb3b087611f74cbde2c0ecd975404, type: 3}
+  lever: {fileID: 8300000, guid: 92c84561fe07f0341a34100fed999812, type: 3}
+  magReleaseTime: 1
+  magInsertTime: 2
+  leverTime: 3
