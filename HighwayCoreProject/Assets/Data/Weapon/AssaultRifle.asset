@@ -16,15 +16,19 @@ MonoBehaviour:
   name: AR
   damage: 15
   maxDistance: 400
-  currentAmmoInMag: 24
+  currentAmmoInMag: 30
   magazineSize: 30
   maxAmmo: 300
-  ammoLeft: 300
+  ammoLeft: 299
   fireRate: 600
   reloadTime: 2
   isReloading: 0
   bulletSpread: 0.01
   bulletSpeed: 150
   switchSpeed: 0.5
-  reloadDelay: 0
-  reloadSequence: []
+  reloadDelay: 0.1
+  reloadSequence:
+  - clip: {fileID: 8300000, guid: 92ee7e0dd3faf8542adb98d21893421e, type: 3}
+    time: 0.9
+  - clip: {fileID: 8300000, guid: e47cb3b087611f74cbde2c0ecd975404, type: 3}
+    time: 1.4
