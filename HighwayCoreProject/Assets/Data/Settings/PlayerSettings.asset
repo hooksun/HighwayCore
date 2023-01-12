@@ -16,4 +16,5 @@ MonoBehaviour:
     sensitivity: 20
     fov: 70
     volume: 0.68
+    highscore: 500
   serialize: 1

@@ -83,9 +83,10 @@ public class Player : MonoBehaviour, IHurtBox
         WeaponSwitch.Die();
         Melee.Die();
         //weaponAnim.Die();
-
+        score -= score % 0.01f;
+        UIManager.SetScore(score, Settings.settings.highscore, false);
         Settings.settings.highscore = Mathf.Max(Settings.settings.highscore, score);
-        //Settings.Save();
+        Settings.Save();
     }
 
     public void EnableInput(bool yes)

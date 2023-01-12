@@ -10,7 +10,7 @@ public class PlayerStatus : PlayerBehaviour
     public TextMeshProUGUI healthPointTxt;
     public GameObject deathMenu;
     public bool isFallen = false;
-    float animationAnimLength = 4f;
+    public float animationAnimLength = 1f;
 
     
     void Start()
@@ -43,11 +43,11 @@ public class PlayerStatus : PlayerBehaviour
     public override void Die()
     {
         //ded
-        Invoke("ShowDeathMenu", 2f);
+        Invoke("ShowDeathMenu", animationAnimLength);
     }
 
     public void ShowDeathMenu(){
-        deathMenu.SetActive(true);
+        UIManager.SetDeathMenu(true);
         showCursor();
         Time.timeScale = 0f;
     }

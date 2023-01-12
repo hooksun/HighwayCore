@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [SelectionBase]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IHurtBox
 {
     public Transform Head;
     public Vector3 transformOffset;
@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     [HideInInspector] public Player targetPlayer;
     [HideInInspector] public EnemyManager manager;
     [HideInInspector] public bool stunned, aggro;
+
+    public bool crit{get => false;}
 
     float stunTime;
 
@@ -50,10 +52,11 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetPlatform(PlatformAddress plat, TransformPoint point)
+    public void SetPlatform(PlatformAddress plat, TransformPoint point, bool grounded)
     {
         Pathfinding.currentPlatform = plat;
         Pathfinding.transformPosition = point;
+        Pathfinding.isGrounded = grounded;
     }
 
     public void TakeDamage(float amount)

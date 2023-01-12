@@ -5,12 +5,12 @@ using UnityEngine;
 public class SpawnerVehicle : Vehicle, IEnemySpawner
 {
     public int spawnPlatform;
+    public Vector3 spawnPoint;
+    public bool groundedSpawn;
     public float spawnCooldown;
     bool onCooldown;
     public override bool isSpawner{get => true;}
     public bool canSpawn{get => !onCooldown;}
-
-    public PlatformAddress address;
 
     void OnEnable()
     {
@@ -21,8 +21,9 @@ public class SpawnerVehicle : Vehicle, IEnemySpawner
     {
         Platform plat = Platforms[spawnPlatform];
         Vector2 center = (plat.BoundsStart + plat.BoundsEnd) * 0.5f;
-        address.platformIndex = spawnPlatform;
-        enemy.SetPlatform(address, new TransformPoint(transform, new Vector3(center.x, plat.height, center.y) - transformOffset));
+        PlatformAddress address = new PlatformAddress(transform.parent.GetComponent<Lane>(), this, spawnPlatform);
+        enemy.SetPlatform(address, new TransformPoint(transform, spawnPoint - transformOffset), groundedSpawn);
+        enemy.Activate();
         
         StartCoroutine(SpawnCooldown());
     }

@@ -92,13 +92,12 @@ public class EnemyManager : MonoBehaviour
                 nme.manager = this;
                 nme.targetPlayer = player;
 
-                spawner.SpawnEnemy(nme);
                 nme.Cost = enemy.enemyCost;
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
                 TotalCost += nme.Cost;
                 spawned += nme.Cost;
-                nme.Activate();
+                spawner.SpawnEnemy(nme);
                 success = true;
                 break;
             }
@@ -247,8 +246,8 @@ public class EnemyManager : MonoBehaviour
             Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex+1];
             answer.Add(new PlatformAddress(platform.lane, nextVehicle, 0));
         }
-        float boundsStart = platform.vehicle.position + platform.platform.BoundsStart.y;
-        float boundsEnd = platform.vehicle.position + platform.platform.BoundsEnd.y;
+        float boundsStart = platform.vehicle.position + platform.platform.BoundsStart.y - boundsOffset;
+        float boundsEnd = platform.vehicle.position + platform.platform.BoundsEnd.y + boundsOffset;
         int laneIndex = platform.laneIndex - 1;
         for(int h = 0; h < 2; h++)
         {
@@ -258,15 +257,15 @@ public class EnemyManager : MonoBehaviour
                 for(int i = 0; i < nextLane.Vehicles.Count; i++)
                 {
                     Vehicle vehicle = nextLane.Vehicles[i];
-                    if(vehicle.position > boundsEnd + boundsOffset)
+                    if(vehicle.position > boundsEnd)
                         break;
-                    if(vehicle.position + vehicle.length < boundsStart - boundsOffset)
+                    if(vehicle.position + vehicle.length < boundsStart)
                         continue;
                     
                     for(int j = 0; j < vehicle.Platforms.Length; j++)
                     {
                         Platform plat = vehicle.Platforms[j];
-                        if(vehicle.position + plat.BoundsStart.y > boundsEnd + boundsOffset || vehicle.position + plat.BoundsEnd.y < boundsStart - boundsOffset)
+                        if(vehicle.position + plat.BoundsStart.y > boundsEnd || vehicle.position + plat.BoundsEnd.y < boundsStart)
                             continue;
                         
                         answer.Add(new PlatformAddress(nextLane, vehicle, j));

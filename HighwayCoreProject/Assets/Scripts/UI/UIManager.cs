@@ -9,7 +9,10 @@ public class UIManager : MonoBehaviour
     static UIManager instance;
 
     public RectTransform Crosshair;
-    public TextMeshProUGUI AmmoText, ReserveText, HealthText, ObjectiveText;
+    public TextMeshProUGUI AmmoText, ReserveText, HealthText, ObjectiveText, ScoreText, HighscoreText;
+    public GameObject DeathMenu;
+    public CanvasGroup ScopeUI;
+    public float ScopeAppear;
     public UISlider HealthBar, JetpackFuel;
     public UIFade JetpackFuelFade, ObjectiveFade, HitMarker;
     
@@ -72,6 +75,11 @@ public class UIManager : MonoBehaviour
         
     }
 
+    public static void SetScope(float amount)
+    {
+        instance.ScopeUI.alpha = Mathf.InverseLerp(instance.ScopeAppear, 1f, amount);
+    }
+
     public static void SetJetpackFuel(float amount)
     {
         instance.JetpackFuel.SetValue(amount);
@@ -82,6 +90,14 @@ public class UIManager : MonoBehaviour
     {
         
     }
+
+    public static void SetScore(float score, float highscore, bool setDeath = true)
+    {
+        instance.ScoreText.text = "Score: " + score.ToString();
+        instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString());
+        SetDeathMenu(setDeath);
+    }
+    public static void SetDeathMenu(bool active) => instance.DeathMenu.SetActive(active);
 }
 
 public abstract class UIClass

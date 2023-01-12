@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 027e80fe24c38ef42be3e33bf67ad269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: 0
   length: 5
+  position: 0
   speed: 0
   accel: 0
   targetGap: 0
@@ -122,4 +122,6 @@ MonoBehaviour:
     BoundsStart: {x: -1, y: 0.5}
     BoundsEnd: {x: 1, y: 4.5}
   spawnPlatform: 0
+  spawnPoint: {x: 0, y: 3, z: 2.5}
+  groundedSpawn: 1
   spawnCooldown: 5
