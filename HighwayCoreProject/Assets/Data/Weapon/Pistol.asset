@@ -19,7 +19,7 @@ MonoBehaviour:
   currentAmmoInMag: 12
   magazineSize: 12
   maxAmmo: 64
-  ammoLeft: 63
+  ammoLeft: 64
   fireRate: 300
   reloadTime: 1.5
   isReloading: 0
@@ -27,4 +27,6 @@ MonoBehaviour:
   bulletSpeed: 150
   switchSpeed: 0.4
   reloadDelay: 0
-  reloadSequence: []
+  reloadSequence:
+  - clip: {fileID: 0}
+    time: 0

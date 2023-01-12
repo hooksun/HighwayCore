@@ -21,6 +21,7 @@ public class GunScript : PlayerBehaviour
     public bool fireInput, secondaryInput;
     public bool isReloading;
     public Audio ShootSound;
+    public AudioSequence ReloadSound;
     // public WeaponAnim anim;
     // public GameObject curWeapon;
 
@@ -170,6 +171,8 @@ public class GunScript : PlayerBehaviour
             gunData.isReloading = true;
             isShooting = false;
 
+            ReloadSound.SetSequence(gunData.reloadSequence, gunData.reloadDelay);
+            ReloadSound.Play();
             Invoke("ReloadingFinished", gunData.reloadTime);
             
         }

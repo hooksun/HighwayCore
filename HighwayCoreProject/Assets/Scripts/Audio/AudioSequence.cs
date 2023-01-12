@@ -10,7 +10,7 @@ public class AudioSequence : Audio
     float time;
     int index;
     bool playing;
-
+    
     protected override void Activate()
     {
         time = 0f;
