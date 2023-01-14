@@ -43,7 +43,7 @@ public class PlayerMelee : PlayerBehaviour
     {
         //player.animator.Play("Player Melee test", 0, 0);
         isPunching = true;
-        Invoke("AnimReset", .5f);
+        Invoke("AnimReset", .6f);
         StartCoroutine(Melee());
         StartCoroutine(Cooldown());
         StartCoroutine(GlobalCooldown());

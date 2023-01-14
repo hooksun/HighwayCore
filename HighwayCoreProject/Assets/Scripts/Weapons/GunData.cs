@@ -22,6 +22,7 @@ public class GunData : ScriptableObject
     public float bulletSpeed;
     public float switchSpeed;
     public float reloadDelay;
+    public RuntimeAnimatorController animator;
     public AudioTime[] reloadSequence;
 
 }
