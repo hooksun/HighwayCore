@@ -27,6 +27,7 @@ MonoBehaviour:
   bulletSpeed: 200
   switchSpeed: 0.5
   reloadDelay: 0
+  animator: {fileID: 9100000, guid: ecc21970a2f31ac45a5c0a9d1f1334a1, type: 2}
   reloadSequence:
   - clip: {fileID: 8300000, guid: 92ee7e0dd3faf8542adb98d21893421e, type: 3}
     time: 0.45

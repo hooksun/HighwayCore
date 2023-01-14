@@ -66,8 +66,9 @@ public class GunScript : PlayerBehaviour
         timeSinceLastSwitch += Time.deltaTime;
 
 
-        if(fireInput){
-            shooting();
+        if(fireInput ){
+            if(!player.Melee.isPunching)
+                shooting();
         }
         if(!fireInput){
             isShooting = false;
