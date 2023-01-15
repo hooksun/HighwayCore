@@ -10,27 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac6999cc3f46eea44bfd463c519bf10d, type: 3}
-  m_Name: Start
+  m_Name: Battle2
   m_EditorClassIdentifier: 
   EnemyPool:
     Pool:
-    - weight: 3
-      variable:
-        enemyIndex: 3
-        enemyCost: 5
-        minDistance: 0
-        maxDistance: 50
     - weight: 1
       variable:
         enemyIndex: 0
         enemyCost: 8
-        minDistance: 0
+        minDistance: -40
+        maxDistance: 40
+    - weight: 1
+      variable:
+        enemyIndex: 3
+        enemyCost: 5
+        minDistance: -20
         maxDistance: 50
-  ActiveCost: 18
-  AggroCost: 10
-  SpawnCost: 10
-  FailCost: 3
-  StartInterval: 5
-  SpawnIntervalMin: 8
-  SpawnIntervalMax: 12
+  ActiveCost: 25
+  AggroCost: 14
+  SpawnCost: 15
+  FailCost: 1
+  StartInterval: 0
+  SpawnIntervalMin: 4
+  SpawnIntervalMax: 6
   AggroInterval: 2

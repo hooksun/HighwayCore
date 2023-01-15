@@ -2590,7 +2590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 410818377}
   - component: {fileID: 410818376}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tunnel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2610,8 +2610,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 4757616609836705426, guid: 0ad84ace12f25e841a56d78bffe97f09, type: 3}
-  speed: 100
+  direction: {x: 0, y: 0, z: 1}
+  speed: 150
   length: 99
+  playerSpeed: 40
   size: 10
 --- !u!4 &410818377
 Transform:
@@ -3863,6 +3865,7 @@ GameObject:
   - component: {fileID: 1472807255}
   - component: {fileID: 1472807254}
   - component: {fileID: 1472807253}
+  - component: {fileID: 1472807259}
   - component: {fileID: 1472807257}
   - component: {fileID: 1472807258}
   m_Layer: 8
@@ -3968,27 +3971,15 @@ MonoBehaviour:
     battle: 0
     battleCenter: 0
     HighwayTable: {fileID: 11400000, guid: 004f855ba244dd248bf2f4147955a583, type: 2}
-  - distance: 400
-    battle: 0
-    battleCenter: 0
-    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
-  - distance: 100
-    battle: 1
-    battleCenter: 50
-    HighwayTable: {fileID: 11400000, guid: 9748e845bdd2af441935299b51c2259d, type: 2}
-  - distance: 400
-    battle: 0
-    battleCenter: 0
-    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
   SectionsLoop:
-  - distance: 100
-    battle: 1
-    battleCenter: 50
-    HighwayTable: {fileID: 11400000, guid: 9748e845bdd2af441935299b51c2259d, type: 2}
   - distance: 400
     battle: 0
     battleCenter: 0
     HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
+  - distance: 100
+    battle: 1
+    battleCenter: 50
+    HighwayTable: {fileID: 11400000, guid: 9748e845bdd2af441935299b51c2259d, type: 2}
   Vehicles:
     Pool:
     - weight: 4
@@ -4032,6 +4023,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
   Battles:
   - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
+  - {fileID: 11400000, guid: 0f1b8b477b2c0ba478a31a40485a3202, type: 2}
   barrierDistance: 50
   forwardBarrier: {fileID: 981864775}
   backBarrier: {fileID: 1060008833}
@@ -4056,6 +4048,19 @@ MonoBehaviour:
         minDistance: -50
         maxDistance: 50
   ActiveEnemies: []
+--- !u!114 &1472807259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472807252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84431dc81a204a64a83e991705c5efc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 30
 --- !u!1 &1693572086 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1693572086, guid: ea5e20aff22595b408bc703ee0d09c2b,
@@ -4850,6 +4855,7 @@ MonoBehaviour:
   FallGravity: 30
   JumpCooldown: 0.2
   RoadDamage: 15
+  RoadDecel: 0.3
   AirJump:
     speed: 10
     accel: 100
@@ -6539,7 +6545,7 @@ MonoBehaviour:
   clip: {fileID: 0}
   audioType: 0
   volume: 1
-  pitch: 1
+  pitch: 0.9
   loop: 0
   autoPlay: 0
   delay: 0

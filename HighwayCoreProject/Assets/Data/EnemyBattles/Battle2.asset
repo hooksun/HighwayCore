@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2801f5eb414520b4b8021223114302ee, type: 3}
-  m_Name: Battle1
+  m_Name: Battle2
   m_EditorClassIdentifier: 
-  SpawnTable: {fileID: 11400000, guid: 39793cb7b0c378348a5adecf76dd9b22, type: 2}
+  SpawnTable: {fileID: 11400000, guid: 129f2e04293e7e84a900682c8d56d392, type: 2}
   Waves:
-  - TotalCost: 30
+  - TotalCost: 50
     EndCost: 8
-  - TotalCost: 30
+  - TotalCost: 50
     EndCost: 0

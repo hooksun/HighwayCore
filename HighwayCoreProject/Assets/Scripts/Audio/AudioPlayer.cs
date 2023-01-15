@@ -11,6 +11,8 @@ public class AudioPlayer : MonoBehaviour
 
     Transform requester;
     bool paused;
+
+    protected virtual bool playing {get => Source.isPlaying;}
     
     void OnEnable()
     {
@@ -24,11 +26,11 @@ public class AudioPlayer : MonoBehaviour
 
     void Update()
     {
-        Source.volume = volume * Player.ActivePlayer.Settings.settings.volume;
+        SetVolume();
         if(requester == null || !requester.gameObject.activeInHierarchy)
         {
             Stop();
-            if(!Source.isPlaying)
+            if(!playing)
                 gameObject.SetActive(false);
             return;
         }
@@ -43,7 +45,7 @@ public class AudioPlayer : MonoBehaviour
         Source.clip = mainClip;
     }
 
-    public void Play()
+    public virtual void Play()
     {
         Source.Play();
     }
@@ -55,7 +57,7 @@ public class AudioPlayer : MonoBehaviour
         Source.PlayOneShot(clip, volume * Player.ActivePlayer.Settings.settings.volume);
     }
 
-    public void Stop()
+    public virtual void Stop()
     {
         Source.loop = false;
     }
@@ -72,7 +74,7 @@ public class AudioPlayer : MonoBehaviour
     {
         if(pause)
         {
-            if(Source.isPlaying)
+            if(playing)
             {
                 Source.Pause();
                 paused = true;
@@ -84,5 +86,10 @@ public class AudioPlayer : MonoBehaviour
             paused = false;
             Source.UnPause();
         }
+    }
+
+    protected virtual void SetVolume()
+    {
+        Source.volume = volume * Player.ActivePlayer.Settings.settings.volume;
     }
 }

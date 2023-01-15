@@ -8,7 +8,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public Rigidbody rb;
     
     public MoveState Walk, Air;
-    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage;
+    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage, RoadDecel;
     public MoveState AirJump;
     public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
@@ -103,9 +103,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         if(current == Air && velocity.y <= 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
         {
+            velocity *= RoadDecel;
             velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
             player.Status.TakeDamage(RoadDamage);
-            velocity.z = -20f;//temp
             ChangeGround(hit.transform);
         }
         
@@ -142,7 +142,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             else
                 groundInfo.normal = Vector3.up;
             ChangeGround(groundInfo.transform);
+            return;
         }
+        velocity += groundVel;
+        groundVel = Vector3.zero;
+        ChangeGround(null);
     }
 
     void ChangeGround(Transform newGround)
@@ -150,7 +154,9 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(groundTrans != newGround)
         {
             groundTrans = newGround;
-            currentGround = groundTrans.GetComponent<IMovingGround>();
+            currentGround = null;
+            if(groundTrans != null)
+                currentGround = groundTrans.GetComponent<IMovingGround>();
             groundVel = Vector3.zero;
         }
         if(currentGround != null)
