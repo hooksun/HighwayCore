@@ -142,11 +142,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             else
                 groundInfo.normal = Vector3.up;
             ChangeGround(groundInfo.transform);
-            return;
         }
-        velocity += groundVel;
-        groundVel = Vector3.zero;
-        ChangeGround(null);
+        if(!current.grounded)
+        {
+            velocity += groundVel;
+            groundVel = Vector3.zero;
+            ChangeGround(null);
+        }
     }
 
     void ChangeGround(Transform newGround)
@@ -518,7 +520,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 public class MoveState
 {
     public float speed, accel, decel, maxSpeed, coyoteTime;
-    public bool updateVelocity, hasFootsteps;
+    public bool updateVelocity, hasFootsteps, grounded;
     public float footstepCooldown, footstepPitch;
     [HideInInspector] public float cooldown;
 }

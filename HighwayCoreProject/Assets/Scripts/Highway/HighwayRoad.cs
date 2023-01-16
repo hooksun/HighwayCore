@@ -5,6 +5,7 @@ using UnityEngine;
 public class HighwayRoad : MonoBehaviour, IMovingGround
 {
     public GameObject prefab;
+    public Rigidbody rb;
     public Vector3 direction;
     public float speed, length, playerSpeed;
     public int size;
@@ -25,8 +26,9 @@ public class HighwayRoad : MonoBehaviour, IMovingGround
 
     void Update()
     {
-        transform.position -= Vector3.forward * speed * Time.deltaTime;
-        if(transform.position.z < Player.ActivePlayer.position.z)
-            transform.position += Vector3.forward * length;
+        rb.velocity = Vector3.back * playerSpeed;
+        rb.position -= Vector3.forward * (speed-playerSpeed) * Time.deltaTime;
+        if(rb.position.z < Player.ActivePlayer.position.z)
+            rb.position += Vector3.forward * length;
     }
 }
