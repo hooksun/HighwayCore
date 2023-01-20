@@ -31,7 +31,7 @@ public class EnemyAttack : EnemyBehaviour
     {
         ForceLookAtPoint(Player.ActivePlayer.position);
     }
-    public override void StopStun() => overrideLook = false;
+    public override void StopStun() => StopForceLook();
 
     public virtual void SetAggro(bool yes)
     {
@@ -96,6 +96,14 @@ public class EnemyAttack : EnemyBehaviour
             targetDirection.y = sin;
         }
     }
+
+    protected virtual void LookAtTarget()
+    {
+        currentDirection = Vector3.RotateTowards(currentDirection, targetDirection, lookAtSpeed * Time.deltaTime, 0f);
+        enemy.Head.rotation = Quaternion.LookRotation(currentDirection, transform.up);
+        enemy.Animation.SetLook(currentDirection);
+    }
+    
     protected virtual void ShootWeapon()
     {
         if(enemy.Weapon.cantShoot)
@@ -107,13 +115,7 @@ public class EnemyAttack : EnemyBehaviour
         Vector3 playerDist = enemy.targetPlayer.position - transform.position;
         bool inRange = playerDist.sqrMagnitude <= MaxAttackDistance * MaxAttackDistance;
         bool inAngle = Vector3.Dot(playerDist.normalized, enemy.Head.forward) >= Mathf.Cos(Mathf.Deg2Rad * MaxAttackAngle);
-        enemy.Weapon.shoot = (enemy.aggro && !enemy.stunned && hasLOS && inRange && inAngle);
-    }
-    protected virtual void LookAtTarget()
-    {
-        currentDirection = Vector3.RotateTowards(currentDirection, targetDirection, lookAtSpeed * Time.deltaTime, 0f);
-        enemy.Head.rotation = Quaternion.LookRotation(currentDirection, transform.up);
-        enemy.Animation.SetLook(currentDirection);
+        enemy.Weapon.shoot = (enemy.aggro && !enemy.stunned && !overrideLook && hasLOS && inRange && inAngle);
     }
 
     protected virtual Vector3 GetPlayerPosition() => Vector3.LerpUnclamped(enemy.targetPlayer.trailPosition, enemy.targetPlayer.position, Lead);
@@ -141,7 +143,7 @@ public class EnemyAttack : EnemyBehaviour
     public void ForceLook(Vector3 direction, float speed = 0f)
     {
         overrideLook = true;
-        targetDirection = direction;
+        targetDirection = direction.normalized;
         if(speed <= 0)
             speed = ForceLookSpeed;
         lookAtSpeed = speed;

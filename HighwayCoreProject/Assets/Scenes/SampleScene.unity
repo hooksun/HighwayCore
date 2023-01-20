@@ -3836,18 +3836,6 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 1209893301}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1217877353 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1217877353, guid: ea5e20aff22595b408bc703ee0d09c2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 222678031777772081}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1332077560
 GameObject:
   m_ObjectHideFlags: 0
@@ -4166,12 +4154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
---- !u!1 &1693572086 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1693572086, guid: ea5e20aff22595b408bc703ee0d09c2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 222678031777772081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2034814214
 GameObject:
   m_ObjectHideFlags: 0
@@ -4829,7 +4811,6 @@ GameObject:
   - component: {fileID: 1534971853332128183}
   - component: {fileID: 530518716359227962}
   - component: {fileID: 8454592958896111171}
-  - component: {fileID: 8183863650042476053}
   - component: {fileID: 8454592958896111174}
   m_Layer: 6
   m_Name: Player
@@ -5923,7 +5904,6 @@ MonoBehaviour:
   animator: {fileID: 1534971853332128183}
   Guns: {fileID: 530518715582177611}
   PickUp: {fileID: 8454592957793930891}
-  Damage: {fileID: 8183863650042476053}
   WeaponSwitch: {fileID: 8454592958891627762}
   Melee: {fileID: 6697333563691823059}
   weaponAnim: {fileID: 0}
@@ -5931,6 +5911,7 @@ MonoBehaviour:
   TrailTime: 0.8
   LookAtEnemyAngle: 100
   DamageResistance: 0
+  deathFloor: -5
   positionOffset: {x: 0, y: 0.5, z: 0}
   trailPosition: {x: 0, y: 0, z: 0}
   score: 0
@@ -6299,20 +6280,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8183863650042476053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 530518716359227905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ac0d27476e8a9a40bd8f02a32d113d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  fallDamage: 99
 --- !u!1 &8337808586835580726
 GameObject:
   m_ObjectHideFlags: 0
@@ -6675,9 +6642,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   playerData: {fileID: 11400000, guid: 77b5b3d8c3ce71b47b44a4bd9301694d, type: 2}
-  healthPointTxt: {fileID: 1217877353}
-  deathMenu: {fileID: 1693572086}
-  isFallen: 0
   animationAnimLength: 1
 --- !u!114 &8454592958896111174
 MonoBehaviour:

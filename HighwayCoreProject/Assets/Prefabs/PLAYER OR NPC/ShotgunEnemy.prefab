@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  Lead: 0.5
+  Lead: 0.75
   ForceLookSpeed: 8
   MaxAttackDistance: 15
   MaxAttackAngle: 20
@@ -407,6 +407,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 264
   footstepAudio: {fileID: 3080306361348637279}
+  isGrounded: 1
 --- !u!114 &500471132682767721
 MonoBehaviour:
   m_ObjectHideFlags: 0

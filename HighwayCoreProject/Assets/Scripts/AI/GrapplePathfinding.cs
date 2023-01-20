@@ -16,16 +16,24 @@ public class GrapplePathfinding : EnemyPathfinding
     public override void Activate()
     {
         base.Activate();
+        StopGrapple();
         grapple.enabled = false;
-        grappling = false;
-        grappleLanded = false;
     }
 
     protected override void Update()
     {
         base.Update();
-        if(grappling)
+        if(grapple.enabled)
         {
+            if(!grappling)
+            {
+                grapplePos = Vector3.MoveTowards(grapplePos, grapple.transform.position, grappleSpeed * Time.deltaTime);
+                if(grapplePos == grapple.transform.position)
+                {
+                    grapple.enabled = false;
+                    return;
+                }
+            }
             grapple.SetPosition(0, grapple.transform.position);
             grapple.SetPosition(1, grapplePos);
         }
@@ -42,6 +50,7 @@ public class GrapplePathfinding : EnemyPathfinding
             grappling = true;
             grappleLanded = false;
         }
+        enemy.Attack.ForceLookAtPoint(jumpPoint.worldPoint);
         if(!grappleLanded)
         {
             grapplePos = Vector3.MoveTowards(grapplePos, jumpPoint.worldPoint, grappleSpeed * Time.deltaTime);
@@ -67,6 +76,22 @@ public class GrapplePathfinding : EnemyPathfinding
         Grappling();
     }
 
+    protected override void Jumping()
+    {
+        base.Jumping();
+        if(grappling)
+        {
+            if(airVelocity.y <= 0f)
+            {
+                StopGrapple();
+                enemy.Attack.StopForceLook();
+                return;
+            }
+            grapplePos = jumpPoint.worldPoint;
+            enemy.Attack.ForceLookAtPoint(jumpPoint.worldPoint);
+        }
+    }
+
     protected override void AirSimulate()
     {
         if(!isJumping && jumpPoint.transform != null)
@@ -88,9 +113,13 @@ public class GrapplePathfinding : EnemyPathfinding
 
     protected override void Land()
     {
-        grapple.enabled = false;
+        StopGrapple();
+        base.Land();
+    }
+
+    void StopGrapple()
+    {
         grappling = false;
         grappleLanded = false;
-        base.Land();
     }
 }

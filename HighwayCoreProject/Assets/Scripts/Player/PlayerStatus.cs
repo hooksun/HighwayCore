@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class PlayerStatus : PlayerBehaviour
 {
     float health;
     public PlayerData playerData;
-    public TextMeshProUGUI healthPointTxt;
-    public GameObject deathMenu;
-    public bool isFallen = false;
     public float animationAnimLength = 1f;
 
     
@@ -17,16 +13,6 @@ public class PlayerStatus : PlayerBehaviour
     {
         health = playerData.maxHealth;
         UIManager.SetHealth(health);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        PlayerHealthCondition();
-    }
-    void PlayerHealthCondition(){
-        //healthPointTxt.SetText("HP : " + health);
-        
     }
 
     public void TakeDamage(float damage){

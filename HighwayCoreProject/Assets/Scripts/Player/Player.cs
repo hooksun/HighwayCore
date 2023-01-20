@@ -13,7 +13,6 @@ public class Player : MonoBehaviour, IHurtBox
     public Animator animator;
     public GunScript Guns;
     public PickUpWeapon PickUp;
-    public PlayerDamageSource Damage;
     public WeaponSwitching WeaponSwitch;
     public PlayerMelee Melee;
     public WeaponAnim weaponAnim;
@@ -21,7 +20,7 @@ public class Player : MonoBehaviour, IHurtBox
 
     public static Player ActivePlayer;
     
-    public float TrailTime, LookAtEnemyAngle, DamageResistance;
+    public float TrailTime, LookAtEnemyAngle, DamageResistance, deathFloor;
     public Vector3 positionOffset;
     [HideInInspector] public Vector3 trailPosition;
     [HideInInspector] public float score;
@@ -39,7 +38,6 @@ public class Player : MonoBehaviour, IHurtBox
         Status.player = this;
         Guns.player = this;
         PickUp.player = this;
-        Damage.player = this;
         WeaponSwitch.player = this;
         Melee.player = this;
         //weaponAnim.player = this;
@@ -57,6 +55,8 @@ public class Player : MonoBehaviour, IHurtBox
         StartCoroutine(Trail(position));
         if(!freezeScore)
             score = Mathf.Max(transform.position.z, score);
+        if(transform.position.y < deathFloor)
+            Die();
     }
 
     IEnumerator Trail(Vector3 pos)
@@ -79,7 +79,6 @@ public class Player : MonoBehaviour, IHurtBox
         Status.Die();
         Guns.Die();
         PickUp.Die();
-        Damage.Die();
         WeaponSwitch.Die();
         Melee.Die();
         //weaponAnim.Die();
