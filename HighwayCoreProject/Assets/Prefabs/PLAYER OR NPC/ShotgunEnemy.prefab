@@ -447,7 +447,7 @@ MonoBehaviour:
   burstCooldown: 1.5
   burstAmount: 3
   magSize: 8
-  bulletsPerShot: 8
+  bulletsPerShot: 6
   bulletIndex: 0
   hitMask:
     serializedVersion: 2

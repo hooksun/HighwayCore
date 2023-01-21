@@ -148,7 +148,7 @@ public class GunScript : PlayerBehaviour
     }
     void ShotgunBullet(){
         ShootSound.Play();
-        for(int i=0;i<8;i++){
+        for(int i=0;i<6;i++){
             BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
         }
     }

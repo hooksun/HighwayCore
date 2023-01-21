@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   available: 1
   name: Shotgun
-  damage: 9
+  damage: 8
   maxDistance: 400
-  currentAmmoInMag: 4
+  currentAmmoInMag: 3
   magazineSize: 8
   maxAmmo: 64
-  ammoLeft: 59
+  ammoLeft: 50
   fireRate: 100
   reloadTime: 1.8
   isReloading: 1
