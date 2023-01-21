@@ -21,6 +21,10 @@ public class WeaponSwitching : PlayerBehaviour
         currentWeapon = 0;
         prevSelectedWeapon = 0;
         selectWeapon(currentWeapon);
+        shotgun.currentAmmoInMag = shotgun.magazineSize;
+        rifle.currentAmmoInMag = rifle.magazineSize;
+        pistol.currentAmmoInMag = pistol.magazineSize;
+        sniper.currentAmmoInMag = sniper.magazineSize;
         shotgun.ammoLeft = shotgun.maxAmmo;
         rifle.ammoLeft = rifle.maxAmmo;
         pistol.ammoLeft = pistol.maxAmmo;

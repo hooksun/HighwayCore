@@ -8,7 +8,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public Rigidbody rb;
     
     public MoveState Walk, Air;
-    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage, RoadDecel;
+    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage, RoadDecel, RoadTime;
     public MoveState AirJump;
     public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
@@ -29,7 +29,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     Vector2 direction;
     Vector3 directionWorld;
     Vector3 velocity;
-    float groundCheckCooldown;
+    float groundCheckCooldown, roadTime;
 
     Vector3 groundVel;
     IMovingGround currentGround;
@@ -103,11 +103,17 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
 
         if(current == Air && velocity.y <= 0f && Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, GroundCheckDist, RoadMask))
         {
-            velocity *= RoadDecel;
-            velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
-            player.Status.TakeDamage(RoadDamage);
-            ChangeGround(hit.transform);
+            roadTime += Time.deltaTime;
+            if(roadTime > RoadTime)
+            {
+                velocity *= RoadDecel;
+                velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
+                player.Status.TakeDamage(RoadDamage);
+                ChangeGround(hit.transform);
+            }
         }
+        else
+            roadTime = 0f;
         
         rb.velocity = velocity + groundVel + (isGrounded?normalVel:Vector3.zero);
     }

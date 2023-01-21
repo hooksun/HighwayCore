@@ -422,33 +422,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   MaxHealth: 100
-  normalDrops:
-    minItems: 3
-    maxItems: 4
-    items:
-      Pool:
-      - weight: 1
-        variable: 0
-      - weight: 1
-        variable: 2
-  stunnedDrops:
-    minItems: 6
-    maxItems: 8
-    items:
-      Pool:
-      - weight: 1
-        variable: 0
-      - weight: 1
-        variable: 1
-      - weight: 1
-        variable: 2
-      - weight: 1
-        variable: 3
-  currentDrop:
-    minItems: 0
-    maxItems: 0
-    items:
-      Pool: []
+  normalDrops: {fileID: 11400000, guid: 4381b0f232a306940ba2e68899b838d2, type: 2}
+  stunnedDrops: {fileID: 11400000, guid: 0fa4e7110e951224f89b6a0d026490e9, type: 2}
+  stunDrops: 0
 --- !u!114 &7175017660930352230
 MonoBehaviour:
   m_ObjectHideFlags: 0

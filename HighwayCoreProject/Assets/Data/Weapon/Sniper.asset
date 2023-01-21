@@ -22,10 +22,10 @@ MonoBehaviour:
   ammoLeft: 25
   fireRate: 60
   reloadTime: 2.5
-  isReloading: 1
+  isReloading: 0
   bulletSpread: 0
   bulletSpeed: 200
-  switchSpeed: 0.5
+  switchSpeed: 0.4
   reloadDelay: 0
   animator: {fileID: 9100000, guid: ecc21970a2f31ac45a5c0a9d1f1334a1, type: 2}
   reloadSequence:

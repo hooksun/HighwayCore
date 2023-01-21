@@ -5,24 +5,25 @@ using UnityEngine;
 public class EnemyHealth : EnemyBehaviour
 {
     public float MaxHealth;
-    public ItemDrop normalDrops, stunnedDrops;
+    public LootTable normalDrops, stunnedDrops;
+
     float Health;
 
-    [HideInInspector] public ItemDrop currentDrop;
+    [HideInInspector] public bool stunDrops;
 
     public override void Activate()
     {
         Health = MaxHealth;
-        currentDrop = normalDrops;
+        stunDrops = false;
     }
 
     public override void Stun(Vector3 knockback)
     {
-        currentDrop = stunnedDrops;
+        stunDrops = true;
     }
     public override void StopStun()
     {
-        currentDrop = normalDrops;
+        stunDrops = false;
     }
 
     public override void TakeDamage(float amount)
@@ -36,28 +37,21 @@ public class EnemyHealth : EnemyBehaviour
 
     public override void Die()
     {
-        SpawnItems(currentDrop);
+        SpawnItems(stunDrops);
     }
 
     public void SetStunItems(bool stun)
     {
-        currentDrop = (stun?stunnedDrops:normalDrops);
+        stunDrops = stun;
     }
 
-    void SpawnItems(ItemDrop drop)
+    void SpawnItems(bool drop)
     {
-        int random = Random.Range(drop.minItems, drop.maxItems);
-        for(int i = 0; i < random; i++)
+        List<int> drops = (drop?stunnedDrops:normalDrops).GetLoot();
+        foreach(int i in drops)
         {
-            Item item = ItemPool.GetObject(drop.items.GetRandomVar());
+            Item item = ItemPool.GetObject(i);
             item.Spawn(transform.position, Vector3.up * Random.Range(0f, 360f));
         }
     }
-}
-
-[System.Serializable]
-public struct ItemDrop
-{
-    public int minItems, maxItems;
-    public VariablePool<int> items;
 }

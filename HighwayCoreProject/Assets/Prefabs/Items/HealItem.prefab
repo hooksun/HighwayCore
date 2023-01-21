@@ -118,7 +118,7 @@ MonoBehaviour:
   maxVelocity: {x: 6, y: 8}
   startCooldown: 0.3
   gravity: 20
-  lockOnRadius: 5
+  lockOnRadius: 7
   lockOnAccel: 70
   lockOnSpeed: 20
   caughtRadius: 0.6

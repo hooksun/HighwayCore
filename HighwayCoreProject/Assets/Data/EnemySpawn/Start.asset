@@ -26,10 +26,10 @@ MonoBehaviour:
         enemyCost: 8
         minDistance: 0
         maxDistance: 50
-  ActiveCost: 18
-  AggroCost: 10
+  ActiveCost: 13
+  AggroCost: 8
   SpawnCost: 10
-  FailCost: 3
+  FailCost: 2
   StartInterval: 5
   SpawnIntervalMin: 8
   SpawnIntervalMax: 12

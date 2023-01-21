@@ -9,12 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b10d910190f2314a94178adab27558e, type: 3}
-  m_Name: PlayerSettings
+  m_Script: {fileID: 11500000, guid: 9675600e6415cf048808f7b73b35da02, type: 3}
+  m_Name: EnemyAR
   m_EditorClassIdentifier: 
-  settings:
-    sensitivity: 20
-    fov: 70
-    volume: 0.68
-    highscore: 1500
-  serialize: 1
+  LootPool:
+    Pool:
+    - weight: 1
+      variable:
+        index: 0
+        min: 0
+    - weight: 1
+      variable:
+        index: 1
+        min: 1
+  minItems: 3
+  maxItems: 3

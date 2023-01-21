@@ -12,16 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82082933c061f8b4198e9b66e5a1affd, type: 3}
   m_Name: Passive
   m_EditorClassIdentifier: 
-  VehiclePool:
+  LootPool:
     Pool:
     - weight: 4
-      variable: 0
+      variable:
+        index: 0
+        min: 0
     - weight: 4
-      variable: 1
+      variable:
+        index: 1
+        min: 0
     - weight: 2
-      variable: 2
+      variable:
+        index: 2
+        min: 0
     - weight: 1
-      variable: 5
+      variable:
+        index: 5
+        min: 0
     - weight: 1
-      variable: 6
+      variable:
+        index: 6
+        min: 0
+  minItems: 30
+  maxItems: 30
   SpawnVehicles: []

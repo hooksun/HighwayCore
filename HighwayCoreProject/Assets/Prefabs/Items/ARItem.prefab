@@ -118,12 +118,12 @@ MonoBehaviour:
   maxVelocity: {x: 6, y: 8}
   startCooldown: 0.3
   gravity: 20
-  lockOnRadius: 5
+  lockOnRadius: 7
   lockOnAccel: 70
   lockOnSpeed: 20
   caughtRadius: 0.6
   upTime: 20
-  ammoAmount: 8
+  ammoAmount: 10
   ammoType: 2
 --- !u!54 &-7866204338903513630
 Rigidbody:

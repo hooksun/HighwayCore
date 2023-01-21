@@ -4063,12 +4063,12 @@ MonoBehaviour:
   - distance: 300
     battle: 0
     battleCenter: 0
-    HighwayTable: {fileID: 11400000, guid: 004f855ba244dd248bf2f4147955a583, type: 2}
+    HighwayTable: {fileID: 11400000, guid: ec06bceafa0e3534f8aa54b867a55e10, type: 2}
   SectionsLoop:
   - distance: 400
     battle: 0
     battleCenter: 0
-    HighwayTable: {fileID: 11400000, guid: 4c8d29d2de52a6e4a8571675d974c918, type: 2}
+    HighwayTable: {fileID: 11400000, guid: 699a77c708f9b2743bda46b15519d094, type: 2}
   - distance: 100
     battle: 1
     battleCenter: 50
@@ -4115,6 +4115,7 @@ MonoBehaviour:
   EnemyTables:
   - {fileID: 11400000, guid: 48b2777b65d7f264a91442c33494d109, type: 2}
   Battles:
+  - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
   - {fileID: 11400000, guid: edc73cd3c0739b9459d30bea401f5913, type: 2}
   - {fileID: 11400000, guid: 0f1b8b477b2c0ba478a31a40485a3202, type: 2}
   barrierDistance: 50
@@ -4944,12 +4945,13 @@ MonoBehaviour:
   JumpCooldown: 0.2
   RoadDamage: 15
   RoadDecel: 0.2
+  RoadTime: 0.1
   AirJump:
     speed: 10
     accel: 100
     decel: 0
     maxSpeed: 0
-    coyoteTime: 0
+    coyoteTime: 0.1
     updateVelocity: 0
     hasFootsteps: 0
     grounded: 0
