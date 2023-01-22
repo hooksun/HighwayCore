@@ -33,19 +33,22 @@ public class WeaponAnim : PlayerBehaviour
     }
 
     public void WhatIsGun(){
-        anim.runtimeAnimatorController = gun.gunData.animator;
-        // if(gun.gunData.name == "Sniper"){
-        //     //anim.runtimeAnimatorController = Resources.Load("Sniper/Player_Animator_Sniper") as RuntimeAnimatorController;
-        //     Animator sniper = GameObject.Find("SniperAnim").GetComponent<Animator>();
-        //     runTimeAnim = sniper.runtimeAnimatorController;
-        //     anim.runtimeAnimatorController = runTimeAnim;
-        // }
-        // else if(gun.gunData.name == "AR"){
-        //     //anim.runtimeAnimatorController = Resources.Load("AR/PlayerAnimator_AR") as RuntimeAnimatorController;
-        //     Animator sniper = GameObject.Find("ARAnim").GetComponent<Animator>();
-        //     runTimeAnim = sniper.runtimeAnimatorController;
-        //     anim.runtimeAnimatorController = runTimeAnim;
-        // }
+        //anim.runtimeAnimatorController = gun.gunData.animator;
+        if(gun.gunData.name == "Sniper"){
+            Animator sniper = GameObject.Find("SniperAnim").GetComponent<Animator>();
+            runTimeAnim = sniper.runtimeAnimatorController;
+            anim.runtimeAnimatorController = runTimeAnim;
+        }
+        else if(gun.gunData.name == "Shotgun"){
+            Animator sniper = GameObject.Find("ARAnim").GetComponent<Animator>();
+            runTimeAnim = sniper.runtimeAnimatorController;
+            anim.runtimeAnimatorController = runTimeAnim;
+        }
+        else if(gun.gunData.name == "AR"){
+            Animator sniper = GameObject.Find("SGAnim").GetComponent<Animator>();
+            runTimeAnim = sniper.runtimeAnimatorController;
+            anim.runtimeAnimatorController = runTimeAnim;
+        }
     }
     
     public void Reload(){
