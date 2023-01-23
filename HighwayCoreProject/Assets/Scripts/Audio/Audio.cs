@@ -33,7 +33,16 @@ public class Audio : MonoBehaviour
 
     public virtual void Play()
     {
-        player.PlayClip(clip, volume, pitch);
+        if(player == null)
+        {
+            started = true;
+            Activate();
+        }
+
+        if(loop)
+            player.Play(pitch);
+        else
+            player.PlayClip(clip, volume, pitch);
     }
     
     public virtual void Stop()

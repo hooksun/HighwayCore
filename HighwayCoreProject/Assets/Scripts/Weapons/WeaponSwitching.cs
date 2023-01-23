@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponSwitching : PlayerBehaviour
 {
-    public Transform[] weapons;
+    public Gun[] weapons;
     public GunData shotgun;
     public GunData rifle;
     public GunData pistol;
@@ -21,14 +21,6 @@ public class WeaponSwitching : PlayerBehaviour
         currentWeapon = 0;
         prevSelectedWeapon = 0;
         selectWeapon(currentWeapon);
-        shotgun.currentAmmoInMag = shotgun.magazineSize;
-        rifle.currentAmmoInMag = rifle.magazineSize;
-        pistol.currentAmmoInMag = pistol.magazineSize;
-        sniper.currentAmmoInMag = sniper.magazineSize;
-        shotgun.ammoLeft = shotgun.maxAmmo;
-        rifle.ammoLeft = rifle.maxAmmo;
-        pistol.ammoLeft = pistol.maxAmmo;
-        sniper.ammoLeft = sniper.maxAmmo;
     }
 
     void Update()
@@ -42,6 +34,7 @@ public class WeaponSwitching : PlayerBehaviour
         if(prevSelectedWeapon!=currentWeapon){
             //player.weaponAnim.Idle();
             selectWeapon(currentWeapon);
+            gunScript.ReloadSound.Stop();
             numOfSwitch++;
         }
         //changeGunData();
@@ -50,50 +43,27 @@ public class WeaponSwitching : PlayerBehaviour
     private KeyCode[] keyCodes = {
         KeyCode.Alpha1, 
         KeyCode.Alpha2,
-        KeyCode.Alpha3,
-        KeyCode.Alpha4
+        KeyCode.Alpha3
     };
 
     void findWeapon(){
-        weapons = new Transform[transform.childCount];
+        weapons = new Gun[transform.childCount];
         for(int i=0;i<transform.childCount;i++){
-            weapons[i] = transform.GetChild(i);
+            weapons[i] = transform.GetChild(i).GetComponent<Gun>();
+            weapons[i].data.currentAmmoInMag = weapons[i].data.magazineSize;
+            weapons[i].data.ammoLeft = weapons[i].data.maxAmmo;
         }
     }
 
     void selectWeapon(int index){
-        if(index == 0 && pistol.available){
-            for(int i=0;i<weapons.Length;i++){
-                weapons[i].gameObject.SetActive(i == index);
-            }
-            gunScript.gunData = pistol;
-            gunScript.gunData.isReloading = false;
-            gunScript.timeSinceLastSwitch = 0f;
+        for(int i=0;i<weapons.Length;i++){
+            weapons[i].gameObject.SetActive(i == index);
         }
-        if(index == 1 && shotgun.available){
-            for(int i=0;i<weapons.Length;i++){
-                weapons[i].gameObject.SetActive(i == index);
-            }
-            gunScript.gunData = shotgun;
-            gunScript.gunData.isReloading = false;
-            gunScript.timeSinceLastSwitch = 0f;
-        }
-        if(index == 2 && rifle.available){
-            for(int i=0;i<weapons.Length;i++){
-                weapons[i].gameObject.SetActive(i == index);
-            }
-            gunScript.gunData = rifle;
-            gunScript.gunData.isReloading = false;
-            gunScript.timeSinceLastSwitch = 0f;
-        }
-        if(index == 3 && sniper.available){
-            for(int i=0;i<weapons.Length;i++){
-                weapons[i].gameObject.SetActive(i == index);
-            }
-            gunScript.gunData = sniper;
-            gunScript.gunData.isReloading = false;
-            gunScript.timeSinceLastSwitch = 0f;
-        }
+        gunScript.gunData = weapons[index].data;
+        gunScript.gun = weapons[index];
+        gunScript.gunData.isReloading = false;
+        gunScript.timeSinceLastSwitch = 0f;
+        gunScript.secondaryInput = false;
     }
 
     public void AddAmmo(int ammount, AmmoType ammoType){

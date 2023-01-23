@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8d8302f3f9e8e43aeb500db322f449, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  available: 1
+  available: 0
   name: Pistol
   damage: 20
   maxDistance: 400
@@ -20,12 +20,15 @@ MonoBehaviour:
   magazineSize: 12
   maxAmmo: 64
   ammoLeft: 64
+  bulletsPerShot: 1
   fireRate: 300
   reloadTime: 1.5
   isReloading: 0
   bulletSpread: 0.01
   bulletSpeed: 150
   switchSpeed: 0.4
+  animator: {fileID: 0}
+  shootAudio: {fileID: 0}
   reloadDelay: 0
   reloadSequence:
   - clip: {fileID: 0}

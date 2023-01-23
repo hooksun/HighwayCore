@@ -87,8 +87,8 @@ public class EnemyWeapon : EnemyBehaviour
     {
         for(int i = 0; i < bulletsPerShot; i++)
         {
-            Projectile proj = ProjectilePool.GetObject(bulletIndex, false);
-            proj.Initiate(enemy.Head.position, enemy.Head.rotation, firePoint.position, bulletSpeed, damage, bulletSpread, hitMask);
+            Projectile proj = ProjectilePool.GetObject(bulletIndex);
+            proj.Initiate(enemy.Head.position, enemy.Head.rotation, firePoint.position, bulletSpeed, damage, bulletSpread, hitMask, true);
         }
         enemy.Animation.Play(shootAnimation, 1);
         shootSound.Play();

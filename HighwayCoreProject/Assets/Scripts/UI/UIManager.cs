@@ -68,11 +68,14 @@ public class UIManager : MonoBehaviour
     public static void SetHitMarker(bool crit = false)
     {
         instance.HitMarker.SetValue();
+        Player.ActivePlayer.PlayHitAudio();
     }
 
-    public static void SetDamageDirection(Vector2 direction)
+    public static void SetDamageDirection(Vector3 direction)
     {
-        
+        DamageMarker damage = DamageMarkerPool.GetObject();
+        damage.transform.localPosition = Vector3.zero;
+        damage.Activate(direction);
     }
 
     public static void SetScope(float amount)

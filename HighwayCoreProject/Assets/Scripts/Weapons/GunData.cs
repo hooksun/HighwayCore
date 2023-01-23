@@ -15,14 +15,16 @@ public class GunData : ScriptableObject
     public int magazineSize;
     public int maxAmmo;
     public int ammoLeft;
+    public int bulletsPerShot = 1;
     public float fireRate;
     public float reloadTime;
     public bool isReloading;
     public float bulletSpread;
     public float bulletSpeed;
     public float switchSpeed;
-    public float reloadDelay;
     public RuntimeAnimatorController animator;
+    public AudioClip shootAudio;
+    public float reloadDelay;
     public AudioTime[] reloadSequence;
 
 }

@@ -10,23 +10,29 @@ public class AudioPlayer : MonoBehaviour
     public float volume;
 
     Transform requester;
-    bool paused;
+    protected bool paused;
 
     protected virtual bool playing {get => Source.isPlaying;}
+    
+    void Start()
+    {
+        SetVolume();
+    }
     
     void OnEnable()
     {
         ActivePlayers.Add(this);
         paused = false;
+        if(Player.ActivePlayer != null)
+            SetVolume();
     }
     void OnDisable()
     {
         ActivePlayers.Remove(this);
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        SetVolume();
         if(requester == null || !requester.gameObject.activeInHierarchy)
         {
             Stop();
@@ -37,7 +43,7 @@ public class AudioPlayer : MonoBehaviour
         transform.position = requester.position;
     }
 
-    public void Setup(Transform req, bool loop, float pitch, AudioClip mainClip = null)
+    public virtual void Setup(Transform req, bool loop, float pitch, AudioClip mainClip = null)
     {
         requester = req;
         Source.loop = loop;
@@ -45,8 +51,10 @@ public class AudioPlayer : MonoBehaviour
         Source.clip = mainClip;
     }
 
-    public virtual void Play()
+    public virtual void Play(float pitch = -1f)
     {
+        if(pitch > 0f)
+            Source.pitch = pitch;
         Source.Play();
     }
 
@@ -70,7 +78,7 @@ public class AudioPlayer : MonoBehaviour
         }
     }
 
-    public void Pause(bool pause)
+    public virtual void Pause(bool pause)
     {
         if(pause)
         {
@@ -81,6 +89,7 @@ public class AudioPlayer : MonoBehaviour
             }
             return;
         }
+        SetVolume();
         if(paused)
         {
             paused = false;

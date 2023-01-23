@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     sensitivity: 25
-    fov: 70
+    fov: 90
     volume: 1
+    musicVolume: 1
+    highscore: 0
   serialize: 0

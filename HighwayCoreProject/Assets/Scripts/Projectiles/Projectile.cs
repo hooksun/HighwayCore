@@ -6,22 +6,23 @@ public class Projectile : MonoBehaviour
 {
     Vector3 position, offset;
     float speed, activeTime, damage;
+    bool hitPlayer;
     LayerMask hitMask;
 
     const float ActiveTime = 0.5f;
     const float approachRate = 3f;
 
-    public void Initiate(Vector3 startPosition, Quaternion rotation, Vector3 transformPosition, float sped, float dmg, float spread, LayerMask layerMask)
+    public void Initiate(Vector3 startPosition,Quaternion rotation,Vector3 transformPosition,float sped,float dmg,float spread,LayerMask layerMask,bool hit=false)
     {
         position = startPosition;
         offset = transformPosition - startPosition;
         speed = sped;
         damage = dmg;
         hitMask = layerMask;
+        hitPlayer = hit;
         transform.position = transformPosition;
         transform.rotation = rotation * RandomSpread(spread);
         activeTime = ActiveTime;
-        gameObject.SetActive(true);
     }
 
     void Update()
@@ -42,10 +43,14 @@ public class Projectile : MonoBehaviour
             if(hurtBox != null)
             {
                 hurtBox.TakeDamage(damage);
-                Vector3 dir = -transform.forward;
-                dir.y = 0f;
-                dir.Normalize();
-                UIManager.SetDamageDirection(Player.ActivePlayer.transform.rotation * dir);
+                if(hitPlayer)
+                {
+                    Vector3 dir = -transform.forward;
+                    dir.y = 0f;
+                    dir.Normalize();
+                    UIManager.SetDamageDirection(dir);
+                }
+                
             }
             gameObject.SetActive(false);
             return;

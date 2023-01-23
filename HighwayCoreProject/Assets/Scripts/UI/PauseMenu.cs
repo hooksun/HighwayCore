@@ -22,6 +22,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         PauseUI.SetActive(true);
         isPaused = true;
+        Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
         AudioPlayer.PauseAll(true);
@@ -40,6 +41,8 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitToMainMenu(){
         Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("MainMenu");
     }
 }

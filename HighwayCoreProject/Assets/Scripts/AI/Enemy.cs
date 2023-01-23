@@ -7,24 +7,26 @@ public class Enemy : MonoBehaviour, IHurtBox
 {
     public Transform Head;
     public Vector3 transformOffset;
-    public float Cost, StunTime, StunResistance;
+    public float Cost, StunTime, StunResistance, iFrames;
     public int RagdollIndex;
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
     public EnemyHealth Health;
     public EnemyWeapon Weapon;
     public EnemyAnimation Animation;
+    public Collider Hitbox;
 
     [HideInInspector] public Player targetPlayer;
     [HideInInspector] public EnemyManager manager;
-    [HideInInspector] public bool stunned, aggro;
+    [HideInInspector] public bool stunned, aggro, spawned;
 
     public bool crit{get => false;}
 
-    float stunTime;
+    float stunTime, iframes;
 
     public void Activate()
     {
+        gameObject.SetActive(true);
         Attack.enemy = this;
         Pathfinding.enemy = this;
         Health.enemy = this;
@@ -33,11 +35,13 @@ public class Enemy : MonoBehaviour, IHurtBox
         stunned = false;
         aggro = false;
         Head.localRotation = Quaternion.identity;
+        Animation.Activate();
         Attack.Activate();
         Pathfinding.Activate();
         Health.Activate();
         Weapon.Activate();
-        Animation.Activate();
+        iframes = iFrames;
+        Hitbox.enabled = false;
     }
 
     public void Die()
@@ -47,6 +51,8 @@ public class Enemy : MonoBehaviour, IHurtBox
         Health.Die();
         Weapon.Die();
         Animation.Die();
+
+        spawned = false;
 
         manager.RequestDie(this);
         gameObject.SetActive(false);
@@ -96,7 +102,17 @@ public class Enemy : MonoBehaviour, IHurtBox
 
     void Update()
     {
-        if(stunned && Time.deltaTime > 0f)
+        if(Time.deltaTime == 0f)
+            return;
+
+        if(iframes > 0f)
+        {
+            iframes -= Time.deltaTime;
+            if(iframes <= 0f)
+                Hitbox.enabled = true;
+        }
+
+        if(stunned)
         {
             stunTime -= Time.deltaTime;
             if(stunTime <= 0)

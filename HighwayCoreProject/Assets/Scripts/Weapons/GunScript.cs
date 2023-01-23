@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class GunScript : PlayerBehaviour
 {
     public GunData gunData;
+    public Gun gun;
     public bool isShooting;
     float fireRate;
     public GameObject impact, bullet;
@@ -20,6 +21,7 @@ public class GunScript : PlayerBehaviour
     bool isScope = false;
     public bool fireInput, secondaryInput;
     public bool isReloading;
+    public LayerMask bulletMask;
     public Audio ShootSound;
     public AudioSequence ReloadSound;
     // public WeaponAnim anim;
@@ -61,7 +63,7 @@ public class GunScript : PlayerBehaviour
         // anim = curWeapon.GetComponentInChildren<WeaponAnim>();
         // anim.Reload();
 
-        fireRate = 1f/(gunData.fireRate/60f);
+        fireRate = 60f/gunData.fireRate;
         timeSinceLastShot += Time.deltaTime;
         timeSinceLastSwitch += Time.deltaTime;
 
@@ -100,18 +102,7 @@ public class GunScript : PlayerBehaviour
     }
 
     void whatIsWeaponShoot(){
-        if(gunData.name == "Shotgun"){
-            ShootSound.clip = GameObject.Find("ShotgunAudio").GetComponent<AudioSource>().clip;
-            ShotgunBullet();
-        }
-        if(gunData.name == "AR" || gunData.name == "Pistol"){
-            AudioSource audio = GameObject.Find("ARAudio").GetComponent<AudioSource>();
-            ShootSound.clip = audio.clip;
-            ARBullet();
-        }
-        if(gunData.name == "Sniper"){
-            SniperBullet();
-        }
+        ARBullet();
     }
 
     void SecondaryFire(){
@@ -143,8 +134,13 @@ public class GunScript : PlayerBehaviour
     // }
 
     void ARBullet(){
+        ShootSound.clip = gunData.shootAudio;
         ShootSound.Play();
-        BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
+        for(int i = 0; i < gunData.bulletsPerShot; i++)
+        {
+            Projectile bullet = ProjectilePool.GetObject();
+            bullet.Initiate(player.Head.position,player.Head.rotation,gun.firePoint.position,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread,bulletMask);
+        }
     }
     void ShotgunBullet(){
         ShootSound.Play();
@@ -168,9 +164,10 @@ public class GunScript : PlayerBehaviour
             indexSet = true;
         }
         //Debug.Log(prevSelectedWeapon);
-        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){ // && ReadyToShoot()
+        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){
             gunData.isReloading = true;
             isShooting = false;
+            player.usingWeapon = true;
 
             ReloadSound.SetSequence(gunData.reloadSequence, gunData.reloadDelay);
             ReloadSound.Play();

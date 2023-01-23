@@ -88,16 +88,16 @@ public class EnemyManager : MonoBehaviour
                 if(dist < enemy.minDistance || dist > enemy.maxDistance)
                     continue;
 
-                Enemy nme = EnemyPool.GetObject(enemy.enemyIndex);
+                Enemy nme = EnemyPool.GetObject(enemy.enemyIndex, false);
                 nme.manager = this;
                 nme.targetPlayer = player;
-
                 nme.Cost = enemy.enemyCost;
                 ActiveEnemies.Add(nme);
                 ActiveCost += nme.Cost;
                 TotalCost += nme.Cost;
                 spawned += nme.Cost;
                 spawner.SpawnEnemy(nme);
+                nme.spawned = true;
                 success = true;
                 break;
             }
@@ -126,7 +126,8 @@ public class EnemyManager : MonoBehaviour
         int[] seq = Util.RandomSequence(ActiveEnemies.Count);
         for(int i = 0; i < ActiveEnemies.Count; i++)
         {
-            if(AggroCost + ActiveEnemies[seq[i]].Cost <= currentTable.AggroCost && ActiveEnemies[seq[i]].TrySetAggro())
+            Enemy current = ActiveEnemies[seq[i]];
+            if(current.gameObject.activeInHierarchy && AggroCost + current.Cost <= currentTable.AggroCost && current.TrySetAggro())
                 return;
         }
     }

@@ -10,11 +10,18 @@ public class AudioContinuous : AudioPlayer
 
     protected override bool playing {get => base.playing && fade > 0f;}
 
-    public override void Play()
+    public override void Setup(Transform req, bool loop, float pitch, AudioClip mainClip = null)
+    {
+        fade = 1f;
+        base.Setup(req, loop, pitch, mainClip);
+    }
+
+    public override void Play(float pitch = -1f)
     {
         fade = 1f;
         fading = false;
-        base.Play();
+        if(!playing)
+            base.Play(pitch);
     }
 
     public override void Stop()
@@ -22,17 +29,28 @@ public class AudioContinuous : AudioPlayer
         fading = true;
     }
 
-    protected override void SetVolume()
+    protected override void Update()
     {
+        base.Update();
+        if(paused)
+            return;
         if(fading && fade > 0f)
         {
             fade -= fadeSpeed * Time.deltaTime;
             if(fade <= 0f)
             {
-                fade = 0f;
+                fading = false;
+                fade = 1f;
                 Source.Stop();
+                return;
             }
+            Source.Pause();
             Source.volume = volume * fade * Player.ActivePlayer.Settings.settings.volume;
+            Source.UnPause();
+            return;
         }
+        Source.Pause();
+        Source.volume = volume * Player.ActivePlayer.Settings.settings.volume;
+        Source.UnPause();
     }
 }

@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IHurtBox
     public PlayerMelee Melee;
     public WeaponAnim weaponAnim;
     public PlayerInput input;
+    public Audio HitAudio;
 
     public static Player ActivePlayer;
     
@@ -87,6 +88,8 @@ public class Player : MonoBehaviour, IHurtBox
         Settings.settings.highscore = Mathf.Max(Settings.settings.highscore, score);
         Settings.Save();
     }
+
+    public void PlayHitAudio() => HitAudio.Play();
 
     public void EnableInput(bool yes)
     {

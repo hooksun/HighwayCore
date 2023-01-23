@@ -421,16 +421,19 @@ MonoBehaviour:
   Cost: 5
   StunTime: 0.6
   StunResistance: 0
+  iFrames: 0.3
   RagdollIndex: 0
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 8344945873007213577}
   Health: {fileID: 500471132682767721}
   Weapon: {fileID: 7175017660930352230}
   Animation: {fileID: 5738362404995044442}
+  Hitbox: {fileID: 259255105076096121}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
   stunned: 0
   aggro: 0
+  spawned: 0
 --- !u!114 &6806637070816601232
 MonoBehaviour:
   m_ObjectHideFlags: 0

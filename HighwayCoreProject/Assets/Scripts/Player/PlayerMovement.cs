@@ -12,12 +12,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public MoveState AirJump;
     public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
+    public Audio JetpackAudio;
     public MoveState Grapple;
     public GrappleProjectile GrappleObj;
     public float GrappleSpeed, GrappleAccel, GrappleDecel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
     public MoveState WallRun, Vault;
     public float WallRunTiltAngle, WallCheckDist, MinWallRunYSpeed, VaultSpeed, VaultDist, VaultBreakAngle;
-    public Vector3 WallCheckPoint, WallJumpForce, VaultJumpForce, VaultStart;
+    public Vector3 WallCheckPoint, WallCheckPoint2, WallJumpForce, VaultJumpForce, VaultStart;
     public float WallRunCooldown, GroundCheckCooldown;
     public float GroundCheckDist, GroundCheckRadius, MaxSlope, GroundCenter;
     public bool HasJetpack, HasGrapple;
@@ -353,7 +354,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
         grappleSqrDist = (hit.point - transform.position).sqrMagnitude;
         grappledEnemy = hit.transform.GetComponent<Enemy>();
-        velocity *= GrappleDrag;
+        if(grappledEnemy != null)
+            grappledEnemy.TakeDamage(0f);
+        Vector3 grappleDir = (hit.point - player.position).normalized;
+        Vector3 grappleVel = grappleDir * Mathf.Max(0f, Vector3.Dot(velocity, grappleDir));
+        velocity = ((velocity - grappleVel) * GrappleDrag) + grappleVel;
         doGravity = false;
     }
     public void OnTargetNotFound()
@@ -410,9 +415,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrounded && !player.usingAbility && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
         {
             RaycastHit hit = groundInfo;
-            if((wallDir != Vector3.zero && Physics.Raycast(transform.position + WallCheckPoint, wallDir, out hit, WallCheckDist, GroundMask))
-            || Physics.Raycast(transform.position + WallCheckPoint, transform.right, out hit, WallCheckDist, GroundMask)
-            || Physics.Raycast(transform.position + WallCheckPoint, -transform.right, out hit, WallCheckDist, GroundMask))
+            if((wallDir != Vector3.zero && (WallRunCheck(WallCheckPoint, wallDir * WallCheckDist, out hit)
+            || WallRunCheck(WallCheckPoint2, wallDir * WallCheckDist, out hit)))
+            || WallRunCheck(WallCheckPoint, transform.right * WallCheckDist, out hit)
+            || WallRunCheck(WallCheckPoint, -transform.right * WallCheckDist, out hit))
             {
                 isWallRunning = true;
                 SetCurrentState(WallRun);
@@ -432,20 +438,35 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             wallDir = Vector3.zero;
     }
 
-    public float currentFuel;
+    bool WallRunCheck(Vector3 pos, Vector3 dir, out RaycastHit hit)=>Physics.Linecast(transform.position + pos, transform.position + pos + dir, out hit, GroundMask);
+
+    float currentFuel;
+    bool jetpackAudio, outOfFuel;
     void Jetpack()
     {
-        if(isJumping && !isGrounded && !player.usingAbility && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
+        if(isJumping && !isGrounded && !outOfFuel && !player.usingAbility && !isVaulting && !isWallRunning && currentFuel > 0f && velocity.y <= JetpackSpeed)
         {
             float velY = Mathf.MoveTowards(velocity.y, JetpackSpeed, (JetpackForce + (velocity.y>0?JumpGravity:FallGravity)) * Time.fixedDeltaTime);
             velocity.y = 0f;
             velocity -= velocity.normalized * JetpackDecel * Time.fixedDeltaTime;
             velocity.y = velY;
             currentFuel -= FuelCost * Time.fixedDeltaTime;
+            outOfFuel = currentFuel <= 0f;
             UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
+            if(!jetpackAudio)
+            {
+                JetpackAudio.Play();
+                jetpackAudio = true;
+            }
             return;
         }
-        
+        if(velocity.y <= JetpackSpeed && jetpackAudio)
+        {
+            JetpackAudio.Stop();
+            jetpackAudio = false;
+        }
+        if(outOfFuel && isGrounded)
+            outOfFuel = false;
         if(currentFuel != JetpackFuel)
         {
             currentFuel = Mathf.MoveTowards(currentFuel, JetpackFuel, (isGrounded?GroundRefuelRate:RefuelRate) * Time.fixedDeltaTime);
@@ -495,6 +516,8 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             currentFuel -= AirJumpCost;
             SetCurrentState(AirJump);
             UIManager.SetJetpackFuel(currentFuel / JetpackFuel);
+            JetpackAudio.Play();
+            jetpackAudio = true;
             return;
         }
         jumpCooldown = 0f;

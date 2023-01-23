@@ -30,7 +30,7 @@ MonoBehaviour:
   AggroCost: 8
   SpawnCost: 10
   FailCost: 2
-  StartInterval: 5
+  StartInterval: 10
   SpawnIntervalMin: 8
   SpawnIntervalMax: 12
   AggroInterval: 2

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   settings:
-    sensitivity: 20
-    fov: 70
-    volume: 0.68
-    highscore: 1500
+    sensitivity: 25
+    fov: 90
+    volume: 1
+    musicVolume: 1
+    highscore: 0
   serialize: 1

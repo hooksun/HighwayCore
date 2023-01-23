@@ -48,6 +48,7 @@ public class EnemyPathfinding : EnemyBehaviour
         {
             jumpPoint = currentPlatform.ClosestPointTo(transform.position);
             InitiateJump(JumpHeight);
+            enemy.Animation.Play(JumpAnimation, 0, JumpFadeTime);
         }
     }
 

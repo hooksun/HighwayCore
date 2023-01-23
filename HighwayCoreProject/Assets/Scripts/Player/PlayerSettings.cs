@@ -7,7 +7,7 @@ public class PlayerSettings : ScriptableObject
     [System.Serializable]
     public struct Setting
     {
-        public float sensitivity, fov, volume, highscore;
+        public float sensitivity, fov, volume, musicVolume, highscore;
     }
     public Setting settings;
     public bool serialize;
