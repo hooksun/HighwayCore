@@ -18,8 +18,9 @@ public class WeaponAnim : PlayerBehaviour
         WhatIsGun();
         anim.SetBool("punching", punch);
         
-        if(gun.isShooting && gun.gunData.currentAmmoInMag > 0)
+        if(gun.isShooting){
             Shoot();
+        }
         else if(gun.isReloading){
             Reload();
         }

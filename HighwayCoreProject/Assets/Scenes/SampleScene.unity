@@ -5249,6 +5249,7 @@ MonoBehaviour:
     m_Bits: 392
   ShootSound: {fileID: 8454592958891627763}
   ReloadSound: {fileID: 8454592958891627765}
+  anim: {fileID: 118632669}
 --- !u!1 &530518715582177621
 GameObject:
   m_ObjectHideFlags: 0
