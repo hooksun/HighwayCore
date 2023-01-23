@@ -24,7 +24,7 @@ public class GunScript : PlayerBehaviour
     public LayerMask bulletMask;
     public Audio ShootSound;
     public AudioSequence ReloadSound;
-    // public WeaponAnim anim;
+    public WeaponAnim anim;
     // public GameObject curWeapon;
 
     
@@ -68,19 +68,20 @@ public class GunScript : PlayerBehaviour
         timeSinceLastSwitch += Time.deltaTime;
 
 
-        if(fireInput ){
+        if(fireInput){
             if(!player.Melee.isPunching)
                 shooting();
         }
         if(!fireInput){
             isShooting = false;
-            //Invoke("StoppedShooting", .5f);
+            //Invoke("StopShooting", .4f);
         }
         if(secondaryInput){
             SecondaryFire();
         }
         else{
             isScope = false;
+
         }
 
         player.Aim.ScopeIn(isScope);
@@ -99,6 +100,9 @@ public class GunScript : PlayerBehaviour
         }
         
         isReloading = gunData.isReloading;
+    }
+    void StopShooting(){
+        isShooting = false;
     }
 
     void whatIsWeaponShoot(){
@@ -120,7 +124,6 @@ public class GunScript : PlayerBehaviour
 
     void shooting(){
         if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
-            isShooting = true;
             whatIsWeaponShoot();
             timeSinceLastShot = 0f;
             gunData.currentAmmoInMag--;
@@ -136,6 +139,8 @@ public class GunScript : PlayerBehaviour
     void ARBullet(){
         ShootSound.clip = gunData.shootAudio;
         ShootSound.Play();
+        isShooting = true;
+        //anim.anim.SetTrigger("shoot");
         for(int i = 0; i < gunData.bulletsPerShot; i++)
         {
             Projectile bullet = ProjectilePool.GetObject();
@@ -199,7 +204,10 @@ public class GunScript : PlayerBehaviour
         if(!gunData.isReloading && timeSinceLastShot > fireRate && timeSinceLastSwitch > gunData.switchSpeed){
             return true;
         }
-        return false;
+        else{
+            isShooting = false;
+            return false;
+        }
     }
 
     Quaternion randomSpread(){
