@@ -255,7 +255,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     float grappleDelay;
     bool isGrappling, grappleCooldown;
     TransformPoint grapplePoint;
-    Enemy grappledEnemy;
     public void GrappleInput(InputAction.CallbackContext ctx)
     {
         if(!ctx.started || !HasGrapple || grappleCooldown)
@@ -268,7 +267,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
                 GrappleObj.Retract();
                 return;
             }
-            grappledEnemy = null;
             player.abilityCooldown = true;
             GrappleObj.Fire(player.Head.forward, player.Head.position, this);
         }
@@ -304,10 +302,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         directionWorld -= grappleDir * Mathf.Min(0f, Vector3.Dot(directionWorld, grappleDir));
         velocity = Vector3.MoveTowards(velocity, grappleDir * GrappleSpeed, (newSqrDist<grappleSqrDist?GrappleAccel:GrappleDecel) * Time.fixedDeltaTime);
         grappleSqrDist = newSqrDist;
-        if(grappledEnemy != null)
-        {
-            grappledEnemy.Stun(Vector3.zero);
-        }
     }
 
     void StopGrapple()
@@ -353,9 +347,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         grappleDelay = GrappleRetractDelay;
         grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
         grappleSqrDist = (hit.point - transform.position).sqrMagnitude;
-        grappledEnemy = hit.transform.GetComponent<Enemy>();
-        if(grappledEnemy != null)
-            grappledEnemy.TakeDamage(0f);
         Vector3 grappleDir = (hit.point - player.position).normalized;
         Vector3 grappleVel = grappleDir * Mathf.Max(0f, Vector3.Dot(velocity, grappleDir));
         velocity = ((velocity - grappleVel) * GrappleDrag) + grappleVel;

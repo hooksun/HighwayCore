@@ -18,6 +18,7 @@ public class Player : MonoBehaviour, IHurtBox
     public WeaponAnim weaponAnim;
     public PlayerInput input;
     public Audio HitAudio;
+    public AudioClip NormalHit, CritHit;
 
     public static Player ActivePlayer;
     
@@ -90,7 +91,11 @@ public class Player : MonoBehaviour, IHurtBox
         Settings.Save();
     }
 
-    public void PlayHitAudio() => HitAudio.Play();
+    public void PlayHitAudio(bool crit)
+    {
+        HitAudio.clip = (crit?CritHit:NormalHit);
+        HitAudio.Play();
+    }
 
     public void EnableInput(bool yes)
     {

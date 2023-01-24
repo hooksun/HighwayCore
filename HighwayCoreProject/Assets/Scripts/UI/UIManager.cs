@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
     public CanvasGroup ScopeUI;
     public float ScopeAppear;
     public UISlider HealthBar, JetpackFuel;
-    public UIFade JetpackFuelFade, ObjectiveFade, HitMarker;
+    public UIFade JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker;
     
     UIClass[] UIClasses;
     float fps;
@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        UIClasses = new UIClass[]{HealthBar, JetpackFuel, JetpackFuelFade, ObjectiveFade, HitMarker};
+        UIClasses = new UIClass[]{HealthBar, JetpackFuel, JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker};
     }
 
     void Update()
@@ -76,8 +76,11 @@ public class UIManager : MonoBehaviour
 
     public static void SetHitMarker(bool crit = false)
     {
-        instance.HitMarker.SetValue();
-        Player.ActivePlayer.PlayHitAudio();
+        if(crit)
+            instance.CritMarker.SetValue();
+        else
+            instance.HitMarker.SetValue();
+        Player.ActivePlayer.PlayHitAudio(crit);
     }
 
     public static void SetDamageDirection(Vector3 direction)
@@ -90,6 +93,7 @@ public class UIManager : MonoBehaviour
     public static void SetScope(float amount)
     {
         instance.ScopeUI.alpha = Mathf.InverseLerp(instance.ScopeAppear, 1f, amount);
+        instance.Crosshair.gameObject.SetActive(amount < instance.ScopeAppear);
     }
 
     public static void SetJetpackFuel(float amount)

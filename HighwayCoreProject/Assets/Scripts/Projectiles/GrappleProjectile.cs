@@ -6,12 +6,13 @@ public class GrappleProjectile : MonoBehaviour
 {
     public LineRenderer lRenderer;
     
-    public float speed, retractSpeed, maxDistance, approachRate, castRadius;
+    public float speed, retractSpeed, maxDistance, approachRate, castRadius, hitDamage;
     public LayerMask hitMask;
 
     public Audio ShootAudio, RetractAudio;
 
     IProjectileSpawner spawner;
+    Enemy enemy;
     TransformPoint grapplePoint;
     Vector3 offset, velocity, projPos, grapplePos;
     float distance;
@@ -28,6 +29,7 @@ public class GrappleProjectile : MonoBehaviour
         projPos = spawnPoint;
         distance = 0f;
         spawner = spawnr;
+        enemy = null;
         lRenderer.enabled = true;
         enabled = true;
         ShootAudio.Play();
@@ -93,6 +95,9 @@ public class GrappleProjectile : MonoBehaviour
             isFiring = false;
             grapplePoint = new TransformPoint(hit.transform, hit.point - hit.transform.position);
             spawner.OnTargetHit(hit);
+            enemy = hit.transform.GetComponent<Enemy>();
+            if(enemy != null)
+                enemy.TakeDamage(hitDamage);
             RetractAudio.Play();
         }
         if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)
@@ -101,6 +106,8 @@ public class GrappleProjectile : MonoBehaviour
             return;
         }
         grapplePos = Vector3.MoveTowards(grapplePos, grapplePoint.worldPoint, speed * Time.deltaTime);
+        if(enemy != null && enemy.gameObject.activeInHierarchy)
+            enemy.Stun(Vector3.zero);
     }
 }
 

@@ -7,7 +7,7 @@ public class PlayerAim : PlayerBehaviour
 {
     public Camera MainCam, WeaponCam;
     public float HeadRotateSpeed;
-    public float scopeMulti, fovTime;
+    public float scopeMulti, weaponScopeMulti, fovTime;
 
     Vector3 direction, headRotateOffset, headTargetOffset;
     float weaponFov, fovRange, fovTarget, fovSpeed;
@@ -46,7 +46,7 @@ public class PlayerAim : PlayerBehaviour
     {
         fovRange = Mathf.MoveTowards(fovRange, fovTarget, fovSpeed * Time.deltaTime);
         MainCam.fieldOfView = Mathf.Lerp(fov, fov * scopeMulti, fovRange);
-        WeaponCam.fieldOfView = Mathf.Lerp(weaponFov, weaponFov * scopeMulti, fovRange);
+        WeaponCam.fieldOfView = Mathf.Lerp(weaponFov, weaponFov * weaponScopeMulti, fovRange);
 
         if(Time.deltaTime == 0f)
             return;

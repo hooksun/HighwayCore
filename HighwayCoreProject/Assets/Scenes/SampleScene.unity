@@ -2569,7 +2569,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0.2235294, g: 0.4721414, b: 0.8980392, a: 1}
+  m_Color: {r: 0.90588236, g: 0.37254903, b: 0.7058824, a: 1}
   m_Intensity: 0.2
   m_Range: 10
   m_SpotAngle: 30
@@ -5590,6 +5590,7 @@ MonoBehaviour:
   WeaponCam: {fileID: 7131788854825130852}
   HeadRotateSpeed: 45
   scopeMulti: 0.5
+  weaponScopeMulti: 0.2
   fovTime: 0.25
 --- !u!54 &530518716359227962
 Rigidbody:
@@ -6339,7 +6340,7 @@ MonoBehaviour:
   cooldown: 1.5
   globalCooldown: 0.3
   delay: 0.2
-  damage: 0
+  damage: 15
   knockback: 5
   HitboxCenter: {x: 0, y: 0, z: 1.25}
   HalfExtent: {x: 1.5, y: 1, z: 1.5}
@@ -6429,6 +6430,8 @@ MonoBehaviour:
   weaponAnim: {fileID: 0}
   input: {fileID: 530518716359227963}
   HitAudio: {fileID: 8454592958896111176}
+  NormalHit: {fileID: 8300000, guid: 70cd073e86226f64e84c4c51e536a504, type: 3}
+  CritHit: {fileID: 8300000, guid: fef1655be7005b445beb738c09f8ff64, type: 3}
   TrailTime: 0.8
   LookAtEnemyAngle: 100
   DamageResistance: 0
@@ -6459,6 +6462,7 @@ MonoBehaviour:
   maxDistance: 35
   approachRate: 3
   castRadius: 0.2
+  hitDamage: 5
   hitMask:
     serializedVersion: 2
     m_Bits: 136

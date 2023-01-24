@@ -67,9 +67,9 @@ public class Enemy : MonoBehaviour, IHurtBox
 
     public void TakeDamage(float amount)
     {
-        UIManager.SetHitMarker();
         Attack.TakeDamage(amount);
         Health.TakeDamage(amount);
+        UIManager.SetHitMarker(!gameObject.activeInHierarchy);
     }
 
     public void Stun(Vector3 knockback)
