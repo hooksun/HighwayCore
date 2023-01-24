@@ -50,6 +50,8 @@ public class PlayerAim : PlayerBehaviour
 
         if(Time.deltaTime == 0f)
             return;
+
+        UIManager.SetScope(fovRange);
         
         transform.rotation = Quaternion.Euler(Vector3.up * direction.y);
         player.Head.localRotation = Quaternion.Euler(Vector3.right * direction.x);
