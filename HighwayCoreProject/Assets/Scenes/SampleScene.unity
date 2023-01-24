@@ -6440,6 +6440,7 @@ MonoBehaviour:
   usingAbility: 0
   usingWeapon: 0
   freezeScore: 0
+  dead: 0
 --- !u!114 &7030582162473291520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6455,7 +6456,7 @@ MonoBehaviour:
   lRenderer: {fileID: 5983912197994531797}
   speed: 35
   retractSpeed: 50
-  maxDistance: 25
+  maxDistance: 35
   approachRate: 3
   castRadius: 0.2
   hitMask:

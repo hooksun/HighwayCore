@@ -9,7 +9,8 @@ public class UIManager : MonoBehaviour
     static UIManager instance;
 
     public RectTransform Crosshair;
-    public TextMeshProUGUI AmmoText, ReserveText, HealthText, ObjectiveText, ScoreText, HighscoreText;
+    public TextMeshProUGUI AmmoText, ReserveText, HealthText, ObjectiveText, ScoreText, HighscoreText, FPSText;
+    public float FPSInterval;
     public GameObject DeathMenu;
     public CanvasGroup ScopeUI;
     public float ScopeAppear;
@@ -17,6 +18,7 @@ public class UIManager : MonoBehaviour
     public UIFade JetpackFuelFade, ObjectiveFade, HitMarker;
     
     UIClass[] UIClasses;
+    float fps;
 
     void Awake()
     {
@@ -26,6 +28,13 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
+        if(fps <= 0f)
+        {
+            FPSText.text = "FPS: " + (1f/Time.unscaledDeltaTime).ToString("0.00");
+            fps += FPSInterval;
+        }
+        fps -= Time.unscaledDeltaTime;
+
         if(Time.deltaTime == 0f)
             return;
 
