@@ -167,22 +167,24 @@ public class GunScript : PlayerBehaviour
     int prevSelectedWeapon;
     int prevNumOfswitch;
     void Reloading(){
-        bool indexSet = false;
-        if(!indexSet){  
-            prevSelectedWeapon = weaponSwitching.currentWeapon;
-            prevNumOfswitch = weaponSwitching.numOfSwitch;
-            indexSet = true;
-        }
-        //Debug.Log(prevSelectedWeapon);
-        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch && timeSinceLastSwitch > gunData.switchSpeed){
-            gunData.isReloading = true;
-            isShooting = false;
-            player.usingWeapon = true;
+        if(timeSinceLastShot > fireRate - fireRate/4){
+            bool indexSet = false;
+            if(!indexSet){  
+                prevSelectedWeapon = weaponSwitching.currentWeapon;
+                prevNumOfswitch = weaponSwitching.numOfSwitch;
+                indexSet = true;
+            }
+            //Debug.Log(prevSelectedWeapon);
+            if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch && timeSinceLastSwitch > gunData.switchSpeed){
+                gunData.isReloading = true;
+                isShooting = false;
+                player.usingWeapon = true;
 
-            ReloadSound.SetSequence(gunData.reloadSequence, gunData.reloadDelay);
-            ReloadSound.Play();
-            Invoke("ReloadingFinished", gunData.reloadTime);
-            
+                ReloadSound.SetSequence(gunData.reloadSequence, gunData.reloadDelay);
+                ReloadSound.Play();
+                Invoke("ReloadingFinished", gunData.reloadTime);
+                
+            }
         }
     }
     
