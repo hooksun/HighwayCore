@@ -129,6 +129,9 @@ public class GunScript : PlayerBehaviour
             timeSinceLastShot = 0f;
             gunData.currentAmmoInMag--;
         }
+        else{
+            isShooting = false;
+        }
     }
 
     // void ARBullet(){
@@ -171,7 +174,7 @@ public class GunScript : PlayerBehaviour
             indexSet = true;
         }
         //Debug.Log(prevSelectedWeapon);
-        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch){
+        if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch && timeSinceLastSwitch > gunData.switchSpeed){
             gunData.isReloading = true;
             isShooting = false;
             player.usingWeapon = true;

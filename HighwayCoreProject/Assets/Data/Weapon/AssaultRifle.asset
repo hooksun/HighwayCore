@@ -19,14 +19,14 @@ MonoBehaviour:
   currentAmmoInMag: 17
   magazineSize: 30
   maxAmmo: 150
-  ammoLeft: 129
+  ammoLeft: 150
   bulletsPerShot: 1
   fireRate: 600
   reloadTime: 2
   isReloading: 0
   bulletSpread: 0.01
   bulletSpeed: 150
-  switchSpeed: 0.3
+  switchSpeed: 0.15
   animator: {fileID: 9100000, guid: 92cf2b339299be144acb3ad28066bb61, type: 2}
   shootAudio: {fileID: 8300000, guid: 108125a919b02234b83a5b15341833e7, type: 3}
   reloadDelay: 0.5
