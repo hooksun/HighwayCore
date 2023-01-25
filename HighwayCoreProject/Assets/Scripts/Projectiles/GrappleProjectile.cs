@@ -97,7 +97,10 @@ public class GrappleProjectile : MonoBehaviour
             spawner.OnTargetHit(hit);
             enemy = hit.transform.GetComponent<Enemy>();
             if(enemy != null)
+            {
+                enemy.Stun(Vector3.zero);
                 enemy.TakeDamage(hitDamage);
+            }
             RetractAudio.Play();
         }
         if(grapplePoint.transform == null || !grapplePoint.transform.gameObject.activeInHierarchy)

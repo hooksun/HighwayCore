@@ -16,6 +16,7 @@ public class GunScript : PlayerBehaviour
     public TextMeshProUGUI ammoInMagCounter;
     public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
+    public Transform scopedFirePoint;
     public GameObject camGameObject;
     public float t = 0f;
     bool isScope = false;
@@ -144,7 +145,8 @@ public class GunScript : PlayerBehaviour
         for(int i = 0; i < gunData.bulletsPerShot; i++)
         {
             Projectile bullet = ProjectilePool.GetObject();
-            bullet.Initiate(player.Head.position,player.Head.rotation,gun.firePoint.position,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread,bulletMask);
+            Vector3 firePoint = (UIManager.scoping?scopedFirePoint.position:gun.firePoint.position);
+            bullet.Initiate(player.Head.position,player.Head.rotation,firePoint,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread,bulletMask);
         }
     }
     void ShotgunBullet(){

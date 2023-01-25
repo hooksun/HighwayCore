@@ -90,10 +90,12 @@ public class UIManager : MonoBehaviour
         damage.Activate(direction);
     }
 
+    public static bool scoping;
     public static void SetScope(float amount)
     {
         instance.ScopeUI.alpha = Mathf.InverseLerp(instance.ScopeAppear, 1f, amount);
-        instance.Crosshair.gameObject.SetActive(amount < instance.ScopeAppear);
+        scoping = amount >= instance.ScopeAppear;
+        instance.Crosshair.gameObject.SetActive(!scoping);
     }
 
     public static void SetJetpackFuel(float amount)
@@ -109,8 +111,8 @@ public class UIManager : MonoBehaviour
 
     public static void SetScore(float score, float highscore, bool setDeath = true)
     {
-        instance.ScoreText.text = "Score: " + score.ToString();
-        instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString());
+        instance.ScoreText.text = "Score: " + score.ToString() + "m";
+        instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString()) + "m";
         SetDeathMenu(setDeath);
     }
     public static void SetDeathMenu(bool active) => instance.DeathMenu.SetActive(active);
