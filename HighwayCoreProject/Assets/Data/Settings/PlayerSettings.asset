@@ -16,6 +16,6 @@ MonoBehaviour:
     sensitivity: 25
     fov: 90
     volume: 1
-    musicVolume: 1
+    music: 1
     highscore: 0
   serialize: 1

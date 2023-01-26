@@ -15,6 +15,6 @@ MonoBehaviour:
   SpawnTable: {fileID: 11400000, guid: 39793cb7b0c378348a5adecf76dd9b22, type: 2}
   Waves:
   - TotalCost: 30
-    EndCost: 8
+    EndCost: 0
   - TotalCost: 30
     EndCost: 0

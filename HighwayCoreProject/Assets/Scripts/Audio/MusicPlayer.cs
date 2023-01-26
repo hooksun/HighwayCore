@@ -9,8 +9,15 @@ public class MusicPlayer : AudioPlayer
 
     }
 
+    protected override void Update()
+    {
+        Source.Pause();
+        SetVolume();
+        Source.UnPause();
+    }
+
     protected override void SetVolume()
     {
-        Source.volume = volume * Player.ActivePlayer.Settings.settings.musicVolume;
+        Source.volume = volume * SaveSystem.settings.settings.music;
     }
 }

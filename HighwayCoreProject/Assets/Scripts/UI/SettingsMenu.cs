@@ -7,17 +7,20 @@ using TMPro;
 public class SettingsMenu : MonoBehaviour
 {
     public PlayerSettings Default, Settings;
-    public SliderSetting sensitivity, fov, volume;
+    public SliderSetting sensitivity, fov, volume, music;
 
     void OnEnable()
     {
         Settings.Load();
+        SaveSystem.settings = Settings;
         sensitivity.ValueChange(Settings.settings.sensitivity);
-        fov.ValueChange(Settings.settings.fov);
-        volume.ValueChange(Settings.settings.volume);
         sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
+        fov.ValueChange(Settings.settings.fov);
         fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
+        volume.ValueChange(Settings.settings.volume);
         volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+        music.ValueChange(Settings.settings.music);
+        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
     }
     
     public void SensitivitySliderChange()
@@ -75,6 +78,25 @@ public class SettingsMenu : MonoBehaviour
         volume.ValueChange(Default.settings.volume);
         Settings.settings.volume = volume.value;
         volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+    }
+
+    public void MusicSliderChange()
+    {
+        music.SliderChange();
+        Settings.settings.music = music.value;
+        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
+    }
+    public void MusicFieldChange()
+    {
+        music.FieldChange();
+        Settings.settings.music = music.value;
+        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
+    }
+    public void MusicReset()
+    {
+        music.ValueChange(Default.settings.music);
+        Settings.settings.music = music.value;
+        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
     }
 
     void OnDisable()

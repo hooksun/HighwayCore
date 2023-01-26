@@ -34,6 +34,7 @@ public class Player : MonoBehaviour, IHurtBox
     void Awake()
     {
         Settings.Load();
+        SaveSystem.settings = Settings;
 
         Aim.player = this;
         Movement.player = this;

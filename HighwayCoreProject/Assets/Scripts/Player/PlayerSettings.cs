@@ -4,11 +4,6 @@ using System.IO;
 [CreateAssetMenu(fileName = "PlayerSettings", menuName = "Player/Settings")]
 public class PlayerSettings : ScriptableObject
 {
-    [System.Serializable]
-    public struct Setting
-    {
-        public float sensitivity, fov, volume, musicVolume, highscore;
-    }
     public Setting settings;
     public bool serialize;
 
@@ -43,4 +38,10 @@ public class PlayerSettings : ScriptableObject
         Setting newSettings = JsonUtility.FromJson<Setting>(setting);
         settings = newSettings;
     }
+}
+
+[System.Serializable]
+public struct Setting
+{
+    public float sensitivity, fov, volume, music, highscore;
 }
