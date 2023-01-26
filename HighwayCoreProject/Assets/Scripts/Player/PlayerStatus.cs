@@ -34,8 +34,7 @@ public class PlayerStatus : PlayerBehaviour
 
     public void ShowDeathMenu(){
         UIManager.SetDeathMenu(true);
-        showCursor();
-        Time.timeScale = 0f;
+        PauseMenu.FreezeTime(true);
     }
 
     void showCursor(){

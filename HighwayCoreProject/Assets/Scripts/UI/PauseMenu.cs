@@ -19,24 +19,32 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void Pause(){
-        Time.timeScale = 0f;
         PauseUI.SetActive(true);
         isPaused = true;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
 
-        AudioPlayer.PauseAll(true);
-        Player.ActivePlayer.EnableInput(false);
+        FreezeTime(true);
     }
 
     public void Resume(){
-        Time.timeScale = 1f;
         PauseUI.SetActive(false);
         isPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
 
-        AudioPlayer.PauseAll(false);
-        Player.ActivePlayer.EnableInput(true);
+        FreezeTime(false);
+    }
+
+    public static void FreezeTime(bool freeze)
+    {
+        AudioPlayer.PauseAll(freeze);
+        Player.ActivePlayer.EnableInput(!freeze);
+        if(freeze)
+        {
+            Time.timeScale = 0f;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void QuitToMainMenu(){
