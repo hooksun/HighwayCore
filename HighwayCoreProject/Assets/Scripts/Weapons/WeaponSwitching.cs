@@ -28,16 +28,15 @@ public class WeaponSwitching : PlayerBehaviour
         if(player.dead)
             return;
 
-        prevSelectedWeapon = currentWeapon;
         for(int i=0;i<keyCodes.Length;i++){
             if(Input.GetKeyDown(keyCodes[i])){
                 currentWeapon = i;
             }
         }
-        if(prevSelectedWeapon!=currentWeapon){
+        if(!player.Melee.isPunching && prevSelectedWeapon!=currentWeapon){
             //player.weaponAnim.Idle();
+            prevSelectedWeapon = currentWeapon;
             selectWeapon(currentWeapon);
-            gunScript.ReloadSound.Stop();
             numOfSwitch++;
         }
         //changeGunData();
@@ -59,9 +58,12 @@ public class WeaponSwitching : PlayerBehaviour
     }
 
     void selectWeapon(int index){
+        UIManager.SetWeapon(index);
+        gunScript.ReloadSound.Stop();
         for(int i=0;i<weapons.Length;i++){
             weapons[i].gameObject.SetActive(i == index);
         }
+        gunScript.gunData.isReloading = false;
         gunScript.gunData = weapons[index].data;
         gunScript.gun = weapons[index];
         gunScript.gunData.isReloading = false;

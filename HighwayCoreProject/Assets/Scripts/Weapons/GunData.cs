@@ -17,7 +17,7 @@ public class GunData : ScriptableObject
     public int ammoLeft;
     public int bulletsPerShot = 1;
     public float fireRate;
-    public float reloadTime;
+    public float reloadTime, reloadRecovery;
     public bool isReloading;
     public float bulletSpread;
     public float bulletSpeed;

@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public RectTransform Crosshair;
     public TextMeshProUGUI AmmoText, ReserveText, HealthText, ObjectiveText, ScoreText, HighscoreText, FPSText;
     public float FPSInterval;
+    public GameObject[] Guns;
     public GameObject DeathMenu;
     public CanvasGroup ScopeUI;
     public float ScopeAppear;
@@ -59,7 +60,10 @@ public class UIManager : MonoBehaviour
 
     public static void SetWeapon(int gun)
     {
-        
+        for(int i = 0; i < instance.Guns.Length; i++)
+        {
+            instance.Guns[i].SetActive(i == gun);
+        }
     }
 
     public static void SetObjectiveText(string text)
@@ -68,7 +72,7 @@ public class UIManager : MonoBehaviour
         instance.ObjectiveFade.SetValue();
     }
 
-    const float crosshairMulti = 1400f;
+    const float crosshairMulti = 2200f;
     public static void SetCrosshairSpread(float amount)
     {
         instance.Crosshair.sizeDelta = Vector2.one * amount * crosshairMulti;
@@ -98,10 +102,11 @@ public class UIManager : MonoBehaviour
         instance.Crosshair.gameObject.SetActive(!scoping);
     }
 
-    public static void SetJetpackFuel(float amount)
+    public static void SetJetpackFuel(float amount, bool updateFade = true)
     {
         instance.JetpackFuel.SetValue(amount);
-        instance.JetpackFuelFade.SetValue();
+        if(updateFade)
+            instance.JetpackFuelFade.SetValue();
     }
 
     public static void SetJetpackAirJumpCost(float amount)

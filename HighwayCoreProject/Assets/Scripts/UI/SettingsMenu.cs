@@ -7,131 +7,44 @@ using TMPro;
 public class SettingsMenu : MonoBehaviour
 {
     public PlayerSettings Default, Settings;
-    public SliderSetting sensitivity, fov, volume, music;
+    public SettingSlider sensitivity, fov, volume, music;
 
     void OnEnable()
     {
         Settings.Load();
         SaveSystem.settings = Settings;
+        sensitivity.DefaultValue = Default.settings.sensitivity;
         sensitivity.ValueChange(Settings.settings.sensitivity);
-        sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
+        fov.DefaultValue = Default.settings.fov;
         fov.ValueChange(Settings.settings.fov);
-        fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
+        volume.DefaultValue = Default.settings.volume;
         volume.ValueChange(Settings.settings.volume);
-        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+        music.DefaultValue = Default.settings.music;
         music.ValueChange(Settings.settings.music);
-        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
     }
     
-    public void SensitivitySliderChange()
+    public void SensitivityValueChange(float value)
     {
-        sensitivity.SliderChange();
-        Settings.settings.sensitivity = sensitivity.value;
-        sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
-    }
-    public void SensitivityFieldChange()
-    {
-        sensitivity.FieldChange();
-        Settings.settings.sensitivity = sensitivity.value;
-        sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
-    }
-    public void SensitivityReset()
-    {
-        sensitivity.ValueChange(Default.settings.sensitivity);
-        Settings.settings.sensitivity = sensitivity.value;
-        sensitivity.Reset.SetActive(Default.settings.sensitivity != Settings.settings.sensitivity);
+        Settings.settings.sensitivity = value;
     }
 
-    public void FovSliderChange()
+    public void FovValueChange(float value)
     {
-        fov.SliderChange();
-        Settings.settings.fov = fov.value;
-        fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
-    }
-    public void FovFieldChange()
-    {
-        fov.FieldChange();
-        Settings.settings.fov = fov.value;
-        fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
-    }
-    public void FovReset()
-    {
-        fov.ValueChange(Default.settings.fov);
-        Settings.settings.fov = fov.value;
-        fov.Reset.SetActive(Default.settings.fov != Settings.settings.fov);
+        Settings.settings.fov = value;
     }
 
-    public void VolumeSliderChange()
+    public void VolumeValueChange(float value)
     {
-        volume.SliderChange();
-        Settings.settings.volume = volume.value;
-        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
-    }
-    public void VolumeFieldChange()
-    {
-        volume.FieldChange();
-        Settings.settings.volume = volume.value;
-        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
-    }
-    public void VolumeReset()
-    {
-        volume.ValueChange(Default.settings.volume);
-        Settings.settings.volume = volume.value;
-        volume.Reset.SetActive(Default.settings.volume != Settings.settings.volume);
+        Settings.settings.volume = value;
     }
 
-    public void MusicSliderChange()
+    public void MusicValueChange(float value)
     {
-        music.SliderChange();
-        Settings.settings.music = music.value;
-        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
-    }
-    public void MusicFieldChange()
-    {
-        music.FieldChange();
-        Settings.settings.music = music.value;
-        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
-    }
-    public void MusicReset()
-    {
-        music.ValueChange(Default.settings.music);
-        Settings.settings.music = music.value;
-        music.Reset.SetActive(Default.settings.music != Settings.settings.music);
+        Settings.settings.music = value;
     }
 
     void OnDisable()
     {
         Settings.Save();
-    }
-
-    [System.Serializable]
-    public class SliderSetting
-    {
-        public Slider slider;
-        public TMP_InputField field;
-        public GameObject Reset;
-        public float value{get => slider.value;}
-
-        public void ValueChange(float amount)
-        {
-            amount -= amount % 0.01f;
-            slider.value = amount;
-            field.text = value.ToString();
-        }
-        public void SliderChange()
-        {
-            slider.value -= value % 0.01f;
-            field.text = value.ToString();
-        }
-        public void FieldChange()
-        {
-            float val;
-            if(float.TryParse(field.text, out val))
-            {
-                val -= val % 0.01f;
-                slider.value = Mathf.Clamp(val, slider.minValue, slider.maxValue);
-            }
-            field.text = value.ToString();
-        }
     }
 }

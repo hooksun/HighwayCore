@@ -10,23 +10,20 @@ public class GunScript : PlayerBehaviour
     public Gun gun;
     public bool isShooting;
     float fireRate;
-    public GameObject impact, bullet;
     float timeSinceLastShot;
     public float timeSinceLastSwitch;
-    public TextMeshProUGUI ammoInMagCounter;
-    public TextMeshProUGUI ammoLeftCounter;
     public WeaponSwitching weaponSwitching;
     public Transform scopedFirePoint;
-    public GameObject camGameObject;
-    public float t = 0f;
     bool isScope = false;
     public bool fireInput, secondaryInput;
     public bool isReloading;
+    public float scopeTime;
     public LayerMask bulletMask;
     public Audio ShootSound;
     public AudioSequence ReloadSound;
     public WeaponAnim anim;
-    // public GameObject curWeapon;
+
+    float spreadMulti;
 
     
     // Start is called before the first frame update
@@ -85,13 +82,14 @@ public class GunScript : PlayerBehaviour
 
         }
 
-        player.Aim.ScopeIn(isScope);
+        player.Aim.ScopeIn(isScope, scopeTime);
+        spreadMulti = (isScope?Mathf.MoveTowards(spreadMulti, 0f, Time.deltaTime / scopeTime):1f);
 
         //ammoInMagCounter.SetText("AMMO : " + gunData.currentAmmoInMag.ToString());
         //ammoLeftCounter.SetText(gunData.ammoLeft.ToString());
         UIManager.SetAmmo(gunData.currentAmmoInMag);
         UIManager.SetReserve(gunData.ammoLeft);
-        UIManager.SetCrosshairSpread(gunData.bulletSpread);
+        UIManager.SetCrosshairSpread(gunData.bulletSpread * spreadMulti);
 
         if(gunData.isReloading || isScope){
             player.usingWeapon = true;
@@ -111,13 +109,7 @@ public class GunScript : PlayerBehaviour
     }
 
     void SecondaryFire(){
-        if(gunData.name == "Shotgun"){
-            
-        }
-        if(gunData.name == "AR" || gunData.name == "Pistol"){
-            
-        }
-        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown && ReadyToShoot()){
+        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown && ReadyToScope()){
             isScope = true;
             //player.Aim.ScopeIn(true);
         }
@@ -152,28 +144,13 @@ public class GunScript : PlayerBehaviour
             bullet.Initiate(player.Head.position,player.Head.rotation,firePoint,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread,bulletMask);
         }
     }
-    void ShotgunBullet(){
-        ShootSound.Play();
-        for(int i=0;i<6;i++){
-            BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
-        }
-    }
-
-    void SniperBullet(){
-        ShootSound.Play();
-        BulletPool.Instance.SpawnFromPool("bullet", camGameObject.transform.position, camGameObject.transform.rotation * randomSpread());
-    }
 
     int prevSelectedWeapon;
     int prevNumOfswitch;
     void Reloading(){
-        if(timeSinceLastShot > fireRate - fireRate/4){
-            bool indexSet = false;
-            if(!indexSet){  
-                prevSelectedWeapon = weaponSwitching.currentWeapon;
-                prevNumOfswitch = weaponSwitching.numOfSwitch;
-                indexSet = true;
-            }
+        if(timeSinceLastShot > gunData.reloadRecovery){
+            prevSelectedWeapon = weaponSwitching.currentWeapon;
+            prevNumOfswitch = weaponSwitching.numOfSwitch;
             //Debug.Log(prevSelectedWeapon);
             if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch && timeSinceLastSwitch > gunData.switchSpeed){
                 gunData.isReloading = true;
@@ -192,7 +169,7 @@ public class GunScript : PlayerBehaviour
         
     }
     void ReloadingFinished(){ //This is where the ammo refill
-        if(prevSelectedWeapon == weaponSwitching.currentWeapon && weaponSwitching.numOfSwitch == prevNumOfswitch){
+        if(timeSinceLastSwitch > gunData.switchSpeed + gunData.reloadTime){
             int numOfBulletNeeded = gunData.magazineSize - gunData.currentAmmoInMag;
 
             if(numOfBulletNeeded > gunData.ammoLeft){
@@ -212,7 +189,16 @@ public class GunScript : PlayerBehaviour
             return true;
         }
         else{
-            isShooting = false;
+            //isShooting = false;
+            return false;
+        }
+    }
+    public bool ReadyToScope(){
+        if(!gunData.isReloading && timeSinceLastShot > gunData.reloadRecovery && timeSinceLastSwitch > gunData.switchSpeed){
+            return true;
+        }
+        else{
+            //isShooting = false;
             return false;
         }
     }

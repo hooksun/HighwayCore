@@ -17,16 +17,15 @@ public class WeaponAnim : PlayerBehaviour
         punch = melee.isPunching;
         WhatIsGun();
         anim.SetBool("punching", punch);
-        
-        if(gun.isShooting){
+
+        if(gun.timeSinceLastSwitch < gun.gunData.switchSpeed){
+            Equip();
+        }
+        else if(gun.isShooting){
             Shoot();
         }
         else if(gun.isReloading){
             Reload();
-        }
-        //timeSinceLastSwitch > gunData.switchSpeed
-        else if (gun.timeSinceLastSwitch < gun.gunData.switchSpeed){
-            Equip();
         }
         else{
             Idle();
@@ -34,22 +33,8 @@ public class WeaponAnim : PlayerBehaviour
     }
 
     public void WhatIsGun(){
-        //anim.runtimeAnimatorController = gun.gunData.animator;
-        if(gun.gunData.name == "Sniper"){
-            Animator sniper = GameObject.Find("SniperAnim").GetComponent<Animator>();
-            runTimeAnim = sniper.runtimeAnimatorController;
-            anim.runtimeAnimatorController = runTimeAnim;
-        }
-        else if(gun.gunData.name == "Shotgun"){
-            Animator sniper = GameObject.Find("ARAnim").GetComponent<Animator>();
-            runTimeAnim = sniper.runtimeAnimatorController;
-            anim.runtimeAnimatorController = runTimeAnim;
-        }
-        else if(gun.gunData.name == "AR"){
-            Animator sniper = GameObject.Find("SGAnim").GetComponent<Animator>();
-            runTimeAnim = sniper.runtimeAnimatorController;
-            anim.runtimeAnimatorController = runTimeAnim;
-        }
+        anim.runtimeAnimatorController = gun.gunData.animator;
+        
     }
     
     public void Reload(){

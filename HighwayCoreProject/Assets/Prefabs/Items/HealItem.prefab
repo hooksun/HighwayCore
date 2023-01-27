@@ -121,7 +121,7 @@ MonoBehaviour:
   lockOnRadius: 7
   lockOnAccel: 70
   lockOnSpeed: 20
-  caughtRadius: 0.6
+  caughtRadius: 0.7
   upTime: 20
   HealAmount: 10
 --- !u!54 &-8850811138040332444

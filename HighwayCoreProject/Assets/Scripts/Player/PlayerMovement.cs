@@ -53,7 +53,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     {
         HasJetpack = true;
         currentFuel = JetpackFuel;
-        UIManager.SetJetpackFuel(1f);
+        UIManager.SetJetpackFuel(1f, false);
         UIManager.SetJetpackAirJumpCost(AirJumpCost / JetpackFuel);
 
     }
