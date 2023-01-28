@@ -94,6 +94,9 @@ public class Player : MonoBehaviour, IHurtBox
 
     public void PlayHitAudio(bool crit)
     {
+        if(!crit)
+            return;
+
         HitAudio.clip = (crit?CritHit:NormalHit);
         HitAudio.Play();
     }
