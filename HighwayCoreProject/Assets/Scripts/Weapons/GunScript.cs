@@ -141,7 +141,7 @@ public class GunScript : PlayerBehaviour
         {
             Projectile bullet = ProjectilePool.GetObject();
             Vector3 firePoint = (UIManager.scoping?scopedFirePoint.position:gun.firePoint.position);
-            bullet.Initiate(player.Head.position,player.Head.rotation,firePoint,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread,bulletMask);
+            bullet.Initiate(player.Head.position,player.Head.rotation,firePoint,gunData.bulletSpeed,gunData.damage,gunData.bulletSpread * spreadMulti,bulletMask);
         }
     }
 

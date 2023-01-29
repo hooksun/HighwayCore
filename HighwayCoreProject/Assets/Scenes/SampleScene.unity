@@ -2448,7 +2448,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 200, y: 7, z: 26}
+  m_Size: {x: 200, y: 7, z: 25.7}
   m_Center: {x: 0, y: -10.5, z: 0}
 --- !u!1 &283776849 stripped
 GameObject:
@@ -2695,7 +2695,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 26, y: 1, z: 800}
+  m_Size: {x: 25.7, y: 1, z: 800}
   m_Center: {x: 0, y: -7, z: 0}
 --- !u!54 &410818381
 Rigidbody:
@@ -2713,18 +2713,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 118
   m_CollisionDetection: 0
---- !u!114 &430378244 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 222678031632875317, guid: ea5e20aff22595b408bc703ee0d09c2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 222678031777772081}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &442180241
 GameObject:
   m_ObjectHideFlags: 0
@@ -3848,18 +3836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Vehicles: []
---- !u!114 &1457945984 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1457945984, guid: ea5e20aff22595b408bc703ee0d09c2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 222678031777772081}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1472807252
 GameObject:
   m_ObjectHideFlags: 0
@@ -4943,15 +4919,9 @@ MonoBehaviour:
   gunData: {fileID: 11400000, guid: 13c098b3a45d48541ab1a7aef12afd76, type: 2}
   gun: {fileID: 0}
   isShooting: 0
-  impact: {fileID: 1164095908613587540, guid: 0bb2654513a0e62458ee31a0d6ed714d, type: 3}
-  bullet: {fileID: 1641358072126768444, guid: 01cb7cf7b18736d4c80ab2ab51428bcc, type: 3}
   timeSinceLastSwitch: 0
-  ammoInMagCounter: {fileID: 430378244}
-  ammoLeftCounter: {fileID: 1457945984}
   weaponSwitching: {fileID: 8454592958891627762}
   scopedFirePoint: {fileID: 1706972805}
-  camGameObject: {fileID: 530518717446665885}
-  t: 0
   fireInput: 0
   secondaryInput: 0
   isReloading: 0

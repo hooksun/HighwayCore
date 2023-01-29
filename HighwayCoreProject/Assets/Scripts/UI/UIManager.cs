@@ -117,7 +117,7 @@ public class UIManager : MonoBehaviour
     public static void SetScore(float score, float highscore, bool setDeath = true)
     {
         instance.ScoreText.text = "Score: " + score.ToString() + "m";
-        instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString()) + "m";
+        instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString() + "m");
         SetDeathMenu(setDeath);
     }
     public static void SetDeathMenu(bool active) => instance.DeathMenu.SetActive(active);

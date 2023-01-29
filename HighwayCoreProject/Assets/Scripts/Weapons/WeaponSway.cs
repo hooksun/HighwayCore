@@ -8,6 +8,9 @@ public class WeaponSway : MonoBehaviour
     public float swayMultiplayer;
 
     private void Update(){
+
+        if(Time.deltaTime == 0f)
+            return;
         float mouseX = Input.GetAxisRaw("Mouse X") *  swayMultiplayer ;
         float mouseY = Input.GetAxisRaw("Mouse Y") * swayMultiplayer;
 
