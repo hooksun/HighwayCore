@@ -17,7 +17,7 @@ public class GunData : ScriptableObject
     public int ammoLeft;
     public int bulletsPerShot = 1;
     public float fireRate;
-    public float reloadTime, reloadRecovery;
+    public float reloadTime, unequipedReloadTime, reloadRecovery;
     public bool isReloading;
     public float bulletSpread;
     public float bulletSpeed;
@@ -26,5 +26,7 @@ public class GunData : ScriptableObject
     public AudioClip shootAudio;
     public float reloadDelay;
     public AudioTime[] reloadSequence;
+
+    [HideInInspector] public float unequipedTime;
 
 }

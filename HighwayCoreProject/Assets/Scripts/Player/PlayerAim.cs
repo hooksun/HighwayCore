@@ -88,10 +88,4 @@ public class PlayerAim : PlayerBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
     }
-    
-    public override void Die()
-    {
-        //ded
-        
-    }
 }

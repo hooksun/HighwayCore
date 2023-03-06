@@ -6,6 +6,7 @@ public class GrapplePathfinding : EnemyPathfinding
 {
     public LineRenderer grapple;
     public float minGrappleJumpHeight, grappleSpeed, grappleGravity, grappleHeight;
+    public Audio GrappleShoot, GrappleRetract;
 
     protected override float jumpGrav{get => (grappleLanded?grappleGravity:JumpGravity);}
 
@@ -15,13 +16,16 @@ public class GrapplePathfinding : EnemyPathfinding
 
     public override void Activate()
     {
-        base.Activate();
         StopGrapple();
         grapple.enabled = false;
+        base.Activate();
     }
 
     protected override void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         base.Update();
         if(grapple.enabled)
         {
@@ -31,6 +35,7 @@ public class GrapplePathfinding : EnemyPathfinding
                 if(grapplePos == grapple.transform.position)
                 {
                     grapple.enabled = false;
+                    GrappleRetract.Stop();
                     return;
                 }
             }
@@ -43,12 +48,13 @@ public class GrapplePathfinding : EnemyPathfinding
     {
         if(!grappling)
         {
-            if(enemy.stunned)
+            if(enemy.stunned || jumpPoint.worldPoint.y < transform.position.y - transformOffset.y)
                 return;
             grapple.enabled = true;
             grapplePos = grapple.transform.position;
             grappling = true;
             grappleLanded = false;
+            GrappleShoot.Play();
         }
         enemy.Attack.ForceLookAtPoint(jumpPoint.worldPoint);
         if(!grappleLanded)
@@ -57,6 +63,7 @@ public class GrapplePathfinding : EnemyPathfinding
             if(grapplePos == jumpPoint.worldPoint)
             {
                 grappleLanded = true;
+                GrappleRetract.Play();
             }
             return;
         }
@@ -84,7 +91,6 @@ public class GrapplePathfinding : EnemyPathfinding
             if(airVelocity.y <= 0f)
             {
                 StopGrapple();
-                enemy.Attack.StopForceLook();
                 return;
             }
             grapplePos = jumpPoint.worldPoint;
@@ -121,5 +127,6 @@ public class GrapplePathfinding : EnemyPathfinding
     {
         grappling = false;
         grappleLanded = false;
+        enemy.Attack.StopForceLook();
     }
 }

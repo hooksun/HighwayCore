@@ -8,7 +8,8 @@ public class EnemyManager : MonoBehaviour
     public HighwayGenerator Highway;
     public EnemySpawnTable[] EnemyTables;
     public EnemyBattle[] Battles;
-    public float barrierDistance;
+    public EnemyBattle BattleIncrement;
+    public float barrierDistance, battleClearDist = 70f;
     public Barrier forwardBarrier;
     public HighwayBarrier backBarrier;
 
@@ -19,6 +20,8 @@ public class EnemyManager : MonoBehaviour
     EnemySpawnTable currentTable;
     EnemyBattle currentBattle;
     EnemyWave currentWave;
+    EnemyWave[] waves;
+    EnemyCost costs, costBuffer;
     float TotalCost, ActiveCost, AggroCost, battlePos;
     int iTable, iBattle, iWave;
     bool battling, battleReady;
@@ -26,6 +29,7 @@ public class EnemyManager : MonoBehaviour
     void Start()
     {
         currentTable = EnemyTables[0];
+        costs = currentTable.Cost;
         spawnTime = currentTable.StartInterval;
         aggroTime = currentTable.AggroInterval;
     }
@@ -58,7 +62,7 @@ public class EnemyManager : MonoBehaviour
             return;
         
         spawnTime = Random.Range(currentTable.SpawnIntervalMin, currentTable.SpawnIntervalMax);
-        SpawnEnemies(currentTable.SpawnCost);
+        SpawnEnemies(costs.Spawn);
     }
 
     void SpawnEnemies(float cost)
@@ -66,13 +70,13 @@ public class EnemyManager : MonoBehaviour
         float spawned = 0f;
         while(spawned < cost)
         {
-            if(ActiveCost >= currentTable.ActiveCost || Spawners.Count == 0)
+            if(ActiveCost >= costs.Active || Spawners.Count == 0)
                 return;
 
             EnemyType enemy = currentTable.GetRandomEnemy();
-            if(ActiveCost + enemy.enemyCost > currentTable.ActiveCost)
+            if(ActiveCost + enemy.enemyCost > costs.Active)
             {
-                spawned += currentTable.FailCost;
+                spawned += costs.Fail;
                 continue;
             }
             int[] seq = Util.RandomSequence(Spawners.Count);
@@ -102,7 +106,7 @@ public class EnemyManager : MonoBehaviour
                 break;
             }
             if(!success)
-                spawned += currentTable.FailCost;
+                spawned += costs.Fail;
         }
     }
 
@@ -121,13 +125,13 @@ public class EnemyManager : MonoBehaviour
 
     void AggroEnemies()
     {
-        if(AggroCost >= currentTable.AggroCost || ActiveEnemies.Count == 0)
+        if(AggroCost >= costs.Aggro || ActiveEnemies.Count == 0)
             return;
         int[] seq = Util.RandomSequence(ActiveEnemies.Count);
         for(int i = 0; i < ActiveEnemies.Count; i++)
         {
             Enemy current = ActiveEnemies[seq[i]];
-            if(current.gameObject.activeInHierarchy && AggroCost + current.Cost <= currentTable.AggroCost && current.TrySetAggro())
+            if(current.gameObject.activeInHierarchy && AggroCost + current.Cost <= costs.Aggro && current.TrySetAggro())
                 return;
         }
     }
@@ -145,33 +149,57 @@ public class EnemyManager : MonoBehaviour
         forwardBarrier.transform.position = Vector3.forward * (battlePos + barrierDistance);
         forwardBarrier.Fade(true);
         backBarrier.visible = true;
+
+        for(int i = ActiveEnemies.Count - 1; i >= 0; i--)
+        {
+            if(ActiveEnemies[i].transform.position.z < battlePos - battleClearDist)
+                ActiveEnemies[i].Die();
+        }
+
         battling = true;
-        currentBattle = Battles[iBattle];
-        currentTable = currentBattle.SpawnTable;
+        if(iBattle < Battles.Length)
+        {
+            currentBattle = Battles[iBattle];
+            currentTable = currentBattle.SpawnTable;
+            costs = currentTable.Cost;
+            waves = currentBattle.Waves.Clone() as EnemyWave[];
+            costBuffer = costs;
+            iBattle++;
+        }
+        else
+        {
+            currentTable = currentBattle.SpawnTable;
+            for(int i = Mathf.Min(waves.Length, BattleIncrement.Waves.Length)-1; i >= 0; i--)
+            {
+                waves[i] += BattleIncrement.Waves[i];
+            }
+            costBuffer += BattleIncrement.SpawnTable.Cost;
+            costs = costBuffer;
+        }
         iWave = 0;
         StartWave();
     }
 
     void StartWave()
     {
-        if(iWave >= currentBattle.Waves.Length)
+        if(iWave >= waves.Length)
         {
             EndBattle();
             return;
         }
 
-        currentWave = currentBattle.Waves[iWave];
+        currentWave = waves[iWave];
+        spawnTime = currentTable.StartInterval;
         TotalCost = 0f;
         iWave++;
     }
 
     void EndBattle()
     {
-        if(iBattle+1 < Battles.Length)
-            iBattle++;
         if(iTable+1 < EnemyTables.Length)
             iTable++;
         currentTable = EnemyTables[iTable];
+        costs = currentTable.Cost;
         spawnTime = currentTable.StartInterval;
         battling = false;
         forwardBarrier.Fade(false);
@@ -199,7 +227,7 @@ public class EnemyManager : MonoBehaviour
         if(!newAggro)
             return true;
         
-        if(AggroCost > currentTable.AggroCost)
+        if(AggroCost > costs.Aggro)
         {
             if(!prioritize)
             {
@@ -224,28 +252,35 @@ public class EnemyManager : MonoBehaviour
     public List<PlatformAddress> RequestPlatformNeighbours(PlatformAddress platform, float boundsOffset)
     {
         List<PlatformAddress> answer = new List<PlatformAddress>();
+        bool inBarrier = WithinBarrier(platform);
 
         if(platform.platformIndex > 0)
         {
             PlatformAddress newPlat = platform;
             newPlat.platformIndex--;
-            answer.Add(newPlat);
+            if(!inBarrier || WithinBarrier(newPlat))
+                answer.Add(newPlat);
         }
         if(platform.platformIndex < platform.vehicle.Platforms.Length - 1)
         {
             PlatformAddress newPlat = platform;
             newPlat.platformIndex++;
-            answer.Add(newPlat);
+            if(!inBarrier || WithinBarrier(newPlat))
+                answer.Add(newPlat);
         }
         if(platform.platformIndex == 0 && platform.vehicleIndex > 0)
         {
             Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex-1];
-            answer.Add(new PlatformAddress(platform.lane, nextVehicle, nextVehicle.Platforms.Length - 1));
+            PlatformAddress newPlat = new PlatformAddress(platform.lane, nextVehicle, nextVehicle.Platforms.Length - 1);
+            if(!inBarrier || WithinBarrier(newPlat))
+                answer.Add(newPlat);
         }
         if(platform.platformIndex == platform.vehicle.Platforms.Length - 1 && platform.vehicleIndex < platform.lane.Vehicles.Count - 1)
         {
             Vehicle nextVehicle = platform.lane.Vehicles[platform.vehicleIndex+1];
-            answer.Add(new PlatformAddress(platform.lane, nextVehicle, 0));
+            PlatformAddress newPlat = new PlatformAddress(platform.lane, nextVehicle, 0);
+            if(!inBarrier || WithinBarrier(newPlat))
+                answer.Add(newPlat);
         }
         float boundsStart = platform.vehicle.position + platform.platform.BoundsStart.y - boundsOffset;
         float boundsEnd = platform.vehicle.position + platform.platform.BoundsEnd.y + boundsOffset;
@@ -269,7 +304,9 @@ public class EnemyManager : MonoBehaviour
                         if(vehicle.position + plat.BoundsStart.y > boundsEnd || vehicle.position + plat.BoundsEnd.y < boundsStart)
                             continue;
                         
-                        answer.Add(new PlatformAddress(nextLane, vehicle, j));
+                        PlatformAddress newPlat = new PlatformAddress(nextLane, vehicle, j);
+                        if(!inBarrier || WithinBarrier(newPlat))
+                            answer.Add(newPlat);
                     }
                 }
             }
@@ -277,6 +314,15 @@ public class EnemyManager : MonoBehaviour
         }
 
         return answer;
+    }
+
+    public bool WithinBarrier(PlatformAddress platform)
+    {
+        if(platform.vehicle.position + platform.platform.BoundsEnd.y < backBarrier.transform.position.z)
+            return false;
+        if(battling && platform.vehicle.position + platform.platform.BoundsStart.y > forwardBarrier.transform.position.z)
+            return false;
+        return true;
     }
 }
 

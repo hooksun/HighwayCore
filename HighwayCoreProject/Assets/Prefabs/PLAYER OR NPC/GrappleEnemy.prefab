@@ -122,15 +122,19 @@ MonoBehaviour:
   Cost: 7
   StunTime: 0.4
   StunResistance: 0
+  iFrames: 0
+  RagdollIndex: 0
   Attack: {fileID: 6806637070816601232}
   Pathfinding: {fileID: 3315381891334651298}
   Health: {fileID: 500471132682767721}
   Weapon: {fileID: -5117687832266868974}
   Animation: {fileID: 1350389818819486831}
+  Hitbox: {fileID: 0}
   targetPlayer: {fileID: 0}
   manager: {fileID: 0}
   stunned: 0
   aggro: 0
+  spawned: 0
 --- !u!114 &6806637070816601232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +153,7 @@ MonoBehaviour:
   MaxAttackDistance: 0
   MaxAttackAngle: 0
   AggroDistance: 0
+  LoseAggroDistance: 0
   MinVerticalAngle: -60
   MaxVerticalAngle: 70
   Aggro:
@@ -173,7 +178,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  DesiredDistance: 0
   MaxHeight: 3
   WalkSpeed: 7
   JumpHeight: 1
@@ -181,7 +185,7 @@ MonoBehaviour:
   FallGravity: 30
   JumpDistance: 4
   MaxJumpDistance: 7
-  JumpAnimation: 
+  JumpAnimation: Enemy Midair
   LongJumpAnimation: 
   JumpFadeTime: 0
   JumpDelay: 0
@@ -199,6 +203,8 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 264
+  footstepAudio: {fileID: 0}
+  isGrounded: 1
   grapple: {fileID: 2866856921374365101}
   minGrappleJumpHeight: 1.5
   grappleSpeed: 20
@@ -218,7 +224,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
   MaxHealth: 50
-  Health: 0
+  normalDrops: {fileID: 0}
+  stunnedDrops: {fileID: 0}
+  stunDrops: 0
 --- !u!114 &-5117687832266868974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +246,8 @@ MonoBehaviour:
   reloadSpeed: 0
   bulletSpread: 0
   bulletSpeed: 0
+  burstCooldown: 0
+  burstAmount: 0
   magSize: 0
   bulletsPerShot: 0
   bulletIndex: 0
@@ -245,8 +255,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   shootAnimation: 
+  reloadAnimation: 
+  shootSound: {fileID: 0}
+  reloadSound: {fileID: 0}
   shoot: 0
   cantShoot: 0
+  reloading: 0
 --- !u!114 &1350389818819486831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,13 +282,17 @@ MonoBehaviour:
   - {fileID: 0}
   waistSpeed: 5
   maxWaistAngle: 60
-  walkAnim: 
   idleAnim: 
+  torsoStunAnim: 
+  feetStunAnim: 
+  stunFadeTime: 0
   MoveAnimations:
   - 
   - 
   - 
   - 
+  animationsLength: 0
+  crossFadeDuration: 0
 --- !u!1 &5451625371424833567
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,24 +16,27 @@ public class PlayerStatus : PlayerBehaviour
     }
 
     public void TakeDamage(float damage){
-        if(health == 0f)
-            return;
         health-=damage;
         health = Mathf.Clamp(health, 0f, playerData.maxHealth);
         UIManager.SetHealth(health);
+        if(player.dead && health > 0f)
+            player.Die(false);
         if(health ==0){
             player.Die();
         }
     }
 
-    public override void Die()
+    public void Die()
     {
         //ded
         Invoke("ShowDeathMenu", animationAnimLength);
     }
 
     public void ShowDeathMenu(){
-        UIManager.SetDeathMenu(true);
+        if(!player.dead)
+            return;
+        player.SetScore();
+        UIManager.SetDeathButtons(true);
         PauseMenu.FreezeTime(true);
     }
 

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour, IHurtBox
 {
     public Transform Head;
     public Vector3 transformOffset;
-    public float Cost, StunTime, StunResistance, iFrames;
+    public float Cost, StunTime, GroundStunTime, StunResistance, iFrames;
     public int RagdollIndex;
     public EnemyAttack Attack;
     public EnemyPathfinding Pathfinding;
@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour, IHurtBox
 
     public bool crit{get => false;}
 
-    float stunTime, iframes;
+    [HideInInspector] public float stunTime, iframes;
 
     public void Activate()
     {
@@ -75,15 +75,14 @@ public class Enemy : MonoBehaviour, IHurtBox
     public void Stun(Vector3 knockback)
     {
         knockback *= 1f - StunResistance;
+        stunTime = (Pathfinding.isGrounded?GroundStunTime:StunTime);
+        stunned = true;
 
         Attack.Stun(knockback);
         Pathfinding.Stun(knockback);
         Health.Stun(knockback);
         Weapon.Stun(knockback);
         Animation.Stun(knockback);
-
-        stunTime = StunTime;
-        stunned = true;
     }
 
     public bool SetAggro(bool yes, bool prioritize = true)

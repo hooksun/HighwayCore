@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2801f5eb414520b4b8021223114302ee, type: 3}
+  m_Name: BattleIncrement
+  m_EditorClassIdentifier: 
+  SpawnTable: {fileID: 11400000, guid: e763ad165c9ae584599f3fa642dc9000, type: 2}
+  Waves:
+  - TotalCost: 5
+    EndCost: 0
+  - TotalCost: 5
+    EndCost: 0
+  - TotalCost: 5
+    EndCost: 0

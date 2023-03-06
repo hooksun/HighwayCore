@@ -15,6 +15,9 @@ public class WeaponModelAnim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+            
         if(gun.isReloading){
             anim.SetBool("reload", true);
         }

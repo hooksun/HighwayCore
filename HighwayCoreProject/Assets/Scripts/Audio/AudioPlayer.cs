@@ -14,7 +14,7 @@ public class AudioPlayer : MonoBehaviour
 
     protected virtual bool playing {get => Source.isPlaying;}
     
-    void Start()
+    protected virtual void Start()
     {
         SetVolume();
     }

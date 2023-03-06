@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyWeapon : EnemyBehaviour
 {
-    public Transform firePoint;
-    public float damage, fireRate, reloadSpeed, bulletSpread, bulletSpeed, burstCooldown;
+    public Transform firePoint, muzzleFlash;
+    public float damage, fireRate, muzzleTime = 0.05f, reloadSpeed, idleTime = 1f, bulletSpread, bulletSpeed, burstCooldown;
     public int burstAmount, magSize, bulletsPerShot, bulletIndex;
     public LayerMask hitMask;
     public string shootAnimation, reloadAnimation;
@@ -24,6 +24,7 @@ public class EnemyWeapon : EnemyBehaviour
         burstTime = 0f;
         reloadTime = 0f;
         mag = magSize;
+        muzzleFlash.gameObject.SetActive(false);
         burst = 0;
     }
 
@@ -31,9 +32,12 @@ public class EnemyWeapon : EnemyBehaviour
     {
         if(!cantShoot)
             return;
-        reloadTime = reloadSpeed;
-        reloading = false;
-        reloadSound.Stop();
+        if(reloadTime > idleTime)
+        {
+            reloadTime = reloadSpeed+idleTime;
+            reloading = false;
+            reloadSound.Stop();
+        }
     }
 
     void Update()
@@ -92,6 +96,15 @@ public class EnemyWeapon : EnemyBehaviour
         }
         enemy.Animation.Play(shootAnimation, 1);
         shootSound.Play();
+        StartCoroutine(MuzzleFlash());
+    }
+
+    IEnumerator MuzzleFlash()
+    {
+        muzzleFlash.Rotate(Vector3.forward * Random.Range(0f, 360f));
+        muzzleFlash.gameObject.SetActive(true);
+        yield return new WaitForSeconds(muzzleTime);
+        muzzleFlash.gameObject.SetActive(false);
     }
 
     public virtual void InitReload()
@@ -107,7 +120,7 @@ public class EnemyWeapon : EnemyBehaviour
         if(cantShoot && !reloading)
         {
             reloading = true;
-            reloadTime = reloadSpeed;
+            reloadTime = reloadSpeed + idleTime;
             enemy.Animation.Play(reloadAnimation, 1);
             reloadSound.Play();
         }

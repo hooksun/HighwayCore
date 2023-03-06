@@ -6,12 +6,12 @@ using UnityEngine.InputSystem;
 public class PlayerMelee : PlayerBehaviour
 {
     public float cooldown, globalCooldown;
-    public float delay, damage, knockback;
+    public float animDelay = .4f, delay, damage, knockback;
     public Vector3 HitboxCenter, HalfExtent;
     public LayerMask EnemyMask;
 
     bool onCooldown;
-    public bool isPunching ;
+    public bool isPunching, punchCooldown;
     
     public void Input(InputAction.CallbackContext ctx)
     {
@@ -34,16 +34,18 @@ public class PlayerMelee : PlayerBehaviour
         if(globalCooldown <= 0)
             yield break;
         
+        punchCooldown = true;
         player.abilityCooldown = true;
         yield return new WaitForSeconds(globalCooldown);
         player.abilityCooldown = false;
+        punchCooldown = false;
     }
     
     public virtual void Activate()
     {
-        //player.animator.Play("Player Melee test", 0, 0);
+        player.animator.SetTrigger("unequip");
         isPunching = true;
-        Invoke("AnimReset", .6f);
+        Invoke("AnimReset", animDelay);
         StartCoroutine(Melee());
         StartCoroutine(Cooldown());
         StartCoroutine(GlobalCooldown());

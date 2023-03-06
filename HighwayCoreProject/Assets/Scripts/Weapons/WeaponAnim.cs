@@ -14,6 +14,9 @@ public class WeaponAnim : PlayerBehaviour
 
     void Update()
     {
+        if(Time.deltaTime == 0f)
+            return;
+
         punch = melee.isPunching;
         WhatIsGun();
         anim.SetBool("punching", punch);

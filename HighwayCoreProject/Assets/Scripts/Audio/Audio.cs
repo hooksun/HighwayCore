@@ -51,4 +51,4 @@ public class Audio : MonoBehaviour
     }
 }
 
-public enum AudioType{player, enemyGunshot, enemyFootsteps, playerContinuous}
+public enum AudioType{player, enemyGunshot, enemyFootsteps, playerContinuous, enemyContinuous}

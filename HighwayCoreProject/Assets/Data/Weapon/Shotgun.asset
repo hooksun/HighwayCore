@@ -19,15 +19,16 @@ MonoBehaviour:
   currentAmmoInMag: 8
   magazineSize: 8
   maxAmmo: 64
-  ammoLeft: 52
+  ammoLeft: 64
   bulletsPerShot: 6
   fireRate: 100
   reloadTime: 1.875
+  unequipedReloadTime: 5
   reloadRecovery: 0.5
   isReloading: 0
   bulletSpread: 0.025
   bulletSpeed: 150
-  switchSpeed: 0.3
+  switchSpeed: 0.26
   animator: {fileID: 9100000, guid: 92cf2b339299be144acb3ad28066bb61, type: 2}
   shootAudio: {fileID: 8300000, guid: 7c3faab6573702d4cb9525793704c6af, type: 3}
   reloadDelay: 0
@@ -38,3 +39,4 @@ MonoBehaviour:
     time: 0.55
   - clip: {fileID: 8300000, guid: 92c84561fe07f0341a34100fed999812, type: 3}
     time: 0.3
+  unequipedTime: 27.50495

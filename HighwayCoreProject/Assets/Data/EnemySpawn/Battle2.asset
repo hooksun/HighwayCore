@@ -14,23 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyPool:
     Pool:
-    - weight: 1
+    - weight: 1.5
       variable:
         enemyIndex: 0
+        enemyCost: 6
+        minDistance: -35
+        maxDistance: 35
+    - weight: 2.5
+      variable:
+        enemyIndex: 1
+        enemyCost: 9
+        minDistance: -35
+        maxDistance: 35
+    - weight: 3
+      variable:
+        enemyIndex: 2
         enemyCost: 8
-        minDistance: -40
-        maxDistance: 40
-    - weight: 1
+        minDistance: -35
+        maxDistance: 35
+    - weight: 3.5
       variable:
         enemyIndex: 3
         enemyCost: 5
-        minDistance: -20
-        maxDistance: 50
-  ActiveCost: 25
-  AggroCost: 14
-  SpawnCost: 10
-  FailCost: 1
-  StartInterval: 0
+        minDistance: -35
+        maxDistance: 35
+  StartInterval: 0.5
   SpawnIntervalMin: 4
   SpawnIntervalMax: 6
   AggroInterval: 2
+  Cost:
+    Active: 25
+    Aggro: 14
+    Spawn: 18
+    Fail: 1

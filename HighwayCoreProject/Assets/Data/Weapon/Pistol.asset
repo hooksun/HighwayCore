@@ -23,6 +23,8 @@ MonoBehaviour:
   bulletsPerShot: 1
   fireRate: 300
   reloadTime: 1.5
+  unequipedReloadTime: 5
+  reloadRecovery: 0
   isReloading: 0
   bulletSpread: 0.01
   bulletSpeed: 150
@@ -33,3 +35,4 @@ MonoBehaviour:
   reloadSequence:
   - clip: {fileID: 0}
     time: 0
+  unequipedTime: 6.748681

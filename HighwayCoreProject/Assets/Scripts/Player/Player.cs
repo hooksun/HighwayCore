@@ -12,7 +12,6 @@ public class Player : MonoBehaviour, IHurtBox
     public Transform Head;
     public Animator animator;
     public GunScript Guns;
-    public PickUpWeapon PickUp;
     public WeaponSwitching WeaponSwitch;
     public PlayerMelee Melee;
     public WeaponAnim weaponAnim;
@@ -40,7 +39,6 @@ public class Player : MonoBehaviour, IHurtBox
         Movement.player = this;
         Status.player = this;
         Guns.player = this;
-        PickUp.player = this;
         WeaponSwitch.player = this;
         Melee.player = this;
         //weaponAnim.player = this;
@@ -56,7 +54,7 @@ public class Player : MonoBehaviour, IHurtBox
             return;
         
         StartCoroutine(Trail(position));
-        if(!freezeScore)
+        if(!freezeScore && !dead)
             score = Mathf.Max(transform.position.z, score);
         if(transform.position.y < deathFloor)
             Die();
@@ -74,20 +72,19 @@ public class Player : MonoBehaviour, IHurtBox
         Status.TakeDamage(amount * (1 - DamageResistance));
     }
 
-    public void Die()
+    public void Die(bool die = true)
     {
-        EnableInput(false);
-        dead = true;
-        Aim.Die();
-        Movement.Die();
-        Status.Die();
-        Guns.Die();
-        PickUp.Die();
-        WeaponSwitch.Die();
-        Melee.Die();
-        //weaponAnim.Die();
-        score -= score % 0.01f;
-        UIManager.SetScore(score, Settings.settings.highscore, false);
+        EnableInput(!die);
+        dead = die;
+        if(dead)
+            Status.Die();
+        UIManager.SetDeathMenu(die);
+    }
+
+    public void SetScore()
+    {
+        score -= score % 1f;
+        UIManager.SetScore(score, Settings.settings.highscore);
         Settings.settings.highscore = Mathf.Max(Settings.settings.highscore, score);
         Settings.Save();
     }
@@ -120,6 +117,4 @@ public class Player : MonoBehaviour, IHurtBox
 public abstract class PlayerBehaviour : MonoBehaviour
 {
     [HideInInspector] public Player player;
-
-    public virtual void Die(){}
 }

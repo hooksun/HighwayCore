@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class EnemyRagdoll : MonoBehaviour
 {
@@ -8,6 +11,8 @@ public class EnemyRagdoll : MonoBehaviour
     public Transform pivot;
     public Animator anim;
     public float upTime;
+
+    public EnemyRagdoll Reference;
 
     public void Init(Transform rig, Vector3 velocity)
     {
@@ -37,10 +42,24 @@ public class EnemyRagdoll : MonoBehaviour
         anim.Update(0f);
         gameObject.SetActive(false);
     }
+#if UNITY_EDITOR
 
     [ContextMenu("SetRigidbodies")]
     public void SetRigidbodies()
     {
         rbs = GetComponentsInChildren<Rigidbody>();
     }
+
+    [ContextMenu("CopyFromReference")]
+    public void CopyFromReference()
+    {
+        for(int i = 0; i < Reference.rbs.Length; i++)
+        {
+            Component srcComponent = Reference.rbs[i].GetComponent<Collider>();
+            Component dstComponent = rbs[i].GetComponent<Collider>();
+            Undo.RegisterCompleteObjectUndo(dstComponent, "Component");
+            EditorUtility.CopySerialized(srcComponent, dstComponent);
+        }
+    }
+#endif
 }

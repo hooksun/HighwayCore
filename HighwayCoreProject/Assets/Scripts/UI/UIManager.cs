@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     public CanvasGroup ScopeUI;
     public float ScopeAppear;
     public UISlider HealthBar, JetpackFuel;
-    public UIFade JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker;
+    public UIFade JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker, EnvironmentDamage;
     
     UIClass[] UIClasses;
     float fps;
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        UIClasses = new UIClass[]{HealthBar, JetpackFuel, JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker};
+        UIClasses = new UIClass[]{HealthBar, JetpackFuel, JetpackFuelFade, ObjectiveFade, HitMarker, CritMarker, EnvironmentDamage};
     }
 
     void Update()
@@ -94,6 +94,11 @@ public class UIManager : MonoBehaviour
         damage.Activate(direction);
     }
 
+    public static void SetEnvironmentDamage()
+    {
+        instance.EnvironmentDamage.SetValue();
+    }
+
     public static bool scoping;
     public static void SetScope(float amount)
     {
@@ -114,13 +119,13 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public static void SetScore(float score, float highscore, bool setDeath = true)
+    public static void SetScore(float score, float highscore)
     {
         instance.ScoreText.text = "Score: " + score.ToString() + "m";
         instance.HighscoreText.text = (score > highscore?"New Highscore!":"Highscore: " + highscore.ToString() + "m");
-        SetDeathMenu(setDeath);
     }
     public static void SetDeathMenu(bool active) => instance.DeathMenu.SetActive(active);
+    public static void SetDeathButtons(bool active) => instance.DeathMenu.transform.GetChild(0).gameObject.SetActive(active);
 }
 
 public abstract class UIClass

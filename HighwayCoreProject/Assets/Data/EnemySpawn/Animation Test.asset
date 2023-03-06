@@ -16,7 +16,7 @@ MonoBehaviour:
     Pool:
     - weight: 1
       variable:
-        enemyIndex: 3
+        enemyIndex: 1
         enemyCost: 5
         minDistance: 0
         maxDistance: 50

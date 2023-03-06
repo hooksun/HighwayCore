@@ -8,11 +8,11 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     public Rigidbody rb;
     
     public MoveState Walk, Air;
-    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage, RoadDecel, RoadTime;
+    public float JumpHeight, JumpYPosMulti, JumpGravity, FallGravity, JumpCooldown, RoadDamage, RoadDecel, RoadTime, groundVelMulti = 0.6f, groundVelDecel;
     public MoveState AirJump;
     public AudioVaried FootstepsAudio;
     public float JetpackSpeed, JetpackForce, JetpackDecel, JetpackFuel, FuelCost, AirJumpCost, RefuelRate, GroundRefuelRate;
-    public Audio JetpackAudio;
+    public Audio JetpackAudio, WallrunAudio;
     public MoveState Grapple;
     public GrappleProjectile GrappleObj;
     public float GrappleSpeed, GrappleAccel, GrappleDecel, GrappleDrag, GrappleRetractRange, GrappleRetractDelay, GrappleCooldown, GlobalGrappleCooldown;
@@ -110,6 +110,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
                 velocity *= RoadDecel;
                 velocity.y = Mathf.Sqrt(2f * JumpGravity * JumpHeight);
                 player.Status.TakeDamage(RoadDamage);
+                UIManager.SetEnvironmentDamage();
                 ChangeGround(hit.transform);
             }
         }
@@ -152,9 +153,13 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         }
         if(!current.grounded)
         {
-            velocity += groundVel;
-            groundVel = Vector3.zero;
-            ChangeGround(null);
+            if(groundTrans != null)
+            {
+                velocity += groundVel * groundVelMulti;
+                groundVel *= 1f - groundVelMulti;
+                ChangeGround(null);
+            }
+            groundVel = Vector3.MoveTowards(groundVel, Vector3.zero, groundVelDecel * Time.fixedDeltaTime);
         }
     }
 
@@ -166,7 +171,6 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             currentGround = null;
             if(groundTrans != null)
                 currentGround = groundTrans.GetComponent<IMovingGround>();
-            groundVel = Vector3.zero;
         }
         if(currentGround != null)
         {
@@ -378,6 +382,17 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
             if(Physics.Raycast(origin, Vector3.down, out hit, VaultDist, GroundMask) ||
             Physics.Raycast(transform.position + Vector3.up * VaultStart.y, vaultDir, out hit, VaultStart.z, HardGroundMask))
             {
+                vaultDir = -hit.normal;
+                if(groundTrans == null)
+                {
+                    Vector3 horizVel = velocity;
+                    horizVel.y = 0f;
+                    if(Vector3.Dot(horizVel + groundVel, horizVel) <= 0f)
+                    {
+                        velocity += groundVel;
+                        groundVel = Vector3.zero;
+                    }
+                }
                 ChangeGround(hit.transform);
                 SetCurrentState(Vault);
             }
@@ -397,6 +412,7 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
     void WallRunning()
     {
         isWallRunning = false;
+        WallrunAudio.Stop();
         if(wallRunCooldown > 0f)
         {
             wallRunCooldown -= Time.fixedDeltaTime;
@@ -406,12 +422,10 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         if(!isGrounded && !player.usingAbility && !isVaulting && velocity.y <= MinWallRunYSpeed && direction.sqrMagnitude > 0)
         {
             RaycastHit hit = groundInfo;
-            if((wallDir != Vector3.zero && (WallRunCheck(WallCheckPoint, wallDir * WallCheckDist, out hit)
-            || WallRunCheck(WallCheckPoint2, wallDir * WallCheckDist, out hit)))
-            || WallRunCheck(WallCheckPoint, transform.right * WallCheckDist, out hit)
-            || WallRunCheck(WallCheckPoint, -transform.right * WallCheckDist, out hit))
+            if(HitWall(out hit))
             {
                 isWallRunning = true;
+                WallrunAudio.Play();
                 SetCurrentState(WallRun);
                 velocity.y = 0f;
                 velocity = Vector3.ProjectOnPlane(velocity, hit.normal);
@@ -427,6 +441,28 @@ public class PlayerMovement : PlayerBehaviour, IProjectileSpawner
         player.Aim.RotateHead(Vector3.zero);
         if(WallRun.cooldown <= 0f)
             wallDir = Vector3.zero;
+    }
+
+    bool HitWall(out RaycastHit hit)
+    {
+        if((wallDir != Vector3.zero && (WallRunCheck(WallCheckPoint, wallDir * WallCheckDist, out hit)
+        || WallRunCheck(WallCheckPoint2, wallDir * WallCheckDist, out hit))) && Vector3.Dot(wallDir, -hit.normal) > 0.8f)
+            return true;
+        Vector3 dir = transform.right;
+        for(int i = 0; i < 2; i++)
+        {
+            for(int j = 0; j < 2; j++)
+            {
+                if(WallRunCheck(WallCheckPoint, dir * WallCheckDist, out hit)
+                && (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.right)) > 0.8f || Mathf.Abs(Vector3.Dot(hit.normal, Vector3.forward)) > 0.8f))
+                    return true;
+                dir += transform.forward;
+                dir.Normalize();
+            }
+            dir = -transform.right;
+        }
+        hit = groundInfo;
+        return false;
     }
 
     bool WallRunCheck(Vector3 pos, Vector3 dir, out RaycastHit hit)=>Physics.Linecast(transform.position + pos, transform.position + pos + dir, out hit, GroundMask);

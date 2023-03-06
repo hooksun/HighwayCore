@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class JetpackPathfinding : EnemyPathfinding
 {
-    public float jetpackForce, launchTime, flyCooldown, jetpackCooldown, airTime, jetpackJumpGravity, minJetpackJumpHeight;
+    public Jetpack jetpack;
+    public float jetpackForce, launchTime, flyCooldown, jetpackCooldown, airTime, jetpackStunTime, jetpackJumpGravity, minJetpackJumpHeight, jetpackTiltMulti;
+    public string jetpackAnimation;
     public Vector3 flyDistance, flySpeed, minPos, maxPos;
     
     float groundTime, flyTime;
@@ -12,14 +14,16 @@ public class JetpackPathfinding : EnemyPathfinding
     bool jetpacking, jetpackJump;
 
     protected override float jumpGrav{get => (jetpackJump?jetpackJumpGravity:JumpGravity);}
+    protected override string jumpAnim{get => (jetpackJump||longJump?jetpackAnimation:base.jumpAnim);}
 
     public override void Activate()
     {
-        base.Activate();
         groundTime = flyCooldown;
         flyTime = 0f;
         jetpacking = false;
         jetpackJump = false;
+        base.Activate();
+        jetpack.Activate();
     }
 
     protected override void Simulate()
@@ -36,7 +40,7 @@ public class JetpackPathfinding : EnemyPathfinding
 
     protected override void AirSimulate()
     {
-        if(jetpacking)
+        if(!enemy.stunned && jetpacking)
         {
             Flying();
             return;
@@ -51,14 +55,37 @@ public class JetpackPathfinding : EnemyPathfinding
 
     public override void Stun(Vector3 knockback)
     {
+        if(jetpacking)
+            enemy.stunTime = jetpackStunTime;
         jetpackJump = false;
+        jetpack.Enable(false);
         base.Stun(knockback);
+    }
+    public override void StopStun()
+    {
+        jetpacking = false;
     }
 
     protected override void Jump()
     {
         jetpackJump = jumpPoint.worldPoint.y - transformPosition.worldPoint.y > minJetpackJumpHeight;
         base.Jump();
+    }
+
+    protected override void Jumping()
+    {
+        base.Jumping();
+        jetpack.Enable((jetpackJump && airVelocity.y > 0f) || tilt != Vector3.up);
+    }
+
+    protected override void Land()
+    {
+        base.Land();
+        if(jetpacking)
+        {
+            groundTime = jetpackCooldown + flyCooldown;
+            StopFly();
+        }
     }
 
     protected virtual void Fly()
@@ -70,6 +97,15 @@ public class JetpackPathfinding : EnemyPathfinding
         airVelocity.y = jetpackForce;
         isGrounded = false;
         jetpacking = true;
+        jetpack.Enable(true);
+        enemy.Animation.Play(jetpackAnimation, 0, JumpFadeTime);
+    }
+
+    protected virtual void StopFly()
+    {
+        jetpacking = false;
+        jetpack.Enable(false);
+        tilt = Vector3.up;
     }
 
     protected virtual void Flying()
@@ -83,9 +119,9 @@ public class JetpackPathfinding : EnemyPathfinding
                 float height = transform.position.y - transformOffset.y - jumpPoint.worldPoint.y;
                 jumpTime = (2f * height / Mathf.Sqrt(2f * FallGravity * height));
                 airVelocity = Vector3.zero;
-                jetpacking = false;
                 isJumping = true;
                 groundTime = jetpackCooldown + flyCooldown;
+                StopFly();
                 return;
             }
         }
@@ -93,11 +129,6 @@ public class JetpackPathfinding : EnemyPathfinding
 
         //fly logic
 
-        if(enemy.stunned)
-        {
-            transform.position += airVelocity * Time.deltaTime;
-            return;
-        }
         Vector3 newPos = transform.position;
         for(int i = 0; i < 3; i++)
         {
@@ -121,5 +152,6 @@ public class JetpackPathfinding : EnemyPathfinding
             airVelocity[i] = refVel;
         }
         transform.position = newPos;
+        tilt = (Vector3.up + (airVelocity * jetpackTiltMulti)).normalized;
     }
 }

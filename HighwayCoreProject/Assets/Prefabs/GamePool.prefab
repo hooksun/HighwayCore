@@ -79,3 +79,6 @@ MonoBehaviour:
     Object: {fileID: 4086749932468931847, guid: a3c40f2338933624cb30ec0fec74ed7f,
       type: 3}
     startAmount: 2
+  - pool: []
+    Object: {fileID: 132808135731923819, guid: 457dc728894911c489b05b7ea11049ea, type: 3}
+    startAmount: 2

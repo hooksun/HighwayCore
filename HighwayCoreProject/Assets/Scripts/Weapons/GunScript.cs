@@ -15,7 +15,7 @@ public class GunScript : PlayerBehaviour
     public WeaponSwitching weaponSwitching;
     public Transform scopedFirePoint;
     bool isScope = false;
-    public bool fireInput, secondaryInput;
+    public bool fireInput, secondaryInput, reloadInput;
     public bool isReloading;
     public float scopeTime;
     public LayerMask bulletMask;
@@ -48,10 +48,27 @@ public class GunScript : PlayerBehaviour
     }
     public void ReloadInput(InputAction.CallbackContext ctx)
     {
-        if(!ctx.started || player.usingAbility || player.abilityCooldown)
+        if(!ctx.started)
             return;
         
-        Reloading();
+        reloadInput = true;
+        //Reloading();
+    }
+
+    public void SwitchWeapon(Gun newGun)
+    {
+        gunData.isReloading = false;
+        gunData.unequipedTime = 0f;
+        gun = newGun;
+        gunData = gun.data;
+        gunData.isReloading = false;
+        gun.Reset();
+        if(gunData.unequipedTime > gunData.unequipedReloadTime)
+            ReloadAmmo();
+        UIManager.SetAmmo(gunData.currentAmmoInMag);
+        UIManager.SetReserve(gunData.ammoLeft);
+        timeSinceLastSwitch = 0f;
+        secondaryInput = reloadInput = false;
     }
 
     // Update is called once per frame
@@ -61,16 +78,23 @@ public class GunScript : PlayerBehaviour
         // anim = curWeapon.GetComponentInChildren<WeaponAnim>();
         // anim.Reload();
 
+        if(Time.deltaTime == 0f)
+            return;
+
         fireRate = 60f/gunData.fireRate;
         timeSinceLastShot += Time.deltaTime;
         timeSinceLastSwitch += Time.deltaTime;
 
 
+        if(reloadInput)
+        {
+            Reloading();
+        }
         if(fireInput){
             if(!player.Melee.isPunching)
                 shooting();
         }
-        if(!fireInput){
+        else{
             isShooting = false;
             //Invoke("StopShooting", .4f);
         }
@@ -109,15 +133,22 @@ public class GunScript : PlayerBehaviour
     }
 
     void SecondaryFire(){
-        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown && ReadyToScope()){
+        if(gunData.name == "Sniper" && !player.usingAbility && !player.abilityCooldown && ReadyToScope() && !gunData.isReloading){
             isScope = true;
             //player.Aim.ScopeIn(true);
         }
     }
 
     void shooting(){
-        if(!gunData.isReloading && gunData.currentAmmoInMag > 0 && ReadyToShoot()){
+        if(ReadyToShoot()){
+            if(gunData.currentAmmoInMag <= 0)
+            {
+                Reloading();
+                return;
+            }
             whatIsWeaponShoot();
+            gun.ShootGfx();
+            reloadInput = false;
             timeSinceLastShot = 0f;
             gunData.currentAmmoInMag--;
         }
@@ -135,6 +166,8 @@ public class GunScript : PlayerBehaviour
     void ARBullet(){
         ShootSound.clip = gunData.shootAudio;
         ShootSound.Play();
+        if(!player.Melee.punchCooldown)
+            anim.anim.SetTrigger("shootTrigger");
         isShooting = true;
         //anim.anim.SetTrigger("shoot");
         for(int i = 0; i < gunData.bulletsPerShot; i++)
@@ -148,19 +181,20 @@ public class GunScript : PlayerBehaviour
     int prevSelectedWeapon;
     int prevNumOfswitch;
     void Reloading(){
-        if(timeSinceLastShot > gunData.reloadRecovery){
+        if(timeSinceLastShot > gunData.reloadRecovery && !player.usingAbility && !player.abilityCooldown){
             prevSelectedWeapon = weaponSwitching.currentWeapon;
             prevNumOfswitch = weaponSwitching.numOfSwitch;
             //Debug.Log(prevSelectedWeapon);
             if(!gunData.isReloading && gunData.ammoLeft > 0 && gunData.currentAmmoInMag < gunData.magazineSize && prevNumOfswitch == weaponSwitching.numOfSwitch && timeSinceLastSwitch > gunData.switchSpeed){
                 gunData.isReloading = true;
                 isShooting = false;
+                isScope = false;
                 player.usingWeapon = true;
 
                 ReloadSound.SetSequence(gunData.reloadSequence, gunData.reloadDelay);
                 ReloadSound.Play();
-                Invoke("ReloadingFinished", gunData.reloadTime);
-                
+                StartCoroutine(ReloadingFinished(gunData.reloadTime, weaponSwitching.numOfSwitch));
+                reloadInput = false;
             }
         }
     }
@@ -168,20 +202,25 @@ public class GunScript : PlayerBehaviour
     void PlaySound(AudioClip clip, float time){
         
     }
-    void ReloadingFinished(){ //This is where the ammo refill
-        if(timeSinceLastSwitch > gunData.switchSpeed + gunData.reloadTime){
-            int numOfBulletNeeded = gunData.magazineSize - gunData.currentAmmoInMag;
-
-            if(numOfBulletNeeded > gunData.ammoLeft){
-                numOfBulletNeeded = gunData.ammoLeft;
-            }
-
-            if(gunData.ammoLeft > 0){
-                gunData.currentAmmoInMag += numOfBulletNeeded;
-                gunData.ammoLeft -= numOfBulletNeeded;
-            }
-
+    IEnumerator ReloadingFinished(float reloadTime, int numOfSwitch){ //This is where the ammo refill
+        yield return new WaitForSeconds(reloadTime);
+        if(numOfSwitch == weaponSwitching.numOfSwitch){
+            
+            ReloadAmmo();
             gunData.isReloading = false;
+        }
+    }
+    void ReloadAmmo()
+    {
+        int numOfBulletNeeded = gunData.magazineSize - gunData.currentAmmoInMag;
+
+        if(numOfBulletNeeded > gunData.ammoLeft){
+            numOfBulletNeeded = gunData.ammoLeft;
+        }
+
+        if(gunData.ammoLeft > 0){
+            gunData.currentAmmoInMag += numOfBulletNeeded;
+            gunData.ammoLeft -= numOfBulletNeeded;
         }
     }
     public bool ReadyToShoot(){

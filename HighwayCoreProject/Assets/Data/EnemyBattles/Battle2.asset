@@ -18,3 +18,5 @@ MonoBehaviour:
     EndCost: 0
   - TotalCost: 50
     EndCost: 0
+  - TotalCost: 25
+    EndCost: 0

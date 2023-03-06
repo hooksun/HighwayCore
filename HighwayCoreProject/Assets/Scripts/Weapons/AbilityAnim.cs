@@ -11,6 +11,7 @@ public class AbilityAnim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetBool("punching", melee.isPunching);
+        if(Time.deltaTime > 0f)
+            anim.SetBool("punching", melee.isPunching);
     }
 }

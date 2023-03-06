@@ -25,7 +25,7 @@ public class WeaponSwitching : PlayerBehaviour
 
     void Update()
     {
-        if(player.dead)
+        if(Time.deltaTime == 0f || player.dead)
             return;
 
         for(int i=0;i<keyCodes.Length;i++){
@@ -40,6 +40,11 @@ public class WeaponSwitching : PlayerBehaviour
             numOfSwitch++;
         }
         //changeGunData();
+        for(int i=0;i<weapons.Length;i++){
+            if(i == prevSelectedWeapon)
+                continue;
+            weapons[i].data.unequipedTime += Time.deltaTime;
+        }
     }
 
     private KeyCode[] keyCodes = {
@@ -63,12 +68,7 @@ public class WeaponSwitching : PlayerBehaviour
         for(int i=0;i<weapons.Length;i++){
             weapons[i].gameObject.SetActive(i == index);
         }
-        gunScript.gunData.isReloading = false;
-        gunScript.gunData = weapons[index].data;
-        gunScript.gun = weapons[index];
-        gunScript.gunData.isReloading = false;
-        gunScript.timeSinceLastSwitch = 0f;
-        gunScript.secondaryInput = false;
+        gunScript.SwitchWeapon(weapons[index]);
     }
 
     public void AddAmmo(int ammount, AmmoType ammoType){

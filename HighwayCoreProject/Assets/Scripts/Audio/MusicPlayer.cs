@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MusicPlayer : AudioPlayer
 {
+    protected override void Start()
+    {
+        base.Start();
+        Source.Play();
+    }
+
     public override void Pause(bool pause)
     {
 

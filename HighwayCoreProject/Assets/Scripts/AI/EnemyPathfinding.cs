@@ -20,6 +20,7 @@ public class EnemyPathfinding : EnemyBehaviour
 
     protected virtual float jumpGrav{get => JumpGravity;}
     protected virtual float fallGrav{get => FallGravity;}
+    protected virtual string jumpAnim{get => JumpAnimation;}
 
     protected PlatformAddress targetPlatform, lastPlatform;
     protected TransformPoint targetPoint, jumpPoint;
@@ -48,7 +49,7 @@ public class EnemyPathfinding : EnemyBehaviour
         {
             jumpPoint = currentPlatform.ClosestPointTo(transform.position);
             InitiateJump(JumpHeight);
-            enemy.Animation.Play(JumpAnimation, 0, JumpFadeTime);
+            enemy.Animation.Play(jumpAnim, 0, JumpFadeTime);
         }
     }
 
@@ -63,6 +64,12 @@ public class EnemyPathfinding : EnemyBehaviour
         if(Time.deltaTime == 0f)
             return;
 
+        if(transform.position.y < -10f || Player.ActivePlayer.position.z - transform.position.z > 100f)
+        {
+            enemy.Die();
+            return;
+        }
+
         Tilt();
         if(isGrounded)
         {
@@ -75,11 +82,6 @@ public class EnemyPathfinding : EnemyBehaviour
         }
         if(!isGrounded)
         {
-            if(transform.position.y < -10f || Player.ActivePlayer.position.z - transform.position.z > 160f)
-            {
-                enemy.Die();
-                return;
-            }
             AirSimulate();
             return;
         }
@@ -104,7 +106,7 @@ public class EnemyPathfinding : EnemyBehaviour
             {
                 isGrounded = false;
                 transformPosition.transform = null;
-                enemy.Animation.Play(JumpAnimation, 0, JumpFadeTime);
+                enemy.Animation.Play(jumpAnim, 0, JumpFadeTime);
                 if(longJump)
                 {
                     tilt = (Vector3.up + (jumpPoint.worldPoint - transform.position).normalized * LongJumpTilt).normalized;
